@@ -1,0 +1,86 @@
+﻿@model QuanLyThuVien.Models.Books
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container">
+
+    <div class="card o-hidden border-0 shadow-lg">
+        <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+                <div class="col-lg-5 img-detail">
+                    <img src="@Html.DisplayFor(model => model.thumbnailUrl)"/>
+                </div>
+                <div class="col-lg-7">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900">@Model.title</h1>
+                        </div>
+                        <hr />
+                        <dl class="dl-horizontal">                          
+                            <dt>
+                                @Html.DisplayNameFor(model => model.authors)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.authors)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.categories)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.categories)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.shortDescription)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.shortDescription)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.longDescription)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.longDescription)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.count)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.count)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.publishedDate)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.publishedDate)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.status)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.status)
+                            </dd>                        
+                        </dl>                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

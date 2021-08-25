@@ -1,0 +1,148 @@
+﻿@model IEnumerable<QuanLyThuVien.Models.Books>
+
+@{
+    ViewBag.Title = "ListBooks";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="container-fluid">
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <h6 class="col-md-10 font-weight-bold text-primary font-Title">Quản lý sách</h6>
+                <div class="col-md-2">
+                    <a href="@Url.Action("Create", "ql_Sach")" class="btn btn-success btn-user btn-block" style="font-weight:bold">
+                        <i class="fa fa-fw fa-plus-square"></i> Thêm mới sách
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.title)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.authors)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.categories)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.shortDescription)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.longDescription)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.count)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.publishedDate)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.status)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.thumbnailUrl)
+                            </th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="max-width: 200px;">
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.title)
+                                    </p>
+                                </td>
+                                <td style="max-width: 200px; width: 150px;">
+                                    @{
+                                        if (item.authors != null)
+                                        {
+                                            int i = 0;
+                                            string[] authorList = item.authors.Split(',');
+                                            foreach (var ath in authorList)
+                                            {
+                                                if (i == 2)
+                                                {
+                                                    <p>
+                                                        @ath ...
+                                                    </p>
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    <p>
+                                                        @ath
+                                                    </p>
+                                                    i++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.categories)
+                                    </p>
+                                </td>
+                                <td style="max-width: 200px;">
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.shortDescription)
+                                    </p>
+                                </td>
+                                <td style="max-width: 300px;">
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.longDescription)
+                                    <p>
+                                </td>
+                                <td class="text-center">
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.count)
+                                    </p>
+
+                                </td>
+                                <td style="width:180px; max-width: 180px;">
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.publishedDate)
+                                    </p>
+
+                                </td>
+                                <td class="text-center">
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.status)
+                                    </p>
+
+                                </td>
+                                <td style="max-width: 150px;">
+                                    <img src="@Html.DisplayFor(modelItem => item.thumbnailUrl)" style="max-width: 150px; max-height:75px;" />
+                                </td>
+
+                                <td class="link-action">
+                                    <a class="link-edit" href="@Url.Action("Edit", "ql_Sach" , new { id = item._id})">
+                                        <i class="fas fa-fw fa-edit"></i>Sửa
+                                    </a><br />
+                                    <a class="link-delete" href="@Url.Action("Delete", "ql_Sach" , new { id = item._id})">
+                                        <i class="fas fa-fw fa-trash"></i>Xoá
+                                    </a><br />
+                                    <a class="link-detail" href="@Url.Action("Detail", "ql_Sach" , new { id = item._id})">
+                                        <i class="fas fa-fw fa-info"></i>Chi tiết
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
