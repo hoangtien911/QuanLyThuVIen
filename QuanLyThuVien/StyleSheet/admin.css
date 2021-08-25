@@ -2500,9 +2500,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-warning {
-  color: #fff;
-  background-color: #f6c23e;
-  border-color: #f6c23e;
+    color: #fff;
+    background-color: #e2a200;
+    border-color: #e2a200;
 }
 
 .btn-warning:hover {
@@ -7906,8 +7906,9 @@ button.bg-dark:focus {
 }
 
 .p-5 {
-  padding: 3rem !important;
+  padding: 2rem !important;
   padding-left: 0 !important;
+  padding-top: 1rem !important;
 }
 
 .pt-5,
@@ -9775,6 +9776,10 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #e3e6f0;
   }
 }
+.table-bordered tr:hover {
+    background-color: lightgray;
+    -webkit-transition: background 0.3s;
+}
 
 html {
   position: relative;
@@ -11280,7 +11285,7 @@ body.sidebar-toggled footer.sticky-footer {
     padding: 20px !important;
 }
 .form-horizontal .row{
-    padding: 15px;
+    padding: 14px;
 }
 .form-horizontal .row label{
     white-space: nowrap;
@@ -11299,4 +11304,16 @@ body.sidebar-toggled footer.sticky-footer {
 .img-detail img{    
     width: 95%;
     height: 100%;
+}
+.details-title{
+    font-weight: 700;
+}
+.icon-back{
+    padding: 10px;
+}
+.icon-back a {
+    color: #3a3b45 !important;
+}
+.icon-back a:hover {
+    color: crimson !important;
 }

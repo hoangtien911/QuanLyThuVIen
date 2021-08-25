@@ -15,68 +15,91 @@
                     <img src="@Html.DisplayFor(model => model.thumbnailUrl)"/>
                 </div>
                 <div class="col-lg-7">
+                    <div class="text-md-right icon-back">
+                        <a href="@Url.Action("ListBooks", "ql_Sach")">
+                            <i class="fa fa-fw fa-times"></i>
+                        </a>
+                    </div>
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900">@Model.title</h1>
+                            <h1 class="h4 text-gray-900">Chi tiết sách: @Model.title</h1>
                         </div>
                         <hr />
-                        <dl class="dl-horizontal">                          
-                            <dt>
+                        <div class="row details">
+                            <div class="text-sm-center col-md-3 details-title">
                                 @Html.DisplayNameFor(model => model.authors)
-                            </dt>
-
-                            <dd>
+                            </div>
+                            <div class="text-sm-left col-md-9">
                                 @Html.DisplayFor(model => model.authors)
-                            </dd>
-
-                            <dt>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title">
                                 @Html.DisplayNameFor(model => model.categories)
-                            </dt>
-
-                            <dd>
+                            </div>
+                            <div class="text-sm-left col-md-9">
                                 @Html.DisplayFor(model => model.categories)
-                            </dd>
-
-                            <dt>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title">
                                 @Html.DisplayNameFor(model => model.shortDescription)
-                            </dt>
-
-                            <dd>
+                            </div>
+                            <div class="text-sm-left col-md-9">
                                 @Html.DisplayFor(model => model.shortDescription)
-                            </dd>
-
-                            <dt>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title">
                                 @Html.DisplayNameFor(model => model.longDescription)
-                            </dt>
-
-                            <dd>
+                            </div>
+                            <div class="text-sm-left col-md-9">
                                 @Html.DisplayFor(model => model.longDescription)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.count)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.count)
-                            </dd>
-
-                            <dt>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title">
                                 @Html.DisplayNameFor(model => model.publishedDate)
-                            </dt>
-
-                            <dd>
+                            </div>
+                            <div class="text-sm-left col-md-9">
                                 @Html.DisplayFor(model => model.publishedDate)
-                            </dd>
-
-                            <dt>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title">
+                                @Html.DisplayNameFor(model => model.count)
+                            </div>
+                            <div class="text-sm-left col-md-9">
+                                @Html.DisplayFor(model => model.count)
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title">
                                 @Html.DisplayNameFor(model => model.status)
-                            </dt>
-
-                            <dd>
+                            </div>
+                            <div class="text-sm-left col-md-9">
                                 @Html.DisplayFor(model => model.status)
-                            </dd>                        
-                        </dl>                      
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-8">
+                                <a href="@Url.Action("Edit", "ql_Sach", new { id = Model._id})" class="btn btn-warning btn-user btn-block">
+                                    <i class="fa fa-fw fa-edit"></i> Sửa thông tin sách
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="@Url.Action("ListBooks", "ql_Sach", new { id = Model._id})" class="btn btn-google btn-user btn-block">
+                                    <i class="fa fa-fw fa-trash"></i> Xoá sách
+                                </a>
+                            </div>                            
+                        </div>
                     </div>
                 </div>
             </div>

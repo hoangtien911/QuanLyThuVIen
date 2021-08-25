@@ -9,6 +9,8 @@ using FireSharp.Config;
 using FireSharp.Response;
 using QuanLyThuVien.Models;
 using Newtonsoft.Json.Serialization;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
@@ -63,11 +65,23 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Create(Books book)
         {
-            client = new FireSharp.FirebaseClient(config);
-            PushResponse response = client.Push("Books/", book);
-            book._id = response.Result.name;
-            client.Set("Books/" + book._id, book);
-            return View();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    client = new FireSharp.FirebaseClient(config);
+                    PushResponse response = client.Push("Books/", book);
+                    book._id = response.Result.name;
+                    client.Set("Books/" + book._id, book);
+                    ViewBag.MSCreate = "Test create alert";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Log >>> " + ex);
+            }
+            ViewBag.MSCreate = "Test Tesst Test";
+            return RedirectToAction("ListBooks");
         }
 
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv UPDATE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
@@ -76,14 +90,26 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Books/" + id);
-            Books data = JsonConvert.DeserializeObject<Books>(response.Body);
+            Books data = JsonConvert.DeserializeObject<Books>(response.Body);           
             return View(data);
         }
         [HttpPost]
         public ActionResult Edit(Books book)
         {
-            client = new FireSharp.FirebaseClient(config);          
-            client.Set("Books/" + book._id, book);           
+            string ms;
+            try
+            {
+                client = new FireSharp.FirebaseClient(config);
+                client.Set("Books/" + book._id, book);
+                ms = "Lưu thành công!";
+                ViewBag.MSEdit = ms;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Log >>> " + ex);
+                ms = "Đã có lỗi sảy ra. Lưu thất bại!";
+                ViewBag.MSEdit = ms;
+            }
             return RedirectToAction("ListBooks");
         }
 

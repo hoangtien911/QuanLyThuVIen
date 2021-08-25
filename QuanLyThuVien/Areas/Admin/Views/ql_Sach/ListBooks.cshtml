@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<QuanLyThuVien.Models.Books>
 
 @{
-    ViewBag.Title = "ListBooks";
+    ViewBag.Title = "Quản lý sách";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 <div class="container-fluid">
@@ -10,8 +10,8 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <div class="row">
-                <h6 class="col-md-10 font-weight-bold text-primary font-Title">Quản lý sách</h6>
-                <div class="col-md-2">
+                <h6 class="col-md-9 font-weight-bold text-primary font-Title">Quản lý sách</h6>
+                <div class="col-md-3">
                     <a href="@Url.Action("Create", "ql_Sach")" class="btn btn-success btn-user btn-block" style="font-weight:bold">
                         <i class="fa fa-fw fa-plus-square"></i> Thêm mới sách
                     </a>
@@ -128,10 +128,10 @@
                                 </td>
 
                                 <td class="link-action">
-                                    <a class="link-edit" href="@Url.Action("Edit", "ql_Sach" , new { id = item._id})">
+                                    <a class="link-edit" href="@Url.Action("Edit", "ql_Sach" , new { id = item._id})" onclick="return confirm('Bạn có muốn sửa sách @Html.DisplayFor(modelItem => item.title)?')">
                                         <i class="fas fa-fw fa-edit"></i>Sửa
                                     </a><br />
-                                    <a class="link-delete" href="@Url.Action("Delete", "ql_Sach" , new { id = item._id})">
+                                    <a class="link-delete" href="@Url.Action("Delete", "ql_Sach" , new { id = item._id})" onclick="return confirm('Bạn có muốn xoá sách @Html.DisplayFor(modelItem => item.title)?')">
                                         <i class="fas fa-fw fa-trash"></i>Xoá
                                     </a><br />
                                     <a class="link-detail" href="@Url.Action("Detail", "ql_Sach" , new { id = item._id})">
@@ -140,8 +140,14 @@
                                 </td>
                             </tr>
                         }
+                        @{ 
+                            if (ViewBag.MSCreate != null)
+                            {
+                                Response.Write("<script>alert('" + ViewBag.MSCreate + "')</script>");
+                            }
+                        }
                     </tbody>
-                </table>
+                </table>            
             </div>
         </div>
     </div>
