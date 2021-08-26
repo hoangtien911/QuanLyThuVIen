@@ -17,7 +17,6 @@
                     </a>
                 </div>
             </div>
-
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -140,15 +139,21 @@
                                 </td>
                             </tr>
                         }
-                        @{ 
-                            if (ViewBag.MSCreate != null)
-                            {
-                                Response.Write("<script>alert('" + ViewBag.MSCreate + "')</script>");
-                            }
-                        }
                     </tbody>
-                </table>            
+                </table>
             </div>
         </div>
     </div>
 </div>
+@{
+    if (ViewBag.MsEdit != null)
+    {
+        Response.Write("<script>alert('" + ViewBag.MsEdit + "')</script>");
+        ViewBag.MsEdit = null;
+    }
+    if (ViewBag.MsDelete != null)
+    {
+        Response.Write("<script>alert('Đã xoá sách " + ViewBag.MsDelete + "')</script>");
+        ViewBag.MsDelete = null;
+    }
+}

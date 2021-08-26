@@ -22,12 +22,12 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
-        };
+        };        
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv SHOW vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
-        public ActionResult ListBooks()
-        {
+        public ActionResult ListBooks(string check)
+        {           
             client = new FireSharp.FirebaseClient(config);
-            FirebaseResponse response = client.Get("Books");            
+            FirebaseResponse response = client.Get("Books");
             Dictionary<string, Books> data = JsonConvert.DeserializeObject<Dictionary<string, Books>>(response.Body.ToString());
             var list = new List<Books>();
             foreach (var item in data)
@@ -45,8 +45,21 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 book.thumbnailUrl = item.Value.thumbnailUrl;
                 list.Add(book);
             }
+            if (check != null)
+            {
+                if (check.Equals("1"))
+                {
+                    ViewBag.MsEdit = "Sửa thông tin sách thành công!";
+                    check = null;
+                }
+                else
+                {
+                    ViewBag.MsDelete = check;
+                    check = null;
+                }               
+            }
             return View(list);
-        }
+        }       
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DETAIL vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         [HttpGet]
         public ActionResult Detail(string id)
@@ -65,23 +78,20 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Create(Books book)
         {
-            try
+            if (book.title != null && book.authors != null)
             {
-                if (ModelState.IsValid)
-                {
-                    client = new FireSharp.FirebaseClient(config);
-                    PushResponse response = client.Push("Books/", book);
-                    book._id = response.Result.name;
-                    client.Set("Books/" + book._id, book);
-                    ViewBag.MSCreate = "Test create alert";
-                }
+                client = new FireSharp.FirebaseClient(config);
+                PushResponse response = client.Push("Books/", book);
+                book._id = response.Result.name;
+                client.Set("Books/" + book._id, book);
+                ViewBag.MsCreate = "Thêm mới sách thành công!";
+                return View();
             }
-            catch (Exception ex)
+            else
             {
-                System.Diagnostics.Debug.WriteLine("Log >>> " + ex);
+                ViewBag.MsCreate = "Đã có lỗi xảy ra. Thêm mới sách thất bại!";
+                return View();
             }
-            ViewBag.MSCreate = "Test Tesst Test";
-            return RedirectToAction("ListBooks");
         }
 
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv UPDATE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
@@ -90,36 +100,44 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Books/" + id);
-            Books data = JsonConvert.DeserializeObject<Books>(response.Body);           
+            Books data = JsonConvert.DeserializeObject<Books>(response.Body);
             return View(data);
         }
         [HttpPost]
         public ActionResult Edit(Books book)
         {
-            string ms;
-            try
+            if(book.title != null && book.authors != null)
             {
                 client = new FireSharp.FirebaseClient(config);
-                client.Set("Books/" + book._id, book);
-                ms = "Lưu thành công!";
-                ViewBag.MSEdit = ms;
+                client.Set("Books/" + book._id, book);             
+                return RedirectToAction("ListBooks", new { @check = 1 });
             }
-            catch (Exception ex)
+            else
             {
-                System.Diagnostics.Debug.WriteLine("Log >>> " + ex);
-                ms = "Đã có lỗi sảy ra. Lưu thất bại!";
-                ViewBag.MSEdit = ms;
+                ViewBag.MsEdit = "Đã có lỗi xảy ra. Sửa thông tin sách thất bại!";
+                return View();
             }
-            return RedirectToAction("ListBooks");
+
         }
 
 
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DELETE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public ActionResult Delete(string id)
         {
-            client = new FireSharp.FirebaseClient(config);
-            client.Delete("Books/" + id);
-            return RedirectToAction("ListBooks");
+            try
+            {
+                client = new FireSharp.FirebaseClient(config);
+                FirebaseResponse response = client.Get("Books/" + id);
+                Books data = JsonConvert.DeserializeObject<Books>(response.Body);
+                client.Delete("Books/" + id);
+                return RedirectToAction("ListBooks", new { @check = data.title });
+            }
+            catch
+            {
+                ViewBag.MsDelete = "Đã có lỗi xảy ra. Xoá sách thất bại!";
+                return RedirectToAction("ListBooks");
+            }
+            
         }
     }
 }
