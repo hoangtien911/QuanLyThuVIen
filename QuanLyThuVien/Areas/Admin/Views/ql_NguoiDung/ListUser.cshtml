@@ -1,0 +1,126 @@
+﻿@model IEnumerable<QuanLyThuVien.Models.User>
+
+@{
+    ViewBag.Title = "ListUser";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <h6 class="col-md-9 font-weight-bold text-primary font-Title">Quản lý người dùng</h6>
+                <div class="col-md-3">
+                    <a href="@Url.Action("Create", "ql_NguoiDung")" class="btn btn-success btn-user btn-block" style="font-weight:bold">
+                        <i class="fa fa-fw fa-plus-square"></i> Thêm mới người dùng
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr class="text-center">
+                            <th>
+                                @Html.DisplayNameFor(model => model.username)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.email)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.password)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dateOfBirth)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.fullName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.adress)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.phone)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dateOfRegist)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.avatar)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.status)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.username)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.password)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.dateOfBirth)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.fullName)
+                                </td>
+                                <td style="max-width: 300px;">
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.adress)
+                                    </p>                                  
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.phone)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.dateOfRegist)
+                                </td>
+                                <td style="max-width: 150px;" class="text-center">
+                                    <img src="@Html.DisplayFor(modelItem => item.avatar)" style="max-width: 150px; max-height:75px;" />
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.status)
+                                </td>
+                                <td class="link-action">
+                                    <a class="link-edit" href="@Url.Action("Edit", "ql_NguoiDung" , new { id = item.id})" onclick="return confirm('Bạn có muốn sửa người dùng @Html.DisplayFor(modelItem => item.username)?')">
+                                        <i class="fas fa-fw fa-edit"></i>Sửa
+                                    </a><br />
+                                    <a class="link-delete" href="@Url.Action("Delete", "ql_NguoiDung" , new { id = item.id})" onclick="return confirm('Bạn có muốn xoá người dùng @Html.DisplayFor(modelItem => item.username)?')">
+                                        <i class="fas fa-fw fa-trash"></i>Xoá
+                                    </a><br />
+                                    <a class="link-detail" href="@Url.Action("Detail", "ql_NguoiDung" , new { id = item.id})">
+                                        <i class="fas fa-fw fa-info"></i>Chi tiết
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.MsEdit != null)
+    {
+        Response.Write("<script>alert('" + ViewBag.MsEdit + "')</script>");
+        ViewBag.MsEdit = null;
+    }
+    if (ViewBag.MsDelete != null)
+    {
+        Response.Write("<script>alert('Đã xoá người dùng " + ViewBag.MsDelete + "')</script>");
+        ViewBag.MsDelete = null;
+    }
+}

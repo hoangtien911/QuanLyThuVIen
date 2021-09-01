@@ -140,12 +140,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\ql_NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_SachController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Books.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +223,10 @@
     <Content Include="Areas\Admin\Views\ql_Sach\Create.cshtml" />
     <Content Include="Areas\Admin\Views\ql_Sach\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\ql_Sach\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_NguoiDung\ListUser.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_NguoiDung\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_NguoiDung\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_NguoiDung\Detail.cshtml" />
     <None Include="packages.config" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />

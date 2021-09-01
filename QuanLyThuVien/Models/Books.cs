@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace QuanLyThuVien.Models
 {
@@ -24,7 +21,9 @@ namespace QuanLyThuVien.Models
         public string longDescription { get; set; }
         [Display(Name = "Số lượng")]       
         public int count { get; set; }
-        [Display(Name = "Ngày phát hành")]     
+        [Display(Name = "Ngày phát hành")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime publishedDate { get; set; }
         [Display(Name = "Trạng thái")]       
         public string status { get; set; }

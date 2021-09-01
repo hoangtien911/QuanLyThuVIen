@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using FireSharp.Interfaces;
 using FireSharp.Config;
 using FireSharp.Response;
 using QuanLyThuVien.Models;
-using Newtonsoft.Json.Serialization;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
@@ -23,7 +17,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
         };        
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv SHOW vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public ActionResult ListBooks(string check)
         {           
             client = new FireSharp.FirebaseClient(config);
@@ -60,7 +54,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             }
             return View(list);
         }       
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DETAIL vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         [HttpGet]
         public ActionResult Detail(string id)
         {
@@ -69,7 +63,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             Books data = JsonConvert.DeserializeObject<Books>(response.Body);
             return View(data);
         }
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CREATE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv THÊM MỚI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         [HttpGet]
         public ActionResult Create()
         {
@@ -94,7 +88,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             }
         }
 
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv UPDATE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv SỬA vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         [HttpGet]
         public ActionResult Edit(string id)
         {
@@ -120,8 +114,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 
         }
 
-
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DELETE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv XOÁ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public ActionResult Delete(string id)
         {
             try

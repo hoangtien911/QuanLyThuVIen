@@ -34,10 +34,10 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item @(ViewContext.RouteData.Values["Action"].ToString() == "Create" ? "active" : "")">
-                <a class="nav-link" href="@Url.Action("Create","ql_Sach")">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Thống kê</span>
+                    <span>Trang chủ</span>
                 </a>
             </li>
 
@@ -54,6 +54,13 @@
                 <a class="nav-link" href="@Url.Action("ListBooks","ql_Sach")">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Quản lý sách</span>
+                </a>
+            </li>
+
+            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_NguoiDung" ? "active" : "")">
+                <a class="nav-link" href="@Url.Action("ListUser","ql_NguoiDung")">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Quản lý người dùng</span>
                 </a>
             </li>
 
@@ -155,18 +162,7 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                   aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                   
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -381,21 +377,21 @@
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
-    </a>  
+    </a>
     <!-- Bootstrap core JavaScript-->
     <script src="~/Scripts/jquery.js"></script>
-    <script src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootstrap.bundle.min.js"></script>
     <!-- Core plugin JavaScript-->
     <script src="~/Scripts/jquery.easing.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="~/Scripts/sb-admin-2.js"></script>
     <!-- Page level plugins -->
+    <script src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/jquery.dataTables.js"></script>
     <script src="~/Scripts/dataTables.bootstrap4.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="~/Scripts/datatables-demo.js"></script> 
+    <script src="~/Scripts/datatables-demo.js"></script>
 
 </body>
 </html>
