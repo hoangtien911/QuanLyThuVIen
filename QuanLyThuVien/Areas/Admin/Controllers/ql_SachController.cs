@@ -67,6 +67,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            ViewBag.listAuthor = getAuthor();
             return View();
         }
         [HttpPost]
@@ -79,6 +80,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 book._id = response.Result.name;
                 client.Set("Books/" + book._id, book);
                 ViewBag.MsCreate = "Thêm mới sách thành công!";
+                ViewBag.listAuthor = getAuthor();
                 return View();
             }
             else
@@ -131,6 +133,25 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 return RedirectToAction("ListBooks");
             }
             
+        }
+        public List<Author> getAuthor()
+        {
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Author");
+            Dictionary<string, Author> data = JsonConvert.DeserializeObject<Dictionary<string, Author>>(response.Body.ToString());
+            var list = new List<Author>();
+            foreach (var item in data)
+            {
+                Author author = new Author();
+                author.id = item.Value.id;
+                author.email = item.Value.email;
+                author.website = item.Value.website;
+                author.name = item.Value.name;
+                author.note = item.Value.note;
+                author.avatar = item.Value.avatar;
+                list.Add(author);
+            }
+            return list;
         }
     }
 }

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using FireSharp.Interfaces;
 using FireSharp.Config;
 using FireSharp.Response;
 using QuanLyThuVien.Models;
-using Newtonsoft.Json.Serialization;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
@@ -124,7 +118,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             catch
             {
                 ViewBag.MsDelete = "Đã có lỗi xảy ra. Xoá người dùng thất bại!";
-                return RedirectToAction("ListBooks");
+                return RedirectToAction("ListUser");
             }
         }
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//

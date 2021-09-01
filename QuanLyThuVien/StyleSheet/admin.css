@@ -9777,7 +9777,7 @@ a.text-dark:hover, a.text-dark:focus {
   }
 }
 .table-bordered tr:hover {
-    background-color: lightgray;
+    background-color: #eaecf4;
     -webkit-transition: background 0.3s;
 }
 
@@ -10399,6 +10399,7 @@ a:focus {
 .sidebar .nav-item .collapse .collapse-inner .collapse-item:hover,
 .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover {
   background-color: #eaecf4;
+  transition: background-color 0.3s;
 }
 
 .sidebar .nav-item .collapse .collapse-inner .collapse-item:active,
@@ -10701,6 +10702,7 @@ a:focus {
 
 .sidebar-dark .nav-item .nav-link:active, .sidebar-dark .nav-item .nav-link:focus, .sidebar-dark .nav-item .nav-link:hover {
   color: #fff;
+  transition: color 0.5s;
 }
 
 .sidebar-dark .nav-item .nav-link:active i, .sidebar-dark .nav-item .nav-link:focus i, .sidebar-dark .nav-item .nav-link:hover i {

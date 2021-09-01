@@ -142,10 +142,12 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_SachController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ql_TacGiaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Books.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -156,6 +158,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chosen-sprite%402x.png" />
+    <Content Include="Content\chosen-sprite.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -164,6 +168,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Scripts\chosen\chosen.jquery.js" />
     <Content Include="Scripts\datatables-demo.js" />
     <Content Include="Scripts\dataTables.bootstrap4.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
@@ -171,6 +176,7 @@
     <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\sb-admin-2.js" />
     <Content Include="StyleSheet\all.css" />
+    <Content Include="StyleSheet\chosen\chosen.css" />
     <Content Include="StyleSheet\dataTables.bootstrap4.css" />
     <Content Include="StyleSheet\admin.css" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -227,6 +233,11 @@
     <Content Include="Areas\Admin\Views\ql_NguoiDung\Create.cshtml" />
     <Content Include="Areas\Admin\Views\ql_NguoiDung\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ql_NguoiDung\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_TacGia\ListAuthor.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_TacGia\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_TacGia\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_TacGia\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_TacGia\testChosen.cshtml" />
     <None Include="packages.config" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />

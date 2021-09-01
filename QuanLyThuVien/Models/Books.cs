@@ -10,8 +10,7 @@ namespace QuanLyThuVien.Models
         [Display(Name = "Tên sách")]
         [Required(ErrorMessage = "Vui lòng nhập tên sách")]
         public string title { get; set; }
-        [Display(Name = "Tác giả")]
-        [Required(ErrorMessage = "Vui lòng nhập tác giả")]
+        [Display(Name = "Tác giả")]   
         public string authors { get; set; }
         [Display(Name = "Thể loại")]      
         public string categories { get; set; }
