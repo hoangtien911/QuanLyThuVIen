@@ -176,6 +176,8 @@
     <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\sb-admin-2.js" />
     <Content Include="StyleSheet\all.css" />
+    <Content Include="StyleSheet\chosen\chosen-sprite%402x.png" />
+    <Content Include="StyleSheet\chosen\chosen-sprite.png" />
     <Content Include="StyleSheet\chosen\chosen.css" />
     <Content Include="StyleSheet\dataTables.bootstrap4.css" />
     <Content Include="StyleSheet\admin.css" />

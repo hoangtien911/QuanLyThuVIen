@@ -27,6 +27,8 @@ namespace QuanLyThuVien.Models
         [Display(Name = "Trạng thái")]       
         public string status { get; set; }
         [Display(Name = "Ảnh bìa")]       
-        public string thumbnailUrl { get; set; }      
+        public string thumbnailUrl { get; set; }
+
+        public string [] author_temp { get; set; }
     }
 }

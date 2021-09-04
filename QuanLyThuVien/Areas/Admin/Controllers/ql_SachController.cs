@@ -5,6 +5,7 @@ using FireSharp.Interfaces;
 using FireSharp.Config;
 using FireSharp.Response;
 using QuanLyThuVien.Models;
+using System.Linq;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
@@ -22,7 +23,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {           
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Books");
-            Dictionary<string, Books> data = JsonConvert.DeserializeObject<Dictionary<string, Books>>(response.Body.ToString());
+            dynamic data = JsonConvert.DeserializeObject<dynamic>(response.Body.ToString());
             var list = new List<Books>();
             foreach (var item in data)
             {
@@ -73,14 +74,16 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Create(Books book)
         {
-            if (book.title != null && book.authors != null)
+            ViewBag.listAuthor = getAuthor();
+            if (book.title != null && book.author_temp != null)
             {
                 client = new FireSharp.FirebaseClient(config);
+                book.authors = string.Join(",", book.author_temp);
+                book.author_temp = null;
                 PushResponse response = client.Push("Books/", book);
                 book._id = response.Result.name;
                 client.Set("Books/" + book._id, book);
-                ViewBag.MsCreate = "Thêm mới sách thành công!";
-                ViewBag.listAuthor = getAuthor();
+                ViewBag.MsCreate = "Thêm mới sách thành công!";                            
                 return View();
             }
             else
@@ -94,16 +97,24 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Edit(string id)
         {
+            ViewBag.listAuthor = getAuthor();
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Books/" + id);
             Books data = JsonConvert.DeserializeObject<Books>(response.Body);
+            if (data.authors != null)
+            {
+                data.author_temp = data.authors.Split(',');
+            }          
             return View(data);
         }
         [HttpPost]
         public ActionResult Edit(Books book)
         {
-            if(book.title != null && book.authors != null)
+            ViewBag.listAuthor = getAuthor();
+            if (book.title != null && book.author_temp != null)
             {
+                book.authors = string.Join(",", book.author_temp);
+                book.author_temp = null;
                 client = new FireSharp.FirebaseClient(config);
                 client.Set("Books/" + book._id, book);             
                 return RedirectToAction("ListBooks", new { @check = 1 });
