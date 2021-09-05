@@ -143,12 +143,14 @@
     <Compile Include="Areas\Admin\Controllers\ql_NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_SachController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_TacGiaController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ql_TheLoaiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Books.cs" />
+    <Compile Include="Models\Categories.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -239,7 +241,10 @@
     <Content Include="Areas\Admin\Views\ql_TacGia\Create.cshtml" />
     <Content Include="Areas\Admin\Views\ql_TacGia\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ql_TacGia\Detail.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_TacGia\testChosen.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_TheLoai\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_TheLoai\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_TheLoai\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_TheLoai\ListCategories.cshtml" />
     <None Include="packages.config" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />

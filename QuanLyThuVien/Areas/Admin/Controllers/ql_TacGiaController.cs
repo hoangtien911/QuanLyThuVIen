@@ -65,7 +65,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 PushResponse response = client.Push("Author/", author);
                 author.id = response.Result.name;
                 client.Set("Author/" + author.id, author);
-                ViewBag.MsCreate = "Thêm mới người tác giả công!";
+                ViewBag.MsCreate = "Thêm mới tác giả thành công!";
                 return View();
             }
             else
@@ -123,27 +123,6 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             FirebaseResponse response = client.Get("Author/" + id);
             Author data = JsonConvert.DeserializeObject<Author>(response.Body);
             return View(data);
-        }
-
-        public ActionResult testChosen()
-        {
-            client = new FireSharp.FirebaseClient(config);
-            FirebaseResponse response = client.Get("Author");
-            Dictionary<string, Author> data = JsonConvert.DeserializeObject<Dictionary<string, Author>>(response.Body.ToString());
-            var list = new List<Author>();
-            foreach (var item in data)
-            {
-                Author author = new Author();
-                author.id = item.Value.id;
-                author.email = item.Value.email;
-                author.website = item.Value.website;
-                author.name = item.Value.name;
-                author.note = item.Value.note;
-                author.avatar = item.Value.avatar;
-                list.Add(author);
-            }
-            ViewBag.list = list;
-            return View();
         }
     }
 }

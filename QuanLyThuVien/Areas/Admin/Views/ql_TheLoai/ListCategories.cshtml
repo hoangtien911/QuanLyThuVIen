@@ -1,0 +1,92 @@
+﻿@model IEnumerable<QuanLyThuVien.Models.Categories>
+
+@{
+    ViewBag.Title = "ListCategories";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <h6 class="col-md-9 font-weight-bold text-primary font-Title">Quản lý thể loại</h6>
+                <div class="col-md-3">
+                    <a href="@Url.Action("Create", "ql_TheLoai")" class="btn btn-success btn-user btn-block" style="font-weight:bold">
+                        <i class="fa fa-fw fa-plus-square"></i> Thêm mới thể loại
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr class="text-center">
+                            <th>
+                                @Html.DisplayNameFor(model => model.name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.shortDescription)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.longDescription)
+                            </th>                           
+                            <th style="width: 60px;">
+                                @Html.DisplayNameFor(model => model.image)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="width: 200px; text-align: center">
+                                    @Html.DisplayFor(modelItem => item.name)
+                                </td>
+                                <td style="width: 400px;">
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.shortDescription)
+                                    </p>                                   
+                                </td>
+                                <td>
+                                    <p>
+                                        @Html.DisplayFor(modelItem => item.longDescription)
+                                    </p>
+                                </td>                               
+                                <td style="max-width: 150px;" class="text-center">
+                                    <img src="@Html.DisplayFor(modelItem => item.image)" style="max-width: 150px; max-height:75px;" />
+                                </td>
+                                <td class="link-action">
+                                    <a class="link-edit" href="@Url.Action("Edit", "ql_TheLoai" , new { id = item.id})" onclick="return confirm('Bạn có muốn sửa thể loại @Html.DisplayFor(modelItem => item.name)?')">
+                                        <i class="fas fa-fw fa-edit"></i>Sửa
+                                    </a><br />
+                                    <a class="link-delete" href="@Url.Action("Delete", "ql_TheLoai" , new { id = item.id})" onclick="return confirm('Bạn có muốn xoá thể loại @Html.DisplayFor(modelItem => item.name)?')">
+                                        <i class="fas fa-fw fa-trash"></i>Xoá
+                                    </a><br />
+                                    <a class="link-detail" href="@Url.Action("Detail", "ql_TheLoai" , new { id = item.id})">
+                                        <i class="fas fa-fw fa-info"></i>Chi tiết
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.MsEdit != null)
+    {
+        Response.Write("<script>alert('" + ViewBag.MsEdit + "')</script>");
+        ViewBag.MsEdit = null;
+    }
+    if (ViewBag.MsDelete != null)
+    {
+        Response.Write("<script>alert('Đã xoá thể loại " + ViewBag.MsDelete + "')</script>");
+        ViewBag.MsDelete = null;
+    }
+}

@@ -1,0 +1,83 @@
+﻿@model QuanLyThuVien.Models.Categories
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+        <div class="col-xl-10 col-lg-12 col-md-9">
+
+            <div class="card o-hidden border-0 shadow-lg">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-horizontal">
+                            <h4 class="text-center">Thêm mới thể loại</h4>
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <hr />
+                            <div class="row text-sm-right">
+                                @Html.LabelFor(model => model.id, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.EditorFor(model => model.id, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                    @Html.ValidationMessageFor(model => model.id, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row text-sm-right">
+                                @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row text-sm-right">
+                                @Html.LabelFor(model => model.shortDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.shortDescription, new { htmlAttributes = new { @class = "form-control" } })                                   
+                                </div>
+                            </div>                          
+                            <div class="row text-sm-right">
+                                @Html.LabelFor(model => model.longDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor(model => model.longDescription, new { @class = "form-control" })                                 
+                                </div>
+                            </div>
+                            <div class="row text-sm-right">
+                                @Html.LabelFor(model => model.image, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.image, new { htmlAttributes = new { @class = "form-control" } })                               
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <a href="@Url.Action("ListCategories", "ql_TheLoai")" class="btn btn-google btn-user btn-block">
+                                        <i class="fa fa-fw fa-undo"></i> Trở lại
+                                    </a>
+                                </div>
+                                <div class="col-md-10">
+                                    <button type="submit" class="btn btn-primary btn-user btn-block" id="btnSave">
+                                        <i class="fa fa-fw fa-save"></i> Lưu
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.MsCreate != null)
+    {
+        Response.Write("<script>alert('" + ViewBag.MsCreate + "')</script>");
+        ViewBag.MsCreate = null;
+    }
+}

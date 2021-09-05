@@ -63,36 +63,77 @@
                                         @Html.DisplayFor(modelItem => item.title)
                                     </p>
                                 </td>
-                                <td style="max-width: 220px; width: 220px;">
-                                    @{
+                                <td style="max-width: 220px; width: 200px;">
+                                    @{ //Hiển thị tên tác giả từ chuỗi id
                                         if (item.authors != null)
                                         {
                                             int i = 0;
                                             string[] authorList = item.authors.Split(',');
                                             foreach (var ath in authorList)
                                             {
-                                                if (i == 2)
+                                                foreach (var athName in ViewBag.listAuthor)
                                                 {
-                                                    <p>
-                                                        @ath ...
-                                                    </p>
-                                                    break;
+                                                    if (ath.Equals(athName.id))
+                                                    {
+                                                        if (i == 2)
+                                                        {
+                                                            <p>
+                                                                @athName.name ...
+                                                            </p>
+                                                            break;
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>
+                                                                @athName.name
+                                                            </p>                                                           
+                                                        }
+                                                    }
                                                 }
-                                                else
+                                                i++;
+                                                if (i == 3)
                                                 {
-                                                    <p>
-                                                        @ath
-                                                    </p>
-                                                    i++;
+                                                    break;
                                                 }
                                             }
                                         }
                                     }
                                 </td>
-                                <td style="max-width: 220px; width: 220px;">
-                                    <p>
-                                        @Html.DisplayFor(modelItem => item.categories)
-                                    </p>
+                                <td style="max-width: 220px; width: 200px;">
+                                    @{
+                                        if (item.categories != null)
+                                        {
+                                            int i = 0;
+                                            string[] categoriesList = item.categories.Split(',');
+                                            foreach (var cate in categoriesList)
+                                            {
+                                                foreach (var cateName in ViewBag.listCategories)
+                                                {
+                                                    if (cate.Equals(cateName.id))
+                                                    {
+                                                        if (i == 2)
+                                                        {
+                                                            <p>
+                                                                @cateName.name ...
+                                                            </p>
+                                                            break;
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>
+                                                                @cateName.name
+                                                            </p>
+                                                        }
+                                                    }
+                                                }
+                                                i++;
+                                                if (i == 3)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
                                 </td>
                                 <td style="max-width: 200px;">
                                     <p>

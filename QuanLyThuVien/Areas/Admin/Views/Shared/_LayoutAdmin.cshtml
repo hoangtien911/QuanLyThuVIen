@@ -71,6 +71,13 @@
                 </a>
             </li>
 
+            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TheLoai" ? "active" : "")">
+                <a class="nav-link" href="@Url.Action("ListCategories","ql_TheLoai")">
+                    <i class="fas fa-fw fa-sort-alpha-down"></i>
+                    <span>Quản lý thể loại</span>
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo">

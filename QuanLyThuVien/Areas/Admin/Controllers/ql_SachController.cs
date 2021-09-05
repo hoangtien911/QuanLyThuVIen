@@ -53,6 +53,8 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                     check = null;
                 }               
             }
+            ViewBag.listAuthor = getAuthor();
+            ViewBag.listCategories = getCategories();
             return View(list);
         }       
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
@@ -69,17 +71,23 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         public ActionResult Create()
         {
             ViewBag.listAuthor = getAuthor();
+            ViewBag.listCategories = getCategories();
             return View();
         }
         [HttpPost]
         public ActionResult Create(Books book)
         {
             ViewBag.listAuthor = getAuthor();
+            ViewBag.listCategories = getCategories();
             if (book.title != null && book.author_temp != null)
             {
                 client = new FireSharp.FirebaseClient(config);
+                // gộp mảng tác giả, thể loại sang chuỗi
                 book.authors = string.Join(",", book.author_temp);
+                book.categories = string.Join(",", book.categories_temp);
                 book.author_temp = null;
+                book.categories_temp = null;
+                //
                 PushResponse response = client.Push("Books/", book);
                 book._id = response.Result.name;
                 client.Set("Books/" + book._id, book);
@@ -98,23 +106,31 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         public ActionResult Edit(string id)
         {
             ViewBag.listAuthor = getAuthor();
+            ViewBag.listCategories = getCategories();
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Books/" + id);
             Books data = JsonConvert.DeserializeObject<Books>(response.Body);
+            //Tách chuỗi tác giả, thể loại sang mảng
             if (data.authors != null)
-            {
-                data.author_temp = data.authors.Split(',');
-            }          
+                data.author_temp = data.authors.Split(',');   
+            if (data.categories != null)
+                data.categories_temp = data.categories.Split(',');
+            //
             return View(data);
         }
         [HttpPost]
         public ActionResult Edit(Books book)
         {
             ViewBag.listAuthor = getAuthor();
+            ViewBag.listCategories = getCategories();
             if (book.title != null && book.author_temp != null)
             {
+                // gộp mảng tác giả, thể loại sang chuỗi
                 book.authors = string.Join(",", book.author_temp);
+                book.categories = string.Join(",", book.categories_temp);
                 book.author_temp = null;
+                book.categories_temp = null;
+                //
                 client = new FireSharp.FirebaseClient(config);
                 client.Set("Books/" + book._id, book);             
                 return RedirectToAction("ListBooks", new { @check = 1 });
@@ -145,6 +161,8 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             }
             
         }
+      
+        /// <returns></returns>
         public List<Author> getAuthor()
         {
             client = new FireSharp.FirebaseClient(config);
@@ -161,6 +179,24 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 author.note = item.Value.note;
                 author.avatar = item.Value.avatar;
                 list.Add(author);
+            }
+            return list;
+        }
+        public List<Categories> getCategories()
+        {
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Categories");
+            Dictionary<string, Categories> data = JsonConvert.DeserializeObject<Dictionary<string, Categories>>(response.Body.ToString());
+            var list = new List<Categories>();
+            foreach (var item in data)
+            {
+                Categories categories = new Categories();
+                categories.id = item.Value.id;
+                categories.name = item.Value.name;
+                categories.shortDescription = item.Value.shortDescription;
+                categories.longDescription = item.Value.longDescription;
+                categories.image = item.Value.image;
+                list.Add(categories);
             }
             return list;
         }

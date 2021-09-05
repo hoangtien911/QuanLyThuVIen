@@ -41,10 +41,7 @@
                             </div>
                             <div class="row text-sm-right">
                                 @Html.LabelFor(model => model.authors, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @*Html.DropDownListFor(model => model.authors,
-                                    new SelectList(ViewBag.listAuthor, "name", "name"),
-                                    new { @class = "form-control", id = "select-author" })*@
+                                <div class="col-md-10">                                   
                                     @Html.ListBoxFor(model => model.author_temp,
                                      new MultiSelectList(ViewBag.listAuthor, "id", "name"),
                                      new {@class = "form-control", id = "select-author" })
@@ -53,7 +50,9 @@
                             <div class="row text-sm-right">
                                 @Html.LabelFor(model => model.categories, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.EditorFor(model => model.categories, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ListBoxFor(model => model.categories_temp,
+                                     new MultiSelectList(ViewBag.listCategories, "id", "name"),
+                                     new { @class = "form-control", id = "select-categories" })
                                 </div>
                             </div>
                             <div class="row text-sm-right">
@@ -72,7 +71,6 @@
                                 @Html.LabelFor(model => model.count, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-4">
                                     @Html.EditorFor(model => model.count, new { htmlAttributes = new { @class = "form-control" } })
-
                                 </div>
                                 @Html.LabelFor(model => model.publishedDate, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-4">
@@ -117,6 +115,9 @@
         $(function () {
             $("#select-author").chosen({
                 no_results_text: "Không tìm thấy tác giả"               
+            });
+            $("#select-categories").chosen({
+                no_results_text: "Không tìm thấy thể loại"
             });
         })
     </script>    

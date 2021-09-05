@@ -30,5 +30,6 @@ namespace QuanLyThuVien.Models
         public string thumbnailUrl { get; set; }
 
         public string [] author_temp { get; set; }
+        public string[] categories_temp { get; set; }
     }
 }
