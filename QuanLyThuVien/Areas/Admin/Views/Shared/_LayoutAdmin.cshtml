@@ -50,49 +50,81 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
+            <!-- Quản lý sách -->
             <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_Sach" ? "active" : "")">
-                <a class="nav-link" href="@Url.Action("ListBooks","ql_Sach")">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                   aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Quản lý sách</span>
                 </a>
-            </li>
-
-            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_NguoiDung" ? "active" : "")">
-                <a class="nav-link" href="@Url.Action("ListUser","ql_NguoiDung")">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Quản lý người dùng</span>
-                </a>
-            </li>
-
-            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TacGia" ? "active" : "")">
-                <a class="nav-link" href="@Url.Action("ListAuthor","ql_TacGia")">
-                    <i class="fas fa-fw fa-address-book"></i>
-                    <span>Quản lý tác giả</span>
-                </a>
-            </li>
-
-            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TheLoai" ? "active" : "")">
-                <a class="nav-link" href="@Url.Action("ListCategories","ql_TheLoai")">
-                    <i class="fas fa-fw fa-sort-alpha-down"></i>
-                    <span>Quản lý thể loại</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                   aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Sách</span>
-                </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                        <h6 class="collapse-header">Tác vụ:</h6>
+                        <a class="collapse-item" href="@Url.Action("Create","ql_Sach")">Thêm mới sách</a>
+                        <a class="collapse-item" href="@Url.Action("ListBooks","ql_Sach")">Danh sách sách</a>
                     </div>
                 </div>
             </li>
-
+            <!-- Quản lý tác giả -->
+            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TacGia" ? "active" : "")">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                   aria-expanded="true" aria-controls="collapseThree">
+                    <i class="fas fa-fw fa-address-book"></i>
+                    <span>Quản lý tác giả</span>
+                </a>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Tác vụ:</h6>
+                        <a class="collapse-item" href="@Url.Action("Create","ql_TacGia")">Thêm mới tác giả</a>
+                        <a class="collapse-item" href="@Url.Action("ListAuthor","ql_TacGia")">Danh sách tác giả</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Quản lý thể loại -->
+            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TheLoai" ? "active" : "")">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+                   aria-expanded="true" aria-controls="collapseFour">
+                    <i class="fas fa-fw fa-sort-alpha-down"></i>
+                    <span>Quản lý thể loại</span>
+                </a>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Tác vụ:</h6>
+                        <a class="collapse-item" href="@Url.Action("Create","ql_TheLoai")">Thêm mới thể loại</a>
+                        <a class="collapse-item" href="@Url.Action("ListCategories","ql_TheLoai")">Danh sách thể loại</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Quản lý phiếu mượn -->
+            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_PhieuMuon" ? "active" : "")">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive"
+                   aria-expanded="true" aria-controls="collapseFive">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                    <span>Quản lý phiếu mượn</span>
+                </a>
+                <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Tác vụ:</h6>
+                        <a class="collapse-item" href="@Url.Action("Create","ql_PhieuMuon")">Thêm mới phiếu mượn</a>
+                        <a class="collapse-item" href="@Url.Action("ListCallCard","ql_PhieuMuon")">Danh sách phiếu mượn</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Quản lý người dùng -->
+            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_NguoiDung" ? "active" : "")">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSix"
+                   aria-expanded="true" aria-controls="collapseSix">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Quản lý người dùng</span>
+                </a>
+                <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Tác vụ:</h6>
+                        <a class="collapse-item" href="@Url.Action("Create","ql_NguoiDung")">Thêm mới người dùng</a>
+                        <a class="collapse-item" href="@Url.Action("ListUser","ql_NguoiDung")">Danh sách người dùng</a>
+                    </div>
+                </div>
+            </li>
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"

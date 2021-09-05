@@ -141,6 +141,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_NguoiDungController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ql_PhieuMuonController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_SachController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_TacGiaController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_TheLoaiController.cs" />
@@ -150,6 +151,7 @@
     </Compile>
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Books.cs" />
+    <Compile Include="Models\CallCard.cs" />
     <Compile Include="Models\Categories.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -245,6 +247,7 @@
     <Content Include="Areas\Admin\Views\ql_TheLoai\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ql_TheLoai\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\ql_TheLoai\ListCategories.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_PhieuMuon\Create.cshtml" />
     <None Include="packages.config" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />

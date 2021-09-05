@@ -11,13 +11,13 @@
         <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row border-right">
-                <div class="col-lg-4 d-flex flex-column align-items-center text-center border-right">
-                    <img class="rounded-circle mt-5" style="width:150px; height: 150px;" src="@Html.DisplayFor(model => model.avatar)" />                
+                <div class="col-lg-4 d-flex flex-column align-items-center text-center align-self-center">
+                    <img class="rounded-circle" style="width:200px; height: 200px;" src="@Html.DisplayFor(model => model.avatar)" />                
                     <span class="font-weight-bold" style="color: black; margin-top: 10px;">@Model.username</span>
                     <span class="text-black-50">@Model.email</span>
 
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-8 border-left">
                     <div class="text-md-right icon-back">
                         <a href="@Url.Action("ListUser", "ql_NguoiDung")">
                             <i class="fa fa-fw fa-times"></i>

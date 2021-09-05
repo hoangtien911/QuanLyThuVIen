@@ -5,7 +5,6 @@ using FireSharp.Interfaces;
 using FireSharp.Config;
 using FireSharp.Response;
 using QuanLyThuVien.Models;
-using System.Linq;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
@@ -23,7 +22,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {           
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Books");
-            dynamic data = JsonConvert.DeserializeObject<dynamic>(response.Body.ToString());
+            Dictionary<string, Books> data = JsonConvert.DeserializeObject<Dictionary<string, Books>>(response.Body.ToString());
             var list = new List<Books>();
             foreach (var item in data)
             {
