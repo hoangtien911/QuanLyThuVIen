@@ -22,7 +22,7 @@ namespace QuanLyThuVien.Models
         public int count { get; set; }
         [Display(Name = "Ngày phát hành")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime publishedDate { get; set; }
         [Display(Name = "Trạng thái")]       
         public string status { get; set; }

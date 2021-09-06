@@ -248,6 +248,7 @@
     <Content Include="Areas\Admin\Views\ql_TheLoai\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\ql_TheLoai\ListCategories.cshtml" />
     <Content Include="Areas\Admin\Views\ql_PhieuMuon\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\ql_PhieuMuon\ListCallCard.cshtml" />
     <None Include="packages.config" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />

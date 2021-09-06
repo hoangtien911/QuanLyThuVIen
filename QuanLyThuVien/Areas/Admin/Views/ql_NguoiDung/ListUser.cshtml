@@ -70,8 +70,20 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.password)
                                 </td>
-                                <td class="text-center">
-                                    @Html.DisplayFor(modelItem => item.dateOfBirth)
+                                <td class="text-center" style="width:130px;">
+                                    @{
+                                        DateTime date_temp = new DateTime(0001, 01, 01);
+                                        if (DateTime.Compare(item.dateOfBirth, date_temp) == 0)
+                                        {
+                                            <p>
+                                                Chưa có thông tin
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.dateOfBirth)
+                                        }
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.fullName)
@@ -84,8 +96,19 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.phone)
                                 </td>
-                                <td class="text-center">
-                                    @Html.DisplayFor(modelItem => item.dateOfRegist)
+                                <td class="text-center" style="width:130px;">
+                                    @{                                        
+                                        if (DateTime.Compare(item.dateOfRegist, date_temp) == 0)
+                                        {
+                                            <p>
+                                                Chưa có thông tin
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.dateOfRegist)
+                                        }
+                                    }
                                 </td>
                                 <td style="max-width: 150px;" class="text-center">
                                     <img src="@Html.DisplayFor(modelItem => item.avatar)" style="max-width: 150px; max-height:75px;" />

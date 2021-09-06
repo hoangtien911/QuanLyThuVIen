@@ -32,12 +32,12 @@ namespace QuanLyThuVien.Models
         [Display(Name = "Năm sinh")]
         [Required(ErrorMessage = "Vui lòng nhập năm sinh")]
         [DataType(DataType.Date)]        
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public Nullable<System.DateTime> dateOfBirth { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime dateOfBirth { get; set; }
         [Display(Name = "Ngày đăng ký")]
         [Required(ErrorMessage = "Vui lòng nhập ngày đăng ký")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public Nullable<System.DateTime> dateOfRegist { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime dateOfRegist { get; set; }
     }
 }

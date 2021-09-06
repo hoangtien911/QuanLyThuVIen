@@ -5,6 +5,7 @@ using FireSharp.Interfaces;
 using FireSharp.Config;
 using FireSharp.Response;
 using QuanLyThuVien.Models;
+using System;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
@@ -33,7 +34,17 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 callCard.date_issued = item.Value.date_issued;
                 callCard.date_return = item.Value.date_return;
                 callCard.date_returned = item.Value.date_returned;
-                callCard.status = item.Value.status;               
+                if(callCard.date_return != null)
+                {
+                    if (DateTime.Compare(callCard.date_return, DateTime.Now) < 0)
+                        callCard.status = "Quá hạn";
+                    if (DateTime.Compare(callCard.date_return, DateTime.Now) > 0)
+                        callCard.status = "Đang mượn";
+                    if (DateTime.Compare(callCard.date_return, new DateTime(0001, 01, 01)) == 0)
+                        callCard.status = "Chưa cập nhật";              
+                }
+                if (DateTime.Compare(callCard.date_returned, new DateTime(0001, 01, 01)) != 0)
+                    callCard.status = "Đã trả";
                 list.Add(callCard);
             }
             if (check != null)

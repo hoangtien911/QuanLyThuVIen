@@ -1,0 +1,187 @@
+﻿@model IEnumerable<QuanLyThuVien.Models.CallCard>
+
+@{
+    ViewBag.Title = "ListCallCard";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <h6 class="col-md-9 font-weight-bold text-primary font-Title">Quản lý phiếu mượn</h6>
+                <div class="col-md-3">
+                    <a href="@Url.Action("Create", "ql_PhieuMuon")" class="btn btn-success btn-user btn-block" style="font-weight:bold">
+                        <i class="fa fa-fw fa-plus-square"></i> Thêm mới phiếu mượn
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr class="text-center">
+                            <th style="width: 250px;">
+                                @Html.DisplayNameFor(model => model.id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.user_id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.books_id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.date_issued)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.date_return)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.date_returned)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.status)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.id)
+                                </td>
+                                <td>
+                                    @{ //Hiển thị tên người dùng từ id
+                                        if (item.user_id != null)
+                                        {
+                                            foreach (var user in ViewBag.listUser)
+                                            {
+                                                if(item.user_id.Equals(user.id))
+                                                {
+                                                    <p>
+                                                        @user.username
+                                                    </p>
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{ //Hiển thị tên sách từ chuỗi id
+                                        if (item.books_id != null)
+                                        {
+                                            int i = 0;
+                                            string[] booksList = item.books_id.Split(',');
+                                            foreach (var book in booksList)
+                                            {
+                                                foreach (var bookName in ViewBag.listBooks)
+                                                {
+                                                    if (book.Equals(bookName._id))
+                                                    {
+                                                        if (i == 2)
+                                                        {
+                                                            <p>
+                                                                @bookName.title ...
+                                                            </p>
+                                                            break;
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>
+                                                                @bookName.title
+                                                            </p>
+                                                        }
+                                                    }
+                                                }
+                                                i++;
+                                                if (i == 3)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        DateTime date_temp = new DateTime(0001,01,01);
+                                        if (DateTime.Compare(item.date_issued, date_temp) == 0 )
+                                        {
+                                            <p>
+                                                Chưa có thông tin
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.date_issued)
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @{                                       
+                                        if (DateTime.Compare(item.date_return, date_temp) == 0)
+                                        {
+                                            <p>
+                                                Chưa có thông tin
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.date_return)
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @{                                       
+                                        if (DateTime.Compare(item.date_returned, date_temp) == 0)
+                                        {
+                                            <p>
+                                                Chưa có thông tin
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.date_returned)
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">                                 
+                                    @Html.DisplayFor(modelItem => item.status)                                   
+                                </td>                                
+                                <td class="link-action">
+                                    <a class="link-edit" href="@Url.Action("Edit", "ql_PhieuMuon" , new { id = item.id})" onclick="return confirm('Bạn có muốn sửa phiếu mượn @Html.DisplayFor(modelItem => item.id)?')">
+                                        <i class="fas fa-fw fa-edit"></i>Sửa
+                                    </a><br />
+                                    <a class="link-delete" href="@Url.Action("Delete", "ql_PhieuMuon" , new { id = item.id})" onclick="return confirm('Bạn có muốn xoá phiếu mượn @Html.DisplayFor(modelItem => item.id)?')">
+                                        <i class="fas fa-fw fa-trash"></i>Xoá
+                                    </a><br />
+                                    <a class="link-detail" href="@Url.Action("Detail", "ql_PhieuMuon" , new { id = item.id})">
+                                        <i class="fas fa-fw fa-info"></i>Chi tiết
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.MsEdit != null)
+    {
+        Response.Write("<script>alert('" + ViewBag.MsEdit + "')</script>");
+        ViewBag.MsEdit = null;
+    }
+    if (ViewBag.MsDelete != null)
+    {
+        Response.Write("<script>alert('Đã xoá phiếu mượn " + ViewBag.MsDelete + "')</script>");
+        ViewBag.MsDelete = null;
+    }
+}

@@ -151,11 +151,20 @@
                                     </p>
 
                                 </td>
-                                <td style="width:150px; max-width: 150px;">
-                                    <p>
-                                        @Html.DisplayFor(modelItem => item.publishedDate)
-                                    </p>
-
+                                <td style="width:130px; max-width: 150px;">
+                                    @{
+                                        DateTime date_temp = new DateTime(0001, 01, 01);
+                                        if (DateTime.Compare(item.publishedDate, date_temp) == 0)
+                                        {
+                                            <p>
+                                                Chưa có thông tin
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.publishedDate)
+                                        }
+                                    }
                                 </td>
                                 <td class="text-center">
                                     <p>
