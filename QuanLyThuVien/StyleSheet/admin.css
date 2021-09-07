@@ -11319,3 +11319,15 @@ body.sidebar-toggled footer.sticky-footer {
 .icon-back a:hover {
     color: crimson !important;
 }
+.danger-callcard {
+    color: red;
+    font-weight: 900;
+}
+.success-callcard {
+    color: #1cc88a;
+    font-weight: 900;
+}
+.alert-callcard {
+    color: #c7c700;
+    font-weight: 900;
+}

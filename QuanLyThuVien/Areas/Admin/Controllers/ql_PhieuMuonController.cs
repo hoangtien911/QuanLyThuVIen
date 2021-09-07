@@ -18,7 +18,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
         };
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH PHIẾU MƯỢN vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public ActionResult ListCallCard(string check)
         {
             client = new FireSharp.FirebaseClient(config);
@@ -34,17 +34,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 callCard.date_issued = item.Value.date_issued;
                 callCard.date_return = item.Value.date_return;
                 callCard.date_returned = item.Value.date_returned;
-                if(callCard.date_return != null)
-                {
-                    if (DateTime.Compare(callCard.date_return, DateTime.Now) < 0)
-                        callCard.status = "Quá hạn";
-                    if (DateTime.Compare(callCard.date_return, DateTime.Now) > 0)
-                        callCard.status = "Đang mượn";
-                    if (DateTime.Compare(callCard.date_return, new DateTime(0001, 01, 01)) == 0)
-                        callCard.status = "Chưa cập nhật";              
-                }
-                if (DateTime.Compare(callCard.date_returned, new DateTime(0001, 01, 01)) != 0)
-                    callCard.status = "Đã trả";
+                callCard.status = item.Value.status;
                 list.Add(callCard);
             }
             if (check != null)
@@ -70,7 +60,47 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("CallCard/" + id);
-            CallCard data = JsonConvert.DeserializeObject<CallCard>(response.Body);
+            CallCard data = JsonConvert.DeserializeObject<CallCard>(response.Body);           
+            foreach (var item in getUser())
+            {
+                if (item.id.Equals(data.user_id))
+                {
+                    ViewBag.UserDetail = item;
+                    break;
+                }
+            }
+            //Tách chuỗi sách sang mảng
+            if (data.books_id != null)
+                data.books_id_temp = data.books_id.Split(',');
+            //
+            int i = 0;
+            string namebooks = "";
+            foreach (string bookid in data.books_id_temp)
+            {
+                foreach (var book in getBooks())
+                {
+                    if (i < data.books_id_temp.Length - 1)
+                    {
+                        if (bookid.Equals(book._id))
+                        {
+                            namebooks += book.title + ", ";
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if (bookid.Equals(book._id))
+                        {
+                            namebooks += book.title + ".";
+                            break;
+                        }
+                    }
+                }
+                i++;
+                if (i == data.books_id_temp.Length)
+                    break;
+            }
+            ViewBag.nameBooks = namebooks;
             return View(data);
         }
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv THÊM MỚI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
@@ -92,7 +122,8 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 // gộp mảng sách sang chuỗi
                 callCard.books_id = string.Join(",", callCard.books_id_temp);
                 callCard.books_id_temp = null;
-                //
+                //kiểm tra trạng thái
+                callCard.status = checkStatus(callCard);
                 PushResponse response = client.Push("CallCard/", callCard);
                 callCard.id = response.Result.name;
                 client.Set("CallCard/" + callCard.id, callCard);
@@ -126,12 +157,13 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {
             ViewBag.listUser = getUser();
             ViewBag.listBooks = getBooks();
-            if (callCard.user_id != null && callCard.books_id != null)
+            if (callCard.user_id != null && callCard.books_id_temp != null)
             {
                 // gộp mảng sách sang chuỗi
                 callCard.books_id = string.Join(",", callCard.books_id_temp);
                 callCard.books_id_temp = null;
-                //
+                //kiểm tra trạng thái
+                callCard.status = checkStatus(callCard);
                 client = new FireSharp.FirebaseClient(config);
                 client.Set("CallCard/" + callCard.id, callCard);
                 return RedirectToAction("ListCallCard", new { @check = 1 });
@@ -211,6 +243,21 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 list.Add(book);
             }
             return list;
+        }
+        public string checkStatus (CallCard callCard)
+        {
+            if (callCard.date_return != null)
+            {
+                if (DateTime.Compare(callCard.date_return, DateTime.Now) < 0)
+                    callCard.status = "Quá hạn";
+                if (DateTime.Compare(callCard.date_return, DateTime.Now) > 0)
+                    callCard.status = "Đang mượn";
+                if (DateTime.Compare(callCard.date_return, new DateTime(0001, 01, 01)) == 0)
+                    callCard.status = "Chưa cập nhật";
+            }
+            if (DateTime.Compare(callCard.date_returned, new DateTime(0001, 01, 01)) != 0)
+                callCard.status = "Đã trả";
+            return callCard.status;
         }
     }
 }

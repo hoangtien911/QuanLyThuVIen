@@ -1,0 +1,96 @@
+﻿@model QuanLyThuVien.Models.CallCard
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container" style="max-width:1100px;">
+
+    <div class="card o-hidden border-0 shadow-lg">
+        <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row border-right">
+                <div class="col-lg-4 d-flex flex-column align-items-center text-center align-self-center">
+                    <img class="rounded-circle" style="width:200px; height: 200px;" src="@ViewBag.UserDetail.avatar)" />
+                    <span class="font-weight-bold" style="color: black; margin-top: 10px;">@ViewBag.UserDetail.username</span>
+                    <span class="text-black-50">@ViewBag.UserDetail.email</span>
+
+                </div>
+                <div class="col-lg-8 border-left">
+                    <div class="text-md-right icon-back">
+                        <a href="@Url.Action("ListCallCard", "ql_PhieuMuon")">
+                            <i class="fa fa-fw fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900">Chi tiết phiếu mượn: @Model.id</h1>
+                        </div>
+                        <hr />
+                        <div class="row details">
+                            <div class="text-sm-center col-md-3 details-title">
+                                @Html.DisplayNameFor(model => model.user_id)
+                            </div>
+                            <div class="text-sm-left col-md-9">
+                                @ViewBag.UserDetail.username
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title">
+                                @Html.DisplayNameFor(model => model.books_id)
+                            </div>
+                            <div class="text-sm-left col-md-9">
+                                @ViewBag.nameBooks
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title">
+                                @Html.DisplayNameFor(model => model.date_issued)
+                            </div>
+                            <div class="text-sm-left col-md-9">
+                                @Html.DisplayFor(model => model.date_return)
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title">
+                                @Html.DisplayNameFor(model => model.date_returned)
+                            </div>
+                            <div class="text-sm-left col-md-9">
+                                @Html.DisplayFor(model => model.date_returned)
+                            </div>
+                        </div>                        
+                        <hr />
+                        <div class="row">
+                            <div class="text-sm-center col-md-3 details-title ">
+                                @Html.DisplayNameFor(model => model.status)
+                            </div>
+                            <div class="text-sm-left col-md-9 @(Model.status.Equals("Quá hạn") ? "danger-callcard" : 
+                                                                Model.status.Equals("Đang mượn") ? "success-callcard" : 
+                                                                Model.status.Equals("Đã trả") ? "alert-callcard" : "")">
+                                @Html.DisplayFor(model => model.status)
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-8">
+                                <a href="@Url.Action("Edit", "ql_PhieuMuon", new { id = Model.id})" class="btn btn-warning btn-user btn-block" onclick="return confirm('Bạn có muốn sửa phiếu mượn @Model.id?')">
+                                    <i class="fa fa-fw fa-edit"></i> Sửa thông tin phiếu mượn
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="@Url.Action("Delete", "ql_PhieuMuon", new { id = Model.id})" class="btn btn-google btn-user btn-block" onclick="return confirm('Bạn có muốn xoá phiếu mượn @Model.id?')">
+                                    <i class="fa fa-fw fa-trash"></i> Xoá phiếu mượn
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
