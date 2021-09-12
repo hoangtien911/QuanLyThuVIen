@@ -23,6 +23,8 @@ namespace QuanLyThuVien.Controllers
         public ActionResult HomePage()
         {
             ViewBag.listbooks = ListBooks();
+            ViewBag.listauthor = ListAuthor();
+            ViewBag.lenghtBooks = ListBooks().Count / 8 + 1;
             return View();
         }
 
@@ -49,6 +51,25 @@ namespace QuanLyThuVien.Controllers
                 book.thumbnailUrl = item.Value.thumbnailUrl;
                 list.Add(book);
             }           
+            return list;
+        }
+        public List<Author> ListAuthor()
+        {
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Author");
+            Dictionary<string, Author> data = JsonConvert.DeserializeObject<Dictionary<string, Author>>(response.Body.ToString());
+            var list = new List<Author>();
+            foreach (var item in data)
+            {
+                Author author = new Author();
+                author.id = item.Value.id;
+                author.email = item.Value.email;
+                author.website = item.Value.website;
+                author.name = item.Value.name;
+                author.note = item.Value.note;
+                author.avatar = item.Value.avatar;
+                list.Add(author);
+            }            
             return list;
         }
     }
