@@ -145,6 +145,7 @@
     <Compile Include="Areas\Admin\Controllers\ql_SachController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_TacGiaController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_TheLoaiController.cs" />
+    <Compile Include="Controllers\SachController.cs" />
     <Compile Include="Controllers\TrangChuController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -328,6 +329,7 @@
     <Content Include="Content\LibraryImage\images\testimonial\1.png" />
     <Content Include="Content\LibraryImage\images\testimonial\2.png" />
     <Content Include="Content\LibraryImage\images\testimonial\3.png" />
+    <Content Include="Content\LibraryImage\wallpaper.jpg" />
     <Content Include="Content\toppng.com-open-book-white-958x342 %281%29.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -459,6 +461,7 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />
     <Content Include="Views\TrangChu\HomePage.cshtml" />
+    <Content Include="Views\Sach\KhoSach.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

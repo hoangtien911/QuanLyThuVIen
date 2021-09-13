@@ -46,16 +46,32 @@
 
 /*============ Pagination page ============*/
 
-    const productItem = document.querySelector("#product-Item").children;
     const prev = document.querySelector(".zmdi-chevron-left");
     const next = document.querySelector(".zmdi-chevron-right");
-    const page = document.querySelector("#page-num").children;
-    const maxItem = 8;
-    let index = 1;   
-    
-    const pagination = Math.ceil(productItem.length / maxItem);
+    const page = document.querySelector("#page-num").children;   
+    let pagination;
+    let length;
+    let maxItem
+    var product;
+    var checkscroll;
 
-    
+    try {
+        maxItem = 8;
+        product = document.querySelector("#product-Item").children;
+        pagination = Math.ceil(product.length / maxItem);
+        length = product.length;
+
+    } catch{
+        maxItem = 12;
+        product = document.querySelector('#product-books').children;
+        pagination = Math.ceil(product.length / maxItem);
+        length = product.length;
+        checkscroll = true;
+    } 
+
+    console.log(product);
+    let index = 1;   
+
     $("#page-num > li").click(function () {
         for (let i = 1; i <= pagination; i++) {
             if ((this).innerText == i) {
@@ -67,6 +83,9 @@
             else
                 page[i].classList.remove("active")
         }
+        if (checkscroll) {
+            document.documentElement.scrollTop = document.body.scrollTop = 400;
+        }        
     });
     page[pagination + 1].addEventListener("click", function () {
         page[index].classList.remove("active");
@@ -98,38 +117,26 @@
         }
         
     }
+   
     function showItems() {
-        for (let i = 0; i < productItem.length; i++) {
-            productItem[i].classList.remove("show");
-            productItem[i].classList.add("hidden");
+        for (let i = 0; i < length; i++) {
+            product[i].classList.remove("show");
+            product[i].classList.add("hidden");
 
 
             if (i >= (index * maxItem) - maxItem && i < index * maxItem) {
                 // if i greater than and equal to (index*maxItem)-maxItem;
                 // means  (1*8)-8=0 if index=2 then (2*8)-8=8
-                productItem[i].classList.remove("hidden");
-                productItem[i].classList.add("show");
+                product[i].classList.remove("hidden");
+                product[i].classList.add("show");
             }         
-        }
-
-
-    }  
-    /*$("#page-num > li").click(function () {             
-        for (let i = 1; i <= pagination; i++) {          
-            if ((this).innerText == i) {
-                page[i].classList.add("active")
-                index = i;
-                check();
-                showItems();
-            }             
-            else
-                page[i].classList.remove("active")
-        }
-    });*/
+        }       
+    }    
     window.onload = function () {
         showItems();
         check();
     }
+    
 /*============ Scroll Up Activation ============*/
     $.scrollUp({
         scrollText: '<i class="fa fa-angle-up"></i>',

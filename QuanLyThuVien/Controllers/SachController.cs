@@ -11,24 +11,43 @@ using QuanLyThuVien.Models;
 
 namespace QuanLyThuVien.Controllers
 {
-    public class TrangChuController : Controller
+    public class SachController : Controller
     {
-        // GET: TrangChu
+        // GET: Sach
         IFirebaseClient client;
         IFirebaseConfig config = new FirebaseConfig
         {
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
         };
-        public ActionResult HomePage()
+        public ActionResult KhoSach()
         {
             ViewBag.listbooks = ListBooks();
             ViewBag.listauthor = ListAuthor();
-            ViewBag.lenghtBooks = ListBooks().Count / 8 + 1;
-            return View();
+            ViewBag.listcategories = ListCategories();
+            int[] MangTheLoai = new int[ListCategories().Count];
+            int i = 0;
+            foreach(var theLoai in ListCategories())
+            {
+                foreach(var sach in ListBooks())
+                {
+                    if (sach.categories != null)
+                        sach.categories_temp = sach.categories.Split(',');
+                    foreach(var idTheLoai in sach.categories_temp)
+                    {
+                        if (theLoai.id == idTheLoai)
+                        {
+                            MangTheLoai[i]++;
+                        }
+                    }                    
+                }
+                i++;
+            }
+            ViewBag.soLuongSach = MangTheLoai;
+            ViewBag.lenghtBooks = ListBooks().Count / 12 + 1;
+            return View();           
         }
 
-        
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public List<Books> ListBooks()
         {
@@ -50,7 +69,7 @@ namespace QuanLyThuVien.Controllers
                 book.status = item.Value.status;
                 book.thumbnailUrl = item.Value.thumbnailUrl;
                 list.Add(book);
-            }           
+            }
             return list;
         }
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH TÁC GIẢ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
@@ -70,7 +89,27 @@ namespace QuanLyThuVien.Controllers
                 author.note = item.Value.note;
                 author.avatar = item.Value.avatar;
                 list.Add(author);
-            }            
+            }
+            return list;
+        }
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH THỂ LOẠI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        public List<Categories> ListCategories()
+        {
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Categories");
+            Dictionary<string, Categories> data = JsonConvert.DeserializeObject<Dictionary<string, Categories>>(response.Body.ToString());
+            var list = new List<Categories>();
+            foreach (var item in data)
+            {
+                Categories categories = new Categories();
+                categories.id = item.Value.id;
+                categories.name = item.Value.name;
+                categories.shortDescription = item.Value.shortDescription;
+                categories.longDescription = item.Value.longDescription;
+                categories.image = item.Value.image;
+                list.Add(categories);
+            }
+                  
             return list;
         }
     }
