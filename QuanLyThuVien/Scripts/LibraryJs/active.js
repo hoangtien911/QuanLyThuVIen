@@ -1,4 +1,4 @@
-/*********************************************************************************
+﻿/*********************************************************************************
 
     Template Name: Boighor Bookshop Responsive Bootstrap4 Template 
     Version: 1.0
@@ -11,6 +11,8 @@
 ===================================================
 
     Pagination page
+    Filter categories
+    Search filter
     Scroll Up Activation
     Mobile Menu
     Wow Active
@@ -41,103 +43,158 @@
             [ END INDEX ]
 ================================================================================*/
 
-(function($) {
+(function ($) {
     'use strict';
 
-/*============ Pagination page ============*/
+    /*============ Pagination page ============*/
+    function panigationff(maxItem) {
+        const prev = document.querySelector(".zmdi-chevron-left");
+        const next = document.querySelector(".zmdi-chevron-right");
+        const page = document.querySelector("#page-num").children;
+        let pagination, length, index = 1;
+        var product, checkscroll;
 
-    const prev = document.querySelector(".zmdi-chevron-left");
-    const next = document.querySelector(".zmdi-chevron-right");
-    const page = document.querySelector("#page-num").children;   
-    let pagination;
-    let length;
-    let maxItem
-    var product;
-    var checkscroll;
+        try {
+            product = document.querySelector("#product-Item").children;
+            length = product.length;
+            pagination = Math.ceil(product.length / maxItem);
+        } catch{
+            product = document.querySelector('#product-books').children;
+            length = product.length;
+            pagination = Math.ceil(product.length / maxItem);
+            checkscroll = true;
+        }
 
-    try {
-        maxItem = 8;
-        product = document.querySelector("#product-Item").children;
-        pagination = Math.ceil(product.length / maxItem);
-        length = product.length;
-
-    } catch{
-        maxItem = 12;
-        product = document.querySelector('#product-books').children;
-        pagination = Math.ceil(product.length / maxItem);
-        length = product.length;
-        checkscroll = true;
-    } 
-
-    console.log(product);
-    let index = 1;   
-
-    $("#page-num > li").click(function () {
-        for (let i = 1; i <= pagination; i++) {
-            if ((this).innerText == i) {
-                page[i].classList.add("active")
-                index = i;
-                check();
-                showItems();
+        $("#page-num > li").click(function () {
+            for (let i = 1; i <= pagination; i++) {
+                if ((this).innerText == i) {
+                    page[i].classList.add("active")
+                    index = i;
+                    check();
+                    showItems();
+                }
+                else
+                    page[i].classList.remove("active")
             }
-            else
-                page[i].classList.remove("active")
-        }
-        if (checkscroll) {
-            document.documentElement.scrollTop = document.body.scrollTop = 400;
-        }        
-    });
-    page[pagination + 1].addEventListener("click", function () {
-        page[index].classList.remove("active");
-        index++;
-        page[index].classList.add("active");
-        check();
-        showItems();
-    })
-    page[0].addEventListener("click", function () {
-        page[index].classList.remove("active");
-        index--;
-        page[index].classList.add("active");
-        check();
-        showItems();
-    })
-    function check() {
-        if (index == pagination) {
-            next.classList.add("hidden");
-        }
-        else {
-            next.classList.remove("hidden");
+            if (checkscroll) {
+                document.documentElement.scrollTop = document.body.scrollTop = 400;
+            }
+        });
+
+        page[pagination + 1].addEventListener("click", function () {
+            page[index].classList.remove("active");
+            index++;
+            page[index].classList.add("active");
+            check();
+            showItems();
+        })
+        page[0].addEventListener("click", function () {
+            page[index].classList.remove("active");
+            index--;
+            page[index].classList.add("active");
+            check();
+            showItems();
+        })
+
+        function check() {
+            if (index == pagination) {
+                next.classList.add("hidden");
+            }
+            else {
+                next.classList.remove("hidden");
+            }
+
+            if (index == 1) {
+                prev.classList.add("hidden");
+            }
+            else {
+                prev.classList.remove("hidden");
+            }
         }
 
-        if (index == 1) {
-            prev.classList.add("hidden");
+        function showItems() {
+            for (let i = 0; i < length; i++) {
+                product[i].classList.remove("show");
+                product[i].classList.add("hidden");
+                if (i >= (index * maxItem) - maxItem && i < index * maxItem) {
+                    // if i greater than and equal to (index*maxItem)-maxItem;
+                    // means  (1*8)-8=0 if index=2 then (2*8)-8=8
+                    product[i].classList.remove("hidden");
+                    product[i].classList.add("show");
+                }
+            }
         }
-        else {
-            prev.classList.remove("hidden");
+        check();
+        showItems();
+
+        /*============ Filter categories============*/
+        var categories;
+        try {
+            categories = document.querySelectorAll('[id=categories]');
+        } catch{
+            console.log("Không tìm được sách!");
         }
-        
+        $("#filter-categories > li").click(function () {
+            let countCategories = 0;
+            for (let i = 0; i < length; i++) {
+                //if ((this).innerText == "TatCaSach")
+                if ((this).id == categories[i].innerText) {
+                    product[i].classList.remove("hidden")
+                    product[i].classList.add("show")
+                    countCategories++;
+                }
+                else {
+                    product[i].classList.add("hidden")
+                    product[i].classList.remove("show")
+                }
+            }
+
+        });
+        $("#AllCategoties").click(function () {
+            check();
+            showItems();
+        });
     }
-   
-    function showItems() {
-        for (let i = 0; i < length; i++) {
-            product[i].classList.remove("show");
-            product[i].classList.add("hidden");
-
-
-            if (i >= (index * maxItem) - maxItem && i < index * maxItem) {
-                // if i greater than and equal to (index*maxItem)-maxItem;
-                // means  (1*8)-8=0 if index=2 then (2*8)-8=8
-                product[i].classList.remove("hidden");
-                product[i].classList.add("show");
-            }         
-        }       
-    }    
+    var checkShow;
+    try {
+        checkShow = document.getElementById("checkShow").innerText;
+    }
+    catch{
+        checkShow = "NoShow";
+    }
     window.onload = function () {
-        showItems();
-        check();
+        if (checkShow == "HomePage")
+            panigationff(8);
+        else
+            panigationff(12);
     }
-    
-/*============ Scroll Up Activation ============*/
+    /*============ Search filter============*/
+    try {
+        document.getElementById("searchInput").addEventListener("keyup", searchFunction);
+    } catch{
+    }
+    function searchFunction() {
+        var input = document.getElementById("searchInput");
+        var filter = input.value.toUpperCase();
+        var books = document.querySelector('#product-books').children;
+        var a1, a2, txtValue1;
+        for (let i = 0; i < books.length; i++) {
+            a1 = books[i].querySelector('#books_title');
+            a2 = books[i].querySelector('#books_author');
+            txtValue1 = a1.innerText + a2.innerText;
+            if (txtValue1.toUpperCase().indexOf(filter) > -1) {
+                books[i].style.display = "";
+            } else {
+                books[i].style.display = "none";
+            }
+        }
+        if (input.value == '') {
+            panigationff(12);
+        } else {
+            panigationff(99);
+        }
+    }
+    /*============ Scroll Up Activation ============*/
     $.scrollUp({
         scrollText: '<i class="fa fa-angle-up"></i>',
         easingType: 'linear',
@@ -145,7 +202,7 @@
         animation: 'slide'
     });
 
-/*=========== Mobile Menu ===========*/
+    /*=========== Mobile Menu ===========*/
     $('nav.mobilemenu__nav').meanmenu({
         meanMenuClose: 'X',
         meanMenuCloseSize: '18px',
@@ -155,10 +212,10 @@
         onePage: true
     });
 
-/*=========== Wow Active ===========*/
+    /*=========== Wow Active ===========*/
     new WOW().init();
 
-/*=========== Sticky Header ===========*/
+    /*=========== Sticky Header ===========*/
     function stickyHeader() {
         $(window).on('scroll', function () {
             var sticky_menu = $('.sticky__header');
@@ -166,19 +223,19 @@
             if (sticky_menu.length) {
                 var windowpos = sticky_menu.top;
                 $(window).on('scroll', function () {
-                  var windowpos = $(window).scrollTop();
-                  if (windowpos > pos.top + 250) {
-                    sticky_menu.addClass('is-sticky');
-                  } else {
-                    sticky_menu.removeClass('is-sticky');
-                  }
-            });
-          }
+                    var windowpos = $(window).scrollTop();
+                    if (windowpos > pos.top + 250) {
+                        sticky_menu.addClass('is-sticky');
+                    } else {
+                        sticky_menu.removeClass('is-sticky');
+                    }
+                });
+            }
         });
     }
     stickyHeader();
 
-/*===========  Testimonial Slick Carousel =============*/
+    /*===========  Testimonial Slick Carousel =============*/
     $('.testext_active').slick({
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -192,7 +249,7 @@
     });
 
 
-/*============= Testimonial Slick Carousel As Nav =============*/
+    /*============= Testimonial Slick Carousel As Nav =============*/
     $('.thumb_active').slick({
         slidesToShow: 3,
         slidesToScroll: 1,
@@ -204,315 +261,315 @@
         centerPadding: '10px',
         responsive: [
             {
-              breakpoint: 576,
-              settings: {
-                dots: false,
-                slidesToShow: 1,  
-                centerPadding: '0px',
+                breakpoint: 576,
+                settings: {
+                    dots: false,
+                    slidesToShow: 1,
+                    centerPadding: '0px',
                 }
             },
             {
-              breakpoint: 769,
-              settings: {
-                autoplay: true,
-                dots: false,
-                slidesToShow: 2,
-                centerMode: false,
+                breakpoint: 769,
+                settings: {
+                    autoplay: true,
+                    dots: false,
+                    slidesToShow: 2,
+                    centerMode: false,
                 }
             },
             {
-              breakpoint: 420,
-              settings: {
-                autoplay: true,
-                dots: false,
-                slidesToShow: 1,
-                centerMode: false,
+                breakpoint: 420,
+                settings: {
+                    autoplay: true,
+                    dots: false,
+                    slidesToShow: 1,
+                    centerMode: false,
                 }
             }
         ]
     });
 
 
-/*=============  Brand Activation  ==============*/
+    /*=============  Brand Activation  ==============*/
     $('.brand__activation').owlCarousel({
-        loop:true,
-        margin:0,
-        nav:true,
-        autoplay: false,
-        autoplayTimeout: 10000,
-        items:6,
-        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>' ],
-        dots: false,
-        lazyLoad: true,
-        responsive:{
-            0:{
-              items:2
-            },
-            1920:{
-              items:6
-            },
-            768:{
-              items:4
-            },
-            576:{
-              items:3
-            },
-            420:{
-              items:3
-            }
-        }
-    });
-
-/*=============  Produst Activation  ==========*/
-    $('.productcategory__slide').owlCarousel({
-        loop:true,
-        margin:0,
-        nav:true,
-        autoplay: false,
-        autoplayTimeout: 10000,
-        items:4,
-        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>' ],
-        dots: false,
-        lazyLoad: true,
-        responsive:{
-            0:{
-                items:1
-            },
-            992:{
-                items:4
-            },
-            768:{
-                items:3
-            },
-            576:{
-                items:2
-            },
-            1920:{
-                items:4
-            }
-        }
-    });
-
-
-/*=============  Produst Activation  ==========*/
-    $('.productcategory__slide--2').owlCarousel({
-        loop:true,
-        margin:0,
-        nav:true,
-        autoplay: false,
-        autoplayTimeout: 10000,
-        items:3,
-        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>' ],
-        dots: false,
-        lazyLoad: true,
-        responsive:{
-            0:{
-              items:1
-            },
-            576:{
-              items:2
-            },
-            768:{
-              items:3
-            },
-            1920:{
-              items:3
-            }
-        }
-    });
-
-
-/*=============  Product Activation ============*/
-    $('.product__indicator--4').owlCarousel({
-        loop:true,
-        margin:0,
-        nav:true,
-        autoplay: false,
-        autoplayTimeout: 10000,
-        items:4,
-        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>' ],
-        dots: false,
-        lazyLoad: true,
-        responsive:{
-            0:{
-              items:1
-            },
-            576:{
-              items:2
-            },
-            768:{
-              items:3
-            },
-			992:{
-                items:4
-            },
-            1920:{
-              items:4
-            }
-        }
-    });
-  
-
-/*=============  Product Activation  ==============*/
-    $('.furniture--4').owlCarousel({
-        loop:true,
+        loop: true,
         margin: 0,
-        nav:true,
+        nav: true,
         autoplay: false,
         autoplayTimeout: 10000,
-        items:4,
-        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>' ],
+        items: 6,
+        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>'],
         dots: false,
         lazyLoad: true,
-        responsive:{
-            0:{
-              items:1
+        responsive: {
+            0: {
+                items: 2
             },
-            576:{
-              items:2
+            1920: {
+                items: 6
             },
-            768:{
-              items:3
+            768: {
+                items: 4
             },
-			992:{
-                items:4
+            576: {
+                items: 3
             },
-            1920:{
-              items:4
+            420: {
+                items: 3
+            }
+        }
+    });
+
+    /*=============  Produst Activation  ==========*/
+    $('.productcategory__slide').owlCarousel({
+        loop: true,
+        margin: 0,
+        nav: true,
+        autoplay: false,
+        autoplayTimeout: 10000,
+        items: 4,
+        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>'],
+        dots: false,
+        lazyLoad: true,
+        responsive: {
+            0: {
+                items: 1
+            },
+            992: {
+                items: 4
+            },
+            768: {
+                items: 3
+            },
+            576: {
+                items: 2
+            },
+            1920: {
+                items: 4
             }
         }
     });
 
 
-/*============= Cartbox Toggler ==============*/
+    /*=============  Produst Activation  ==========*/
+    $('.productcategory__slide--2').owlCarousel({
+        loop: true,
+        margin: 0,
+        nav: true,
+        autoplay: false,
+        autoplayTimeout: 10000,
+        items: 3,
+        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>'],
+        dots: false,
+        lazyLoad: true,
+        responsive: {
+            0: {
+                items: 1
+            },
+            576: {
+                items: 2
+            },
+            768: {
+                items: 3
+            },
+            1920: {
+                items: 3
+            }
+        }
+    });
+
+
+    /*=============  Product Activation ============*/
+    $('.product__indicator--4').owlCarousel({
+        loop: true,
+        margin: 0,
+        nav: true,
+        autoplay: false,
+        autoplayTimeout: 10000,
+        items: 4,
+        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>'],
+        dots: false,
+        lazyLoad: true,
+        responsive: {
+            0: {
+                items: 1
+            },
+            576: {
+                items: 2
+            },
+            768: {
+                items: 3
+            },
+            992: {
+                items: 4
+            },
+            1920: {
+                items: 4
+            }
+        }
+    });
+
+
+    /*=============  Product Activation  ==============*/
+    $('.furniture--4').owlCarousel({
+        loop: true,
+        margin: 0,
+        nav: true,
+        autoplay: false,
+        autoplayTimeout: 10000,
+        items: 4,
+        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>'],
+        dots: false,
+        lazyLoad: true,
+        responsive: {
+            0: {
+                items: 1
+            },
+            576: {
+                items: 2
+            },
+            768: {
+                items: 3
+            },
+            992: {
+                items: 4
+            },
+            1920: {
+                items: 4
+            }
+        }
+    });
+
+
+    /*============= Cartbox Toggler ==============*/
     function cartboxToggler() {
         var trigger = $('.block__active'),
-          container = $('.block_content');
+            container = $('.block_content');
         trigger.on('click', function (e) {
-          e.preventDefault();
-          container.toggleClass('is-visible');
+            e.preventDefault();
+            container.toggleClass('is-visible');
         });
         $('.close__wrap').on('click', function () {
-          container.removeClass('is-visible');
+            container.removeClass('is-visible');
         });
     }
     cartboxToggler();
 
 
-/*============= Search Toggler ==============*/
+    /*============= Search Toggler ==============*/
     function searchToggler() {
         var trigger = $('.search__active'),
-          container = $('.search_active');
+            container = $('.search_active');
         trigger.on('click', function (e) {
-          e.preventDefault();
-          container.toggleClass('is-visible');
+            e.preventDefault();
+            container.toggleClass('is-visible');
         });
         $('.close__wrap').on('click', function () {
-          container.removeClass('is-visible');
+            container.removeClass('is-visible');
         });
     }
     searchToggler();
 
 
-/*============= Cart Toggler ==============*/
+    /*============= Cart Toggler ==============*/
     function cartToggler() {
         var trigger = $('.cartbox_active'),
-          container = $('.minicart__active');
+            container = $('.minicart__active');
         trigger.on('click', function (e) {
-          e.preventDefault();
-          container.toggleClass('is-visible');
+            e.preventDefault();
+            container.toggleClass('is-visible');
 
         });
         trigger.on('click', function (e) {
-          e.preventDefault();
-          container.toggleClass('');
+            e.preventDefault();
+            container.toggleClass('');
 
         });
         $('.micart__close').on('click', function () {
-          container.removeClass('is-visible');
+            container.removeClass('is-visible');
         });
     }
     cartToggler();
 
-/*============= Setting Toggler ==============*/
+    /*============= Setting Toggler ==============*/
     function settingToggler() {
         var settingTrigger = $('.setting__active'),
-          settingContainer = $('.setting__block');
+            settingContainer = $('.setting__block');
         settingTrigger.on('click', function (e) {
-          e.preventDefault();
-          settingContainer.toggleClass('is-visible');
+            e.preventDefault();
+            settingContainer.toggleClass('is-visible');
         });
         settingTrigger.on('click', function (e) {
-          e.preventDefault();
-          settingContainer.toggleClass('');
+            e.preventDefault();
+            settingContainer.toggleClass('');
         });
     }
     settingToggler();
 
 
-/*=============  Slider Activation  ==============*/
+    /*=============  Slider Activation  ==============*/
     $('.slide__activation').owlCarousel({
-        loop:true,
+        loop: true,
         margin: 0,
-        nav:true,
+        nav: true,
         autoplay: false,
         autoplayTimeout: 10000,
-        items:1,
-        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>' ],
+        items: 1,
+        navText: ['<i class="zmdi zmdi-chevron-left"></i>', '<i class="zmdi zmdi-chevron-right"></i>'],
         dots: false,
         lazyLoad: true,
-        responsive:{
-        0:{
-          items:1
-        },
-        1920:{
-          items:1
-        }
+        responsive: {
+            0: {
+                items: 1
+            },
+            1920: {
+                items: 1
+            }
         }
     });
 
 
-/*============= Setting Option ==============*/
+    /*============= Setting Option ==============*/
     function settingOption() {
         var settingItem = $('.currency-trigger');
         settingItem.on('click', function () {
-          $(this).siblings('.switcher-dropdown').toggleClass('is-visible');
+            $(this).siblings('.switcher-dropdown').toggleClass('is-visible');
         });
     }
     settingOption();
 
-/*============= Fancybox ==============*/
+    /*============= Fancybox ==============*/
     $('.fancybox').fancybox({
-        prevEffect  : 'none',
-        nextEffect  : 'none',
-        helpers : {
-          title : {
-            type: 'outside'
-          },
-          thumbs  : {
-            width : 50,
-            height  : 50
-          }
+        prevEffect: 'none',
+        nextEffect: 'none',
+        helpers: {
+            title: {
+                type: 'outside'
+            },
+            thumbs: {
+                width: 50,
+                height: 50
+            }
         }
     });
 
 
-/*========= Video ===========*/
-    var video_frame_w= $('.img_static').outerWidth();
-    var video_frame_h= $('.img_static').outerHeight();
-    $('#cms_play').on('click', function(){
+    /*========= Video ===========*/
+    var video_frame_w = $('.img_static').outerWidth();
+    var video_frame_h = $('.img_static').outerHeight();
+    $('#cms_play').on('click', function () {
         $(this).hide('fast');
         $(".img_static").fadeOut('fast');
-        $('.static_video').append('<iframe class="added_video" width="'+video_frame_w+'px" height="'+video_frame_h+'px" src="https://www.youtube.com/embed/0fYMLQjK-MI?rel=0&autoplay=1" frameborder="0"></iframe>');
+        $('.static_video').append('<iframe class="added_video" width="' + video_frame_w + 'px" height="' + video_frame_h + 'px" src="https://www.youtube.com/embed/0fYMLQjK-MI?rel=0&autoplay=1" frameborder="0"></iframe>');
     });
 
-/*=============  Gallery Mesonry Activation  ==============*/
+    /*=============  Gallery Mesonry Activation  ==============*/
     $('.gallery__masonry__activation').imagesLoaded(function () {
         // filter items on button click
         $('.gallery__menu').on('click', 'button', function () {
             var filterValue = $(this).attr('data-filter');
             $grid.isotope({
-              filter: filterValue
+                filter: filterValue
             });
         });
         // change is-checked class on buttons
@@ -521,7 +578,7 @@
             $(this).addClass('is-checked');
             var selector = $(this).attr('data-filter');
             $containerpage.isotope({
-              filter: selector
+                filter: selector
             });
             return false;
         });
@@ -531,49 +588,49 @@
             percentPosition: true,
             transitionDuration: '0.7s',
             masonry: {
-              // use outer width of grid-sizer for columnWidth
-              columnWidth: '.gallery__item',
+                // use outer width of grid-sizer for columnWidth
+                columnWidth: '.gallery__item',
             }
         });
     });
 
 
-/*====== CheckOut Page ======*/
-    function checkoutLogin(){
+    /*====== CheckOut Page ======*/
+    function checkoutLogin() {
         var showLogin = $('.showlogin');
         var form = $('.checkout_login');
-        showLogin.on('click' , function(e){
+        showLogin.on('click', function (e) {
             e.preventDefault();
             form.slideToggle();
             form.remove('style');
         });
     }
     checkoutLogin();
-    function checkoutCoupon(){
+    function checkoutCoupon() {
         var showLogin = $('.showcoupon');
         var form = $('.checkout_coupon');
-        showLogin.on('click' , function(e){
+        showLogin.on('click', function (e) {
             e.preventDefault();
             form.slideToggle();
             form.remove('style');
         });
     }
     checkoutCoupon();
-    $('.wn__accountbox').on('click' , function(){
+    $('.wn__accountbox').on('click', function () {
         $('.account__field').slideToggle().remove('style');
     });
-    $('.differt__address').on('click' , function(){
+    $('.differt__address').on('click', function () {
         $('.differt__form').slideToggle().remove('style');
     });
 
 
-/*====== Price Slider Active ======*/ 
+    /*====== Price Slider Active ======*/
     $('#slider-range').slider({
         range: true,
         min: 10,
         max: 500,
         values: [110, 400],
-        slide: function(event, ui) {
+        slide: function (event, ui) {
             $('#amount').val('$' + ui.values[0] + ' - $' + ui.values[1]);
         }
     });
@@ -581,61 +638,61 @@
         " - $" + $('#slider-range').slider('values', 1));
 
 
-/*====== Dropdown ======*/
-    $('.dropdown').parent('.drop').css('position' , 'relative');
+    /*====== Dropdown ======*/
+    $('.dropdown').parent('.drop').css('position', 'relative');
 
-	
-/*====== slick slider ======*/
-	$('.center').slick({
-	  centerMode: true,
-	  centerPadding: '0px',
-	  slidesToShow: 7,
-	  responsive: [
-		 {
-		  breakpoint: 1366,
-		  settings: {
-			slidesToShow: 3,
-			slidesToScroll: 3,
-			infinite: true,
-			dots: false
-		  }
-		},
-		{
-		  breakpoint: 1100,
-		  settings: {
-			slidesToShow: 3,
-			slidesToScroll: 3,
-			infinite: true,
-			dots: false
-		  }
-		},
-		{
-			breakpoint: 970,
-			settings: {
-				slidesToShow: 3,
-				slidesToScroll: 3,
-				infinite: true,
-				dots: false
-			  }
-		},
-		{
-		  breakpoint: 768,
-		  settings: {
-			arrows: false,
-			centerMode: true,
-			slidesToShow: 3
-		  }
-		},
-		{
-		  breakpoint: 480,
-		  settings: {
-			arrows: false,
-			centerMode: true,
-			slidesToShow: 1
-		  }
-		}
-	  ]
-	});
+
+    /*====== slick slider ======*/
+    $('.center').slick({
+        centerMode: true,
+        centerPadding: '0px',
+        slidesToShow: 7,
+        responsive: [
+            {
+                breakpoint: 1366,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: false
+                }
+            },
+            {
+                breakpoint: 1100,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: false
+                }
+            },
+            {
+                breakpoint: 970,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: false
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    arrows: false,
+                    centerMode: true,
+                    slidesToShow: 3
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    arrows: false,
+                    centerMode: true,
+                    slidesToShow: 1
+                }
+            }
+        ]
+    });
 
 
 })(jQuery);
