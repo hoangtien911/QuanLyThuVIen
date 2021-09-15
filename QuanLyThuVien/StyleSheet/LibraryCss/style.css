@@ -5783,9 +5783,8 @@ h3.widget-title-modal {
 .product__info__main .product__overview {
     border-top: 1px solid #ebebeb;
     clear: both;
-    line-height: 24px;
-    margin: 20px 0 0;
-    padding: 30px 0;
+    line-height: 24px;   
+    padding: 10px 0;
 }
 
     .product__info__main .product__overview p {
@@ -5913,10 +5912,14 @@ h3.widget-title-modal {
         color: #333;
     }
 
-.product__info__detailed .review-fieldset {
+.product__info__detailed .review__attribute {
     border-top: 1px solid #c9c9c9;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.product__info__detailed .review-fieldset {
     margin-top: 34px;
-    padding-top: 72px;
 }
 
     .product__info__detailed .review-fieldset h2 {
@@ -8718,4 +8721,13 @@ a.checkout__title {
     }
 input::placeholder { /* Most modern browsers support this now. */
     color: #333 !important;
+}
+.img_author {
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50% !important;
 }

@@ -20,11 +20,13 @@ namespace QuanLyThuVien.Controllers
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
         };
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv HIỂN THỊ TẤT CẢ SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public ActionResult KhoSach()
         {
             ViewBag.listbooks = ListBooks();
             ViewBag.listauthor = ListAuthor();
             ViewBag.listcategories = ListCategories();
+
             int[] MangTheLoai = new int[ListCategories().Count];
             int i = 0;
             foreach(var theLoai in ListCategories())
@@ -47,8 +49,145 @@ namespace QuanLyThuVien.Controllers
             ViewBag.lenghtBooks = ListBooks().Count / 12 + 1;
             return View();           
         }
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        [HttpGet]
+        public ActionResult ChiTietSach(string id)
+        {
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Books/" + id);
+            Books data = JsonConvert.DeserializeObject<Books>(response.Body);
 
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+            foreach(var TacGia in ListAuthor())
+            {
+                if (data.authors.Equals(TacGia.id))
+                {
+                    ViewBag.authors = TacGia.name;
+                    break;
+                }
+            }
+         
+            ViewBag.listbooks = ListBooks();
+            ViewBag.listauthor = ListAuthor();
+            ViewBag.listcategories = ListCategories();
+            int[] MangTheLoai = new int[ListCategories().Count];
+            int i = 0;
+            foreach (var theLoai in ListCategories())
+            {
+                foreach (var sach in ListBooks())
+                {
+                    if (sach.categories != null)
+                        sach.categories_temp = sach.categories.Split(',');
+                    foreach (var idTheLoai in sach.categories_temp)
+                    {
+                        if (theLoai.id == idTheLoai)
+                        {
+                            MangTheLoai[i]++;
+                        }
+                    }
+                }
+                i++;
+            }
+            ViewBag.soLuongSach = MangTheLoai;
+
+            return View(data);
+        }
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT TÁC GIẢ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        [HttpGet]
+        public ActionResult ChiTietTacGia(string id)
+        {
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Author/" + id);
+            Author data = JsonConvert.DeserializeObject<Author>(response.Body);
+
+            ViewBag.listbooks = ListBooks();
+            ViewBag.listcategories = ListCategories();
+            int[] MangTheLoai = new int[ListCategories().Count];
+            int i = 0;
+            foreach (var theLoai in ListCategories())
+            {
+                foreach (var sach in ListBooks())
+                {
+                    if (sach.categories != null)
+                        sach.categories_temp = sach.categories.Split(',');
+                    foreach (var idTheLoai in sach.categories_temp)
+                    {
+                        if (theLoai.id == idTheLoai)
+                        {
+                            MangTheLoai[i]++;
+                        }
+                    }
+                }
+                i++;
+            }
+            ViewBag.soLuongSach = MangTheLoai;
+            List<Books> listBooksOfAuthor = new List<Books>();
+            foreach(var item in ListBooks())
+            {
+                if (data.id.Equals(item.authors))
+                {
+                    listBooksOfAuthor.Add(item);
+                }
+            }
+            foreach (var TacGia in ListAuthor())
+            {
+                if (data.id.Equals(TacGia.id))
+                {
+                    ViewBag.authors = TacGia.name;
+                    break;
+                }
+            }
+            ViewBag.listBooksOfAuthor = listBooksOfAuthor;
+            return View(data);
+        }
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT TÁC GIẢ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        [HttpGet]
+        public ActionResult ChiTietTheLoai(string id)
+        {
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Categories/" + id);
+            Categories data = JsonConvert.DeserializeObject<Categories>(response.Body);
+
+            ViewBag.listbooks = ListBooks();
+            ViewBag.listcategories = ListCategories();
+            int[] MangTheLoai = new int[ListCategories().Count];
+            int i = 0;
+            foreach (var theLoai in ListCategories())
+            {
+                foreach (var sach in ListBooks())
+                {
+                    if (sach.categories != null)
+                        sach.categories_temp = sach.categories.Split(',');
+                    foreach (var idTheLoai in sach.categories_temp)
+                    {
+                        if (theLoai.id == idTheLoai)
+                        {
+                            MangTheLoai[i]++;
+                        }
+                    }
+                }
+                i++;
+            }
+            ViewBag.soLuongSach = MangTheLoai;
+            List<Books> listBooksOfCategories = new List<Books>();
+            foreach (var item in ListBooks())
+            {
+                if (data.id.Equals(item.categories))
+                {                   
+                    foreach (var TacGia in ListAuthor())
+                    {
+                        if (item.authors.Equals(TacGia.id))
+                        {
+                            item.authors = TacGia.name;
+                            break;
+                        }
+                    }
+                    listBooksOfCategories.Add(item);
+                }
+            }           
+            ViewBag.listBooksOfCategories = listBooksOfCategories;
+            return View(data);
+        }
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv LẤY DANH SÁCH SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public List<Books> ListBooks()
         {
             client = new FireSharp.FirebaseClient(config);
@@ -72,7 +211,7 @@ namespace QuanLyThuVien.Controllers
             }
             return list;
         }
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH TÁC GIẢ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv LẤY DANH SÁCH TÁC GIẢ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public List<Author> ListAuthor()
         {
             client = new FireSharp.FirebaseClient(config);
@@ -92,7 +231,7 @@ namespace QuanLyThuVien.Controllers
             }
             return list;
         }
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH THỂ LOẠI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv LẤY DANH SÁCH THỂ LOẠI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public List<Categories> ListCategories()
         {
             client = new FireSharp.FirebaseClient(config);

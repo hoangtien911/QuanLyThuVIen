@@ -462,6 +462,9 @@
     <Content Include="Scripts\bootstrap.js.map" />
     <Content Include="Views\TrangChu\HomePage.cshtml" />
     <Content Include="Views\Sach\KhoSach.cshtml" />
+    <Content Include="Views\Sach\ChiTietSach.cshtml" />
+    <Content Include="Views\Sach\ChiTietTacGia.cshtml" />
+    <Content Include="Views\Sach\ChiTietTheLoai.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

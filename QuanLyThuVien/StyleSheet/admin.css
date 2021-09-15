@@ -11303,9 +11303,15 @@ body.sidebar-toggled footer.sticky-footer {
     font-size: 38px;
     line-height: 38px;
 }
-.img-detail img{    
-    width: 95%;
-    height: 100%;
+.img-detail img {
+    width: max-content;
+    height: max-content;
+    max-width: 500px;
+    max-height: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 .details-title{
     font-weight: 700;
