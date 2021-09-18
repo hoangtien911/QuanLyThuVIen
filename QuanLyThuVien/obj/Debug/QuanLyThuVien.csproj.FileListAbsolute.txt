@@ -88,4 +88,7 @@ C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\obj\Debug
 C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.csproj.CopyComplete
 C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.dll
 C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.pdb
-C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.csprojAssemblyReference.cache
+C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\bin\Fluentx.dll
+C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\bin\Fluentx.Mvc.dll
+C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\bin\Fluentx.xml
+C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\bin\Fluentx.Mvc.xml

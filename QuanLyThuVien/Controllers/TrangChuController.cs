@@ -11,6 +11,7 @@ using QuanLyThuVien.Models;
 
 namespace QuanLyThuVien.Controllers
 {
+    
     public class TrangChuController : Controller
     {
         // GET: TrangChu
@@ -25,10 +26,14 @@ namespace QuanLyThuVien.Controllers
             ViewBag.listbooks = ListBooks();
             ViewBag.listauthor = ListAuthor();
             ViewBag.lenghtBooks = ListBooks().Count / 8 + 1;
+            if (Request.Cookies["UserCookies"] != null)
+            {
+                Session["UserSession"] = Request.Cookies["UserCookies"]["userid"];
+                return View();
+            }
             return View();
         }
-
-        
+    
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public List<Books> ListBooks()
         {

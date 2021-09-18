@@ -814,17 +814,17 @@ a {
 }
 
 .bg-image--5 {
-    background-image: url(../../Content/LibraryImage/images/bg/5.jpg);
+    background-image: url(https://i.pinimg.com/originals/74/73/cf/7473cf7cb404a24fd1f20e9699492ad6.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
 }
 
 .bg-image--6 {
-    background-image: url(../../Content/LibraryImage/wallpaper.jpg);
+    background-image: url(https://wallpaperaccess.com/full/124383.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;   
+    background-position: center center;
 }   
 
 .bg-image--7 {
@@ -8730,4 +8730,8 @@ input::placeholder { /* Most modern browsers support this now. */
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50% !important;
+}
+.span_remember {
+    margin-left: 10px;
+    margin-top: -5px;
 }

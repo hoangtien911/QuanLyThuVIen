@@ -48,63 +48,30 @@
                                 <li>
                                     <a href="@Url.Action("KhoSach", "Sach")"
                                        class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Sach" ? "LinkActive" : "")">Sách</a>
-                                </li>                              
-                                <li class="drop">
-                                    <a href="shop-grid.html">Kids</a>
-                                    <div class="megamenu mega02">
-                                        <ul class="item item02">
-                                            <li class="title">Top Collections</li>
-                                            <li><a href="shop-grid.html">American Girl</a></li>
-                                            <li><a href="shop-grid.html">Diary Wimpy Kid</a></li>
-                                            <li><a href="shop-grid.html">Finding Dory</a></li>
-                                            <li><a href="shop-grid.html">Harry Potter</a></li>
-                                            <li><a href="shop-grid.html">Land of Stories</a></li>
-                                        </ul>
-                                        <ul class="item item02">
-                                            <li class="title">More For Kids</li>
-                                            <li><a href="shop-grid.html">B&N Educators</a></li>
-                                            <li><a href="shop-grid.html">B&N Kids' Club</a></li>
-                                            <li><a href="shop-grid.html">Kids' Music</a></li>
-                                            <li><a href="shop-grid.html">Toys & Games</a></li>
-                                            <li><a href="shop-grid.html">Hoodies</a></li>
-                                        </ul>
-                                    </div>
                                 </li>
-                                <li class="drop">
-                                    <a href="#">Pages</a>
-                                    <div class="megamenu dropdown">
-                                        <ul class="item item01">
-                                            <li><a href="about.html">About Page</a></li>
-                                            <li class="label2">
-                                                <a href="portfolio.html">Portfolio</a>
-                                                <ul>
-                                                    <li><a href="portfolio.html">Portfolio</a></li>
-                                                    <li><a href="portfolio-three-column.html">Portfolio 3 Column</a></li>
-                                                    <li><a href="portfolio-details.html">Portfolio Details</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="my-account.html">My Account</a></li>
-                                            <li><a href="cart.html">Cart Page</a></li>
-                                            <li><a href="checkout.html">Checkout Page</a></li>
-                                            <li><a href="wishlist.html">Wishlist Page</a></li>
-                                            <li><a href="error404.html">404 Page</a></li>
-                                            <li><a href="faq.html">Faq Page</a></li>
-                                            <li><a href="team.html">Team Page</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="drop">
-                                    <a href="blog.html">Blog</a>
-                                    <div class="megamenu dropdown">
-                                        <ul class="item item01">
-                                            <li><a href="blog.html">Blog Page</a></li>
-                                            <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                            <li><a href="blog-no-sidebar.html">Blog No Sidebar</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="contact.html">Liên hệ</a></li>
+                                @if (Session["UserSession"] == null)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("DangNhap", "TaiKhoan")"
+                                           class="@(ViewContext.RouteData.Values["Action"].ToString() == "DangNhap" ? "LinkActive" : "")">Đăng nhập</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("DangKy", "TaiKhoan")"
+                                           class="@(ViewContext.RouteData.Values["Action"].ToString() == "DangNhap" ? "LinkActive" : "")">Đăng ký</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="@Url.Action("DangXuat", "TaiKhoan")"
+                                           class="@(ViewContext.RouteData.Values["Action"].ToString() == "DangXuat" ? "LinkActive" : "")">Tài khoản</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("DangXuat", "TaiKhoan")"
+                                           class="@(ViewContext.RouteData.Values["Action"].ToString() == "DangXuat" ? "LinkActive" : "")">Đăng xuất</a>
+                                    </li>
+                                }                               
                             </ul>
                         </nav>
                     </div>

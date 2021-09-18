@@ -19,7 +19,11 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         };        
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public ActionResult ListBooks(string check)
-        {           
+        {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Books");
             Dictionary<string, Books> data = JsonConvert.DeserializeObject<Dictionary<string, Books>>(response.Body.ToString());
@@ -60,6 +64,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Detail(string id)
         {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Books/" + id);
             Books data = JsonConvert.DeserializeObject<Books>(response.Body);
@@ -69,6 +77,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             ViewBag.listAuthor = getAuthor();
             ViewBag.listCategories = getCategories();
             return View();
@@ -104,6 +116,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Edit(string id)
         {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             ViewBag.listAuthor = getAuthor();
             ViewBag.listCategories = getCategories();
             client = new FireSharp.FirebaseClient(config);
@@ -145,6 +161,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv XOÁ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public ActionResult Delete(string id)
         {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             try
             {
                 client = new FireSharp.FirebaseClient(config);

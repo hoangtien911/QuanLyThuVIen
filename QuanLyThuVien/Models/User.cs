@@ -39,5 +39,6 @@ namespace QuanLyThuVien.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime dateOfRegist { get; set; }
+        public bool remember { get; set; }
     }
 }

@@ -20,6 +20,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH TÁC GIẢ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public ActionResult ListAuthor(string check)
         {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Author");
             Dictionary<string, Author> data = JsonConvert.DeserializeObject<Dictionary<string, Author>>(response.Body.ToString());
@@ -54,6 +58,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             return View();
         }
         [HttpPost]
@@ -78,6 +86,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Edit(string id)
         {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Author/" + id);
             Author data = JsonConvert.DeserializeObject<Author>(response.Body);
@@ -101,6 +113,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv XOÁ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         public ActionResult Delete(string id)
         {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             try
             {
                 client = new FireSharp.FirebaseClient(config);
@@ -119,6 +135,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Detail(string id)
         {
+            //------------- START Check Session ---------------//
+            if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            //------------- END Check Session ---------------//
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Author/" + id);
             Author data = JsonConvert.DeserializeObject<Author>(response.Body);
