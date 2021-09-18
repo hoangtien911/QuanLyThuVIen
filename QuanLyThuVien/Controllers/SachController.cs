@@ -95,6 +95,26 @@ namespace QuanLyThuVien.Controllers
                 i++;
             }
             ViewBag.soLuongSach = MangTheLoai;
+            if (Session["UserSession"] != null)
+            {               
+                FirebaseResponse response1 = client.Get("Favorite");
+                Dictionary<string, Favorite> favorite = JsonConvert.DeserializeObject<Dictionary<string, Favorite>>(response1.Body.ToString());
+                Favorite temp = new Favorite();
+                foreach (var item in favorite)
+                {
+                    if (item.Value.userID.Equals(Session["UserSession"]))
+                    {
+                        temp.userID = item.Value.userID;
+                        temp.booksID = item.Value.booksID;
+                        temp.booksID_temp = temp.booksID.Split(',');
+                        for(int j = 0; j < temp.booksID_temp.Length; j++)
+                        {
+                            if (temp.booksID_temp[j].Equals(data._id))
+                                ViewBag.checkFavorite = true;
+                        }
+                    }
+                }
+            }
 
             return View(data);
         }
@@ -257,6 +277,81 @@ namespace QuanLyThuVien.Controllers
             }
                   
             return list;
+        }
+
+        public JsonResult addFavorite(string userID, string bookID)
+        {
+            client = new FireSharp.FirebaseClient(config);         
+            try
+            {
+                if (Session["UserSession"] != null)
+                {
+                    FirebaseResponse response = client.Get("Favorite/" + userID);
+                    Favorite data = JsonConvert.DeserializeObject<Favorite>(response.Body);
+                    if (data == null)
+                        return Json(new { status = false });
+                    if (data.booksID == null)
+                        data.booksID = bookID;
+                    else
+                        data.booksID += "," + bookID;                   
+                    client.Set("Favorite/" + userID, data);
+                    return Json(new
+                    {
+                        status = true
+                    });
+                }
+                return Json(new
+                {
+                    status = false
+                });
+            }
+            catch
+            {
+                return Json(new
+                {
+                    status = false
+                });
+            }                      
+        }
+        public JsonResult removeFavorite(string userID, string bookID)
+        {
+            client = new FireSharp.FirebaseClient(config);
+            try
+            {
+                if (Session["UserSession"] != null)
+                {
+                    FirebaseResponse response = client.Get("Favorite/" + userID);
+                    Favorite data = JsonConvert.DeserializeObject<Favorite>(response.Body);                   
+                    List<string> list= data.booksID.Split(',').ToList();
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        if (list[i].Equals(bookID))
+                        {
+                            list.RemoveAt(i);
+                            break;
+                        }
+                    }
+                    data.booksID_temp = list.ToArray();
+                    data.booksID = string.Join(",", list);
+                    data.booksID_temp = null;
+                    client.Set("Favorite/" + userID, data);
+                    return Json(new
+                    {
+                        status = true
+                    });
+                }
+                return Json(new
+                {
+                    status = false
+                });
+            }
+            catch
+            {
+                return Json(new
+                {
+                    status = false
+                });
+            }
         }
     }
 }

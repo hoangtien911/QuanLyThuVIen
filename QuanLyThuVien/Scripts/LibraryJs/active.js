@@ -5,7 +5,6 @@
 
 **********************************************************************************/
 
-
 /*================================================
             [ INDEX ]
 ===================================================
@@ -45,6 +44,65 @@
 
 (function ($) {
     'use strict';
+/*============ START Function yeu thich sach ============*/
+
+    $('.wishlist').off('click').on('click', function (e) {
+        e.preventDefault();
+        try {
+            var check = false;
+            var userID = document.getElementById("userID").innerText;
+            var bookID = document.getElementById("bookID").innerText;
+
+            for (let i = 0; i < this.classList.length; i++) {
+                if (this.classList[i] == "activeYT") {
+                    check = true;
+                    break;
+                }
+            }
+            if (check) {
+                this.classList.remove("activeYT");
+                $.ajax({
+                    url: "/Sach/removeFavorite",
+                    data: {
+                        userID: userID,
+                        bookID: bookID
+                    },
+                    dataType: "json",
+                    type: "POST",
+                    success: function (response) {
+                        if (response) {
+                            console.log("remove susses!");
+                        }
+                    }
+                });            
+            }
+            else {
+                this.classList.add("activeYT");
+                $.ajax({
+                    url: "/Sach/addFavorite",
+                    data: {
+                        userID: userID,
+                        bookID: bookID
+                    },
+                    dataType: "json",
+                    type: "POST",
+                    success: function (response) {
+                        if (response) {
+                            console.log("add susses!");
+                        }
+                    }
+                });                                 
+            }      
+        } catch{
+            alert("Hãy đăng nhập.");
+        }
+       
+        
+    });
+
+/*============ END Function yeu thich sach ============*/
+
+
 
     /*============ Pagination page ============*/
     function panigationff(maxItem) {

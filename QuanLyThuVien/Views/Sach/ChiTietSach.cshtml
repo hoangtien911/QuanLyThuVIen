@@ -23,6 +23,13 @@
         </div>
     </div>
 </div>
+@{
+    if (Session["UserSession"] != null)
+    {
+        <p class="hidden" id="userID">@Session["UserSession"]</p>
+        <p class="hidden" id="bookID">@Model._id</p>
+    }
+}
 <!-- End link area -->
 <!-- Start main Content -->
 <div class="maincontent bg--white pt--80 pb--55">
@@ -66,7 +73,7 @@
                                             foreach (var idTheLoaiItem in IdTheLoai)
                                             {
                                                 string TenTheLoai = "";
-                                                foreach(var TheLoai in ViewBag.listcategories)
+                                                foreach (var TheLoai in ViewBag.listcategories)
                                                 {
                                                     if (idTheLoaiItem.Equals(TheLoai.id))
                                                     {
@@ -74,7 +81,7 @@
                                                         break;
                                                     }
                                                 }
-                                                if (i == IdTheLoai.Length -1 )
+                                                if (i == IdTheLoai.Length - 1)
                                                 {
                                                     <a href="@Url.Action("ChiTietTheLoai","Sach", new { id = IdTheLoai[i] })">@TenTheLoai</a>
                                                 }
@@ -92,12 +99,12 @@
                                     <p style="margin: 10px 0;">Trạng thái: @Model.status</p>
                                 </div>
                                 <div class="product__overview">
-                                    <p>@Model.shortDescription</p>                                                                     
+                                    <p>@Model.shortDescription</p>
                                 </div>
                                 <hr />
                                 <div class="product-addto-links clearfix d-flex" style="margin-top: 20px;">
                                     <span style="line-height: 40px;">Yêu thích: </span>
-                                    <a class="wishlist" href="#" style="margin-right: 10px;"></a>
+                                    <a class="wishlist @(ViewBag.checkFavorite != null? "activeYT" : "")" href="#" style="margin-right: 10px;"></a>
                                     <span style="line-height: 40px;">Báo cáo: </span>
                                     <a class="email" href="#"></a>
                                 </div>
@@ -120,9 +127,9 @@
                         <!-- End Single Tab Content -->
                         <!-- Start Single Tab Content -->
                         <div class="pro__tab_label tab-pane fade" id="nav-review" role="tabpanel">
-                            <div class="review-fieldset">                               
+                            <div class="review-fieldset">
                                 <div class="review-field-ratings">
-                                    <div class="product-review-table">                                      
+                                    <div class="product-review-table">
                                         <div class="review-field-rating d-flex">
                                             <span>Value</span>
                                             <ul class="rating d-flex" style="line-height: 32px;">
@@ -135,7 +142,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="review_form_field">                                                                     
+                                <div class="review_form_field">
                                     <div class="input__box">
                                         <span>Đánh giá của bạn</span>
                                         <textarea name="review"></textarea>
@@ -148,7 +155,7 @@
                             <div class="review__attribute">
                                 <h2>Đánh giá trung bình</h2>
                                 <div class="review__ratings__type d-flex">
-                                    <div class="review-ratings">                                     
+                                    <div class="review-ratings">
                                         <div class="rating-summary d-flex">
                                             <ul class="rating d-flex">
                                                 <li><i class="zmdi zmdi-star"></i></li>
@@ -158,13 +165,13 @@
                                                 <li class="off"><i class="zmdi zmdi-star"></i></li>
                                             </ul>
                                         </div>
-                                    </div>                                 
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- End Single Tab Content -->
                     </div>
-                </div>             
+                </div>
             </div>
             <div class="col-lg-3 col-12 md-mt-40 sm-mt-40">
                 <div class="shop__sidebar">
@@ -181,7 +188,7 @@
                                 }
                             }
                         </ul>
-                    </aside>                   
+                    </aside>
                     <aside class="wedget__categories poroduct--tag">
                         <h3 class="wedget__title">Tags</h3>
                         <ul>
@@ -194,7 +201,7 @@
                                 }
                             }
                         </ul>
-                    </aside>                   
+                    </aside>
                 </div>
             </div>
         </div>

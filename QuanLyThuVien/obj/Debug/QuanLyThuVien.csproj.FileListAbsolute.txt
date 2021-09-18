@@ -92,3 +92,4 @@ C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\bin\Fluen
 C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\bin\Fluentx.Mvc.dll
 C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\bin\Fluentx.xml
 C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\bin\Fluentx.Mvc.xml
+C:\Users\TienHoang\Desktop\ThuTapTotNghiep\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.csprojAssemblyReference.cache

@@ -5779,6 +5779,11 @@ h3.widget-title-modal {
         background-position: 100% center;
         border-color: #e59285;
     }
+    .activeYT {
+        background-color: #e59285 !important;
+        background-position: 100% center !important;
+        border-color: #e59285 !important;
+    }
 
 .product__info__main .product__overview {
     border-top: 1px solid #ebebeb;

@@ -162,6 +162,7 @@
     <Compile Include="Models\Books.cs" />
     <Compile Include="Models\CallCard.cs" />
     <Compile Include="Models\Categories.cs" />
+    <Compile Include="Models\Favorite.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
