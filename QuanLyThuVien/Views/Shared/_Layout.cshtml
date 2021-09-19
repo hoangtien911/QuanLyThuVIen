@@ -64,8 +64,8 @@
                                 else
                                 {
                                     <li>
-                                        <a href="@Url.Action("DangXuat", "TaiKhoan")"
-                                           class="@(ViewContext.RouteData.Values["Action"].ToString() == "DangXuat" ? "LinkActive" : "")">Tài khoản</a>
+                                        <a href="@Url.Action("ChiTietUser", "TaiKhoan", new { id = Session["UserSession"] })"
+                                           class="@(ViewContext.RouteData.Values["Action"].ToString() == "ChiTietUser" ? "LinkActive" : "")">Tài khoản</a>
                                     </li>
                                     <li>
                                         <a href="@Url.Action("DangXuat", "TaiKhoan")"

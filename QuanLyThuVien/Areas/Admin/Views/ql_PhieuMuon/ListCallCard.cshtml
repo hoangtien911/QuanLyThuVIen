@@ -155,10 +155,12 @@
                                     @Html.DisplayFor(modelItem => item.status)                                   
                                 </td>                                
                                 <td class="link-action">
-                                    <a class="link-edit" href="@Url.Action("Edit", "ql_PhieuMuon" , new { id = item.id})" onclick="return confirm('Bạn có muốn sửa phiếu mượn @Html.DisplayFor(modelItem => item.id)?')">
+                                    <a class="link-edit" href="@Url.Action("Edit", "ql_PhieuMuon" , new { id = item.id})" 
+                                       onclick="return confirm('Bạn có muốn sửa phiếu mượn @Html.DisplayFor(modelItem => item.id)?')">
                                         <i class="fas fa-fw fa-edit"></i>Sửa
                                     </a><br />
-                                    <a class="link-delete" href="@Url.Action("Delete", "ql_PhieuMuon" , new { id = item.id})" onclick="return confirm('Bạn có muốn xoá phiếu mượn @Html.DisplayFor(modelItem => item.id)?')">
+                                    <a class="link-delete" href="@Url.Action("Delete", "ql_PhieuMuon" , new { id = item.id})" 
+                                       onclick="return confirm('Bạn có muốn xoá phiếu mượn @Html.DisplayFor(modelItem => item.id)?')">
                                         <i class="fas fa-fw fa-trash"></i>Xoá
                                     </a><br />
                                     <a class="link-detail" href="@Url.Action("Detail", "ql_PhieuMuon" , new { id = item.id})">

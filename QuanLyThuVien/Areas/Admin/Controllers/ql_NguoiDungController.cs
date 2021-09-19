@@ -21,8 +21,8 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         public ActionResult ListUser(string check)
         {
             //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            /*if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });*/
             //------------- END Check Session ---------------//
 
             client = new FireSharp.FirebaseClient(config);
@@ -66,8 +66,8 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         public ActionResult Create()
         {
             //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+            /*if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });*/
             //------------- END Check Session ---------------//
             return View();
         }
@@ -94,8 +94,8 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         public ActionResult Edit(string id)
         {
             //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
+           /* if (Session["AdminSession"] == null)
+                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });*/
             //------------- END Check Session ---------------//
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("User/" + id);

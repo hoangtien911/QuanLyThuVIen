@@ -44,6 +44,118 @@
 
 (function ($) {
     'use strict';
+
+/*============ START edit user ============*/
+    $('#edit_user_btn').on('click', function (e) {
+        e.preventDefault();
+        var check = false;
+
+        var div_info = document.getElementById("info_user");
+        var div_edit = document.getElementById("edit_user");
+        var div_changePass = document.getElementById("change_password");
+
+        if (div_edit.getElementsByClassName("hidden"))
+            check = true;
+
+        if (check) {
+            var exit = document.getElementById("exit_edit_user");
+            var save = document.getElementById("save_edit_user");
+
+            div_info.classList.add("hidden");
+            div_changePass.classList.add("hidden");
+            div_edit.classList.remove("hidden");
+         
+            //lưu
+            save.addEventListener('click', function () {
+                $.ajax({
+                    url: "/TaiKhoan/SuaThongTin",
+                    data: {
+                        id: document.getElementById("user_id").innerText,
+                        username: document.getElementById("user_name").innerText,
+                        password: document.getElementById("user_pass").innerText,
+                        dateOfRegist: document.getElementById("user_dor").innerText,                       
+                        fullName: document.getElementById("fullname").value,
+                        dateOfBirth: document.getElementById("dob").value,
+                        phone: document.getElementById("phone").value,
+                        email: document.getElementById("email").value,
+                        gender: document.getElementById("gender").value,
+                        adress: document.getElementById("adress").value,
+                        avatar: document.getElementById("avatar").value
+                    },
+                    dataType: "json",
+                    type: "POST",
+                    success: function (response) {
+                        if (response) {
+                            alert("Sửa thông tin thành công!");
+                            $("#info_user").load(" #info_user");  
+                            $("#avatar_user").load(" #avatar_user");
+                            div_info.classList.remove("hidden");
+                            div_changePass.classList.add("hidden");
+                            div_edit.classList.add("hidden");
+
+                        }
+                    }
+
+                });
+            })
+            //huỷ
+            exit.addEventListener('click', function () {
+                div_info.classList.remove("hidden");
+                div_changePass.classList.add("hidden");
+                div_edit.classList.add("hidden");
+            })
+        }
+    });
+/*============ END  edit  ============*/
+/*============ START change password ============*/
+    $('#change_password_btn').on('click', function (e) {
+        e.preventDefault();
+        var check = false;
+
+        var div_info = document.getElementById("info_user");
+        var div_edit = document.getElementById("edit_user");
+        var div_changePass = document.getElementById("change_password");
+
+        if (div_changePass.getElementsByClassName("hidden"))
+            check = true;
+      
+        if (check) {
+            var exit = document.getElementById("exit_change_pass");
+
+            div_info.classList.add("hidden");            
+            div_edit.classList.add("hidden");
+            div_changePass.classList.remove("hidden");
+
+            exit.addEventListener('click', function () {
+                div_info.classList.remove("hidden");               
+                div_edit.classList.add("hidden");
+                div_changePass.classList.add("hidden");
+            })
+        }
+    });
+/*============ End change password ============*/
+
+/*============ START check status callcard ============*/
+    try {
+        const status = document.querySelectorAll("#statusCallCard");      
+        for (let i = 0; i < status.length; i++) {
+            if (status[i].innerText == "Đã trả") {
+                status[i].classList.add("status_1")
+            }
+            if (status[i].innerText == "Đang mượn") {
+                status[i].classList.add("status_2")
+            }
+            if (status[i].innerText == "Quá hạn") {
+                status[i].classList.add("status_3")
+            }
+        }
+
+
+    }
+    catch{}
+
+/*============ END check status callcard ============*/
+
 /*============ START Function yeu thich sach ============*/
 
     $('.wishlist').off('click').on('click', function (e) {

@@ -7230,8 +7230,7 @@ h3.widget-title-modal {
     .table-content table td {
         border-top: medium none;
         font-size: 13px;
-        padding: 20px 10px;
-        text-align: center;
+        padding: 20px 10px;        
         vertical-align: middle;
     }
 
@@ -7333,6 +7332,9 @@ h3.widget-title-modal {
     border-bottom: 1px solid transparent;
     border-right: 1px solid transparent;
     color: #333;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .cartbox__btn {
@@ -8740,3 +8742,43 @@ input::placeholder { /* Most modern browsers support this now. */
     margin-left: 10px;
     margin-top: -5px;
 }
+.status_1 {
+    border: 1px solid;
+    border-radius: 10px;
+    background-color: #0014ff;
+    font-weight: 900;
+    color: #fff;
+}
+.status_2 {
+    border: 1px solid;
+    border-radius: 10px;
+    background-color: #00a533;
+    font-weight: 900;
+    color: #fff;
+}
+.status_3 {
+    border: 1px solid;
+    border-radius: 10px;
+    background-color: #a50000;
+    font-weight: 900;
+    color: #fff;
+}
+.btn-primary:hover {
+    color: #fff !important;
+    background-color: #0062cc;
+    border-color: #005cbf;
+    box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 50%);
+}
+#edit_user div{
+    margin: 5px 0;
+}
+    #edit_user div p {
+        line-height: 48px;
+    }
+#change_password div {
+    margin: 5px 0;
+}
+
+    #change_password div p {
+        line-height: 48px;
+    }
