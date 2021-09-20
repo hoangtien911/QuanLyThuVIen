@@ -32,6 +32,7 @@ namespace QuanLyThuVien.Controllers
             FirebaseResponse response = client.Get("User");
             Dictionary<string, User> data = JsonConvert.DeserializeObject<Dictionary<string, User>>(response.Body.ToString());
             User loginUser = new User();
+            bool check = false;
             foreach (var item in data)
             {
                 if (item.Value.username.Equals(user.username))
@@ -48,12 +49,14 @@ namespace QuanLyThuVien.Controllers
                     loginUser.dateOfRegist = item.Value.dateOfRegist;
                     loginUser.avatar = item.Value.avatar;
                     loginUser.status = item.Value.status;
+                    check = true;
                     break;
                 }
-                else
-                {
-                    ViewBag.thongbao = "Tên tài khoản không tồn tại.";
-                }
+            }
+            if (!check)
+            {
+                ViewBag.thongbao = "Tên tài khoản không tồn tại.";
+                return View();
             }
             if (!loginUser.password.Equals(user.password))
             {
@@ -109,47 +112,53 @@ namespace QuanLyThuVien.Controllers
             // get user with user id
             FirebaseResponse getUserResponse = client.Get("User/" + id);
             User getUser = JsonConvert.DeserializeObject<User>(getUserResponse.Body.ToString());
-            try
+
+            FirebaseResponse getCallCardResponse = client.Get("CallCard/");
+            FirebaseResponse getFavoriteResponse = client.Get("Favorite/" + getUser.id);
+
+            //get favorite with user id
+            Favorite getFavorite = JsonConvert.DeserializeObject<Favorite>(getFavoriteResponse.Body.ToString());
+            if (getFavorite != null && getFavorite.booksID != null)
             {
-                FirebaseResponse getCallCardResponse = client.Get("CallCard/");
-                FirebaseResponse getFavoriteResponse = client.Get("Favorite/" + id);
-                
-                //get favorite with user id
-                Favorite getFavorite = JsonConvert.DeserializeObject<Favorite>(getFavoriteResponse.Body.ToString());
-                if(getFavorite != null)
+                getFavorite.booksID_temp = getFavorite.booksID.Split(',');
+                //get books with favorite id
+                ViewBag.listBooksFavorite = new List<Books>();
+                foreach (var booksID in getFavorite.booksID_temp)
                 {
-                    getFavorite.booksID_temp = getFavorite.booksID.Split(',');
-                    //get books with favorite id
-                    ViewBag.listBooksFavorite = new List<Books>();
-                    foreach (var booksID in getFavorite.booksID_temp)
-                    {
-                        FirebaseResponse getBook = client.Get("Books/" + booksID);
-                        ViewBag.listBooksFavorite.Add(JsonConvert.DeserializeObject<Books>(getBook.Body.ToString()));
-                    }
-                }               
-                // get callcard == user.id
-                Dictionary<string, CallCard> data = JsonConvert.DeserializeObject<Dictionary<string, CallCard>>(getCallCardResponse.Body.ToString());
-                if (data != null)
+                    FirebaseResponse getBook = client.Get("Books/" + booksID);
+                    ViewBag.listBooksFavorite.Add(JsonConvert.DeserializeObject<Books>(getBook.Body.ToString()));
+                }
+            }
+            // get callcard == user.id
+            Dictionary<string, CallCard> data = JsonConvert.DeserializeObject<Dictionary<string, CallCard>>(getCallCardResponse.Body.ToString());
+            if (data != null)
+            {
+                List<CallCard> listCallCard = new List<CallCard>();
+                foreach (var item in data)
                 {
-                    ViewBag.listCallCard = new List<CallCard>();
-                    foreach (var item in data)
+                    if (item.Value.user_id.Equals(getUser.id))
                     {
-                        if (item.Value.user_id.Equals(id))
-                        {
-                            CallCard callCard = new CallCard();
-                            callCard.id = item.Value.id;
-                            callCard.books_id = item.Value.books_id;
-                            callCard.user_id = item.Value.user_id;
-                            callCard.date_issued = item.Value.date_issued;
-                            callCard.date_return = item.Value.date_return;
-                            callCard.date_returned = item.Value.date_returned;
-                            callCard.status = item.Value.status;
-                            ViewBag.listCallCard.Add(callCard);
-                        }
+                        CallCard callCard = new CallCard();
+                        callCard.id = item.Value.id;
+                        callCard.books_id = item.Value.books_id;
+                        callCard.user_id = item.Value.user_id;
+                        callCard.date_issued = item.Value.date_issued;
+                        callCard.date_return = item.Value.date_return;
+                        callCard.date_returned = item.Value.date_returned;
+                        callCard.status = item.Value.status;
+                        listCallCard.Add(callCard);
                     }
+                }
+                if(listCallCard.Count == 0)
+                {
+                    ViewBag.listCallCard = null;
+                }
+                else
+                {
+                    ViewBag.listCallCard = listCallCard;
                     //get books with callcard books_id                    
                     ViewBag.listBooksCallCard = new List<Books>();
-                    foreach (var item in ViewBag.listCallCard)
+                    foreach (var item in listCallCard)
                     {
                         item.books_id_temp = item.books_id.Split(',');
                         foreach (var booksID in item.books_id_temp)
@@ -157,37 +166,54 @@ namespace QuanLyThuVien.Controllers
                             FirebaseResponse getBook = client.Get("Books/" + booksID);
                             ViewBag.listBooksCallCard.Add(JsonConvert.DeserializeObject<Books>(getBook.Body.ToString()));
                         }
-                    }                   
+                    }
                 }
-               
-                return View(getUser);
+                
             }
-            catch
-            {
-                return View(getUser);
-            }
+            return View(getUser);
         }
 
-        public JsonResult SuaThongTin(string id, string username, string password, string dateOfRegist, string fullName, string dateOfBirth, string phone, string email, string gender, string adress, string avatar)
+        public JsonResult SuaThongTin(string id, string fullName, string dateOfBirth, string phone, string email, string gender, string adress, string avatar)
         {
             client = new FireSharp.FirebaseClient(config);
-           
-                User user = new User();
-                user.id = id;
-                user.username = username;
-                user.password = password;
-                user.status = "User";
-                user.dateOfRegist = DateTime.Parse(dateOfRegist);
-                user.fullName = fullName;
-                user.dateOfBirth = DateTime.Parse(dateOfBirth);
-                user.phone = phone;
-                user.email = email;
-                user.gender = gender;
-                user.adress = adress;
-                user.avatar = avatar;
-                client.Set("User/" + user.id, user);
-                return Json(new { status = true });
-           
+            // get user with user id
+            FirebaseResponse getUserResponse = client.Get("User/" + id);
+            User user = JsonConvert.DeserializeObject<User>(getUserResponse.Body.ToString());
+            user.fullName = fullName;
+            user.dateOfBirth = DateTime.Parse(dateOfBirth);
+            user.phone = phone;
+            user.email = email;
+            user.gender = gender;
+            user.adress = adress;
+            user.avatar = avatar;
+            client.Set("User/" + user.id, user);
+            return Json(new { status = true });
+
+        }
+        public JsonResult DoiPassword(string id, string password, string newpassword, string checknewpass)
+        {
+            client = new FireSharp.FirebaseClient(config);
+            // get user with user id
+            FirebaseResponse getUserResponse = client.Get("User/" + id);
+            User user = JsonConvert.DeserializeObject<User>(getUserResponse.Body.ToString());
+
+            if (password.Equals(user.password))
+            {
+                if (newpassword.Equals(checknewpass))
+                {
+                    user.password = newpassword;
+                    client.Set("User/" + user.id, user);
+                    return Json(new { status = "Đổi mật khẩu thành công." });
+                }
+                else
+                {
+                    return Json(new { status = "Nhập lại mật khẩu không đúng." });
+                }
+            }
+            else
+            {
+                return Json(new { status = "Mật khẩu không đúng." });
+            }
         }
     }
 }

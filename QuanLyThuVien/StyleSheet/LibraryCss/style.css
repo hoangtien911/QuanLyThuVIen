@@ -3580,10 +3580,11 @@ nav.menu {
 .rating li i {
     color: #b6b6b6;
     margin-right: 8px;
+    font-size: 18px;
 }
 
 .rating li.on i {
-    color: #e59285;
+    color: #ff2300;
 }
 
 .product__activation [class*="col-"] {

@@ -30,19 +30,19 @@ namespace QuanLyThuVien.Controllers
 
             int[] MangTheLoai = new int[ListCategories().Count];
             int i = 0;
-            foreach(var theLoai in ListCategories())
+            foreach (var theLoai in ListCategories())
             {
-                foreach(var sach in ListBooks())
+                foreach (var sach in ListBooks())
                 {
                     if (sach.categories != null)
                         sach.categories_temp = sach.categories.Split(',');
-                    foreach(var idTheLoai in sach.categories_temp)
+                    foreach (var idTheLoai in sach.categories_temp)
                     {
                         if (theLoai.id == idTheLoai)
                         {
                             MangTheLoai[i]++;
                         }
-                    }                    
+                    }
                 }
                 i++;
             }
@@ -54,7 +54,7 @@ namespace QuanLyThuVien.Controllers
                 Session["UserSession"] = Request.Cookies["UserCookies"]["userid"];
                 return RedirectToAction("HomePage", "TrangChu");
             }
-            return View();           
+            return View();
         }
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         [HttpGet]
@@ -64,7 +64,7 @@ namespace QuanLyThuVien.Controllers
             FirebaseResponse response = client.Get("Books/" + id);
             Books data = JsonConvert.DeserializeObject<Books>(response.Body);
 
-            foreach(var TacGia in ListAuthor())
+            foreach (var TacGia in ListAuthor())
             {
                 if (data.authors.Equals(TacGia.id))
                 {
@@ -72,7 +72,7 @@ namespace QuanLyThuVien.Controllers
                     break;
                 }
             }
-         
+
             ViewBag.listbooks = ListBooks();
             ViewBag.listauthor = ListAuthor();
             ViewBag.listcategories = ListCategories();
@@ -96,26 +96,20 @@ namespace QuanLyThuVien.Controllers
             }
             ViewBag.soLuongSach = MangTheLoai;
             if (Session["UserSession"] != null)
-            {               
-                FirebaseResponse response1 = client.Get("Favorite");
-                Dictionary<string, Favorite> favorite = JsonConvert.DeserializeObject<Dictionary<string, Favorite>>(response1.Body.ToString());
-                Favorite temp = new Favorite();
-                foreach (var item in favorite)
-                {
-                    if (item.Value.userID.Equals(Session["UserSession"]))
+            {
+                FirebaseResponse response1 = client.Get("Favorite/" + Session["UserSession"]);
+                Favorite favorite = JsonConvert.DeserializeObject<Favorite>(response1.Body.ToString());
+                if (favorite.booksID != null)
+                {                   
+                    favorite.booksID_temp = favorite.booksID.Split(',');
+                    for (int j = 0; j < favorite.booksID_temp.Length; j++)
                     {
-                        temp.userID = item.Value.userID;
-                        temp.booksID = item.Value.booksID;
-                        temp.booksID_temp = temp.booksID.Split(',');
-                        for(int j = 0; j < temp.booksID_temp.Length; j++)
-                        {
-                            if (temp.booksID_temp[j].Equals(data._id))
-                                ViewBag.checkFavorite = true;
-                        }
+                        if (favorite.booksID_temp[j].Equals(data._id))
+                            ViewBag.checkFavorite = true;
                     }
                 }
-            }
 
+            }
             return View(data);
         }
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT TÁC GIẢ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
@@ -148,7 +142,7 @@ namespace QuanLyThuVien.Controllers
             }
             ViewBag.soLuongSach = MangTheLoai;
             List<Books> listBooksOfAuthor = new List<Books>();
-            foreach(var item in ListBooks())
+            foreach (var item in ListBooks())
             {
                 if (data.id.Equals(item.authors))
                 {
@@ -199,7 +193,7 @@ namespace QuanLyThuVien.Controllers
             foreach (var item in ListBooks())
             {
                 if (data.id.Equals(item.categories))
-                {                   
+                {
                     foreach (var TacGia in ListAuthor())
                     {
                         if (item.authors.Equals(TacGia.id))
@@ -210,7 +204,7 @@ namespace QuanLyThuVien.Controllers
                     }
                     listBooksOfCategories.Add(item);
                 }
-            }           
+            }
             ViewBag.listBooksOfCategories = listBooksOfCategories;
             return View(data);
         }
@@ -275,13 +269,13 @@ namespace QuanLyThuVien.Controllers
                 categories.image = item.Value.image;
                 list.Add(categories);
             }
-                  
+
             return list;
         }
 
         public JsonResult addFavorite(string userID, string bookID)
         {
-            client = new FireSharp.FirebaseClient(config);         
+            client = new FireSharp.FirebaseClient(config);
             try
             {
                 if (Session["UserSession"] != null)
@@ -293,7 +287,7 @@ namespace QuanLyThuVien.Controllers
                     if (data.booksID == null)
                         data.booksID = bookID;
                     else
-                        data.booksID += "," + bookID;                   
+                        data.booksID += "," + bookID;
                     client.Set("Favorite/" + userID, data);
                     return Json(new
                     {
@@ -311,7 +305,7 @@ namespace QuanLyThuVien.Controllers
                 {
                     status = false
                 });
-            }                      
+            }
         }
         public JsonResult removeFavorite(string userID, string bookID)
         {
@@ -321,8 +315,8 @@ namespace QuanLyThuVien.Controllers
                 if (Session["UserSession"] != null)
                 {
                     FirebaseResponse response = client.Get("Favorite/" + userID);
-                    Favorite data = JsonConvert.DeserializeObject<Favorite>(response.Body);                   
-                    List<string> list= data.booksID.Split(',').ToList();
+                    Favorite data = JsonConvert.DeserializeObject<Favorite>(response.Body);
+                    List<string> list = data.booksID.Split(',').ToList();
                     for (int i = 0; i < list.Count; i++)
                     {
                         if (list[i].Equals(bookID))

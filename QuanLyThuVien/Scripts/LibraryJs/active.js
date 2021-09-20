@@ -46,13 +46,17 @@
     'use strict';
 
 /*============ START edit user ============*/
-    $('#edit_user_btn').on('click', function (e) {
-        e.preventDefault();
+    $('#edit_user_btn').on('click', function () {
         var check = false;
 
         var div_info = document.getElementById("info_user");
+        var div_button_info = document.getElementById("button_even");
+
         var div_edit = document.getElementById("edit_user");
+        var div_button_edit = document.getElementById("button_edit");
+
         var div_changePass = document.getElementById("change_password");
+        var div_button_change = document.getElementById("button_change_pass");
 
         if (div_edit.getElementsByClassName("hidden"))
             check = true;
@@ -61,19 +65,21 @@
             var exit = document.getElementById("exit_edit_user");
             var save = document.getElementById("save_edit_user");
 
+            div_button_info.classList.add("hidden");
             div_info.classList.add("hidden");
+
             div_changePass.classList.add("hidden");
+            div_button_change.classList.add("hidden");
+
             div_edit.classList.remove("hidden");
+            div_button_edit.classList.remove("hidden");
          
             //lưu
             save.addEventListener('click', function () {
                 $.ajax({
                     url: "/TaiKhoan/SuaThongTin",
                     data: {
-                        id: document.getElementById("user_id").innerText,
-                        username: document.getElementById("user_name").innerText,
-                        password: document.getElementById("user_pass").innerText,
-                        dateOfRegist: document.getElementById("user_dor").innerText,                       
+                        id: document.getElementById("user_id").innerText,                                               
                         fullName: document.getElementById("fullname").value,
                         dateOfBirth: document.getElementById("dob").value,
                         phone: document.getElementById("phone").value,
@@ -87,11 +93,18 @@
                     success: function (response) {
                         if (response) {
                             alert("Sửa thông tin thành công!");
+
                             $("#info_user").load(" #info_user");  
                             $("#avatar_user").load(" #avatar_user");
+
+                            div_button_info.classList.remove("hidden");
                             div_info.classList.remove("hidden");
+
                             div_changePass.classList.add("hidden");
+                            div_button_change.classList.add("hidden");
+
                             div_edit.classList.add("hidden");
+                            div_button_edit.classList.add("hidden");
 
                         }
                     }
@@ -100,36 +113,93 @@
             })
             //huỷ
             exit.addEventListener('click', function () {
+                div_button_info.classList.remove("hidden");
                 div_info.classList.remove("hidden");
+
                 div_changePass.classList.add("hidden");
+                div_button_change.classList.add("hidden");
+
                 div_edit.classList.add("hidden");
+                div_button_edit.classList.add("hidden");
             })
         }
     });
 /*============ END  edit  ============*/
 /*============ START change password ============*/
-    $('#change_password_btn').on('click', function (e) {
+    $('#change_password_btn').off().on('click', function (e) {
         e.preventDefault();
         var check = false;
 
         var div_info = document.getElementById("info_user");
+        var div_button_info = document.getElementById("button_even");
+
         var div_edit = document.getElementById("edit_user");
+        var div_button_edit = document.getElementById("button_edit");
+
         var div_changePass = document.getElementById("change_password");
+        var div_button_change = document.getElementById("button_change_pass");
+        
+
 
         if (div_changePass.getElementsByClassName("hidden"))
             check = true;
       
         if (check) {
             var exit = document.getElementById("exit_change_pass");
+            var save = document.getElementById("save_change_pass");
 
-            div_info.classList.add("hidden");            
-            div_edit.classList.add("hidden");
+            div_button_info.classList.add("hidden");
+            div_info.classList.add("hidden");
+
             div_changePass.classList.remove("hidden");
+            div_button_change.classList.remove("hidden");
 
+            div_edit.classList.add("hidden");
+            div_button_edit.classList.add("hidden");
+
+            //lưu
+            save.addEventListener('click', function () {
+                $.ajax({
+                    url: "/TaiKhoan/DoiPassword",
+                    data: {
+                        id: document.getElementById("user_id").innerText,
+                        password: document.getElementById("password").value,
+                        newpassword: document.getElementById("newpassword").value,
+                        checknewpass: document.getElementById("checknewpass").value,                        
+                    },
+                    dataType: "json",
+                    type: "POST",
+                    success: function (response) {
+                        if (response) {
+                            alert(response.status);
+
+                            div_button_info.classList.remove("hidden");
+                            div_info.classList.remove("hidden");
+
+                            div_changePass.classList.add("hidden");
+                            div_button_change.classList.add("hidden");
+
+                            div_edit.classList.add("hidden");
+                            div_button_edit.classList.add("hidden");
+                          
+                        }
+                    },
+                    error: function () {
+                        alert("Đã có lỗi xảy ra.");
+                    }
+
+                });
+            })            
+            //huỷ
             exit.addEventListener('click', function () {
-                div_info.classList.remove("hidden");               
-                div_edit.classList.add("hidden");
+                div_button_info.classList.remove("hidden");
+                div_info.classList.remove("hidden");
+
                 div_changePass.classList.add("hidden");
+                div_button_change.classList.add("hidden");
+
+                div_edit.classList.add("hidden");
+                div_button_edit.classList.add("hidden");
             })
         }
     });
