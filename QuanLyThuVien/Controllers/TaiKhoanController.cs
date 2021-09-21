@@ -76,10 +76,10 @@ namespace QuanLyThuVien.Controllers
                 if (loginUser.status.Equals("User"))
                 {
                     Session["UserSession"] = loginUser.id;
+                    Response.Cookies["UserCookies"]["username"] = loginUser.username;
+                    Response.Cookies["UserCookies"]["userid"] = loginUser.id;
                     if (user.remember)
-                    {
-                        Response.Cookies["UserCookies"]["userid"] = loginUser.id;
-                        Response.Cookies["UserCookies"]["username"] = loginUser.username;
+                    {                      
                         Response.Cookies["UserCookies"]["password"] = loginUser.password;
                         Response.Cookies["UserCookies"].Expires = DateTime.Now.AddDays(15);
                     }

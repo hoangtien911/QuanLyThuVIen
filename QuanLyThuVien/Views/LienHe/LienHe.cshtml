@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "LienHe";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Start Bradcaump area -->
+<div class="ht__bradcaump__area bg-image--6">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="bradcaump__inner text-center">
+                    <h2 class="bradcaump-title">Liên hệ</h2>
+                    <nav class="bradcaump-content">
+                        <a class="breadcrumb_item" href="@Url.Action("HomePage","TrangChu")">Trang chủ</a>
+                        <span class="brd-separetor">/</span>
+                        <span class="breadcrumb_item active">Liên hệ</span>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Bradcaump area -->
+<!-- Start Contact Area -->
+<section class="wn_contact_area bg--white pt--80">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12">
+                <div class="contact-form-wrap">
+                    <h2 class="contact__title">Liên hệ với chúng tôi</h2>
+                    <p>Nếu bạn có điều gì cần thông báo, góp ý hay gặp bất cứ điều gì khiến bạn chưa hài lòng khi sử dụng website của chúng tôi. 
+                       Hãy cho chúng tôi biết bằng cách điền vào phiếu sau.</p>
+                    <form id="contact-form" action="mail.php" method="post">
+                        <div class="single-contact-form">
+                            <input type="text" name="firstname" placeholder="Họ tên*">                           
+                        </div>
+                        <div class="single-contact-form">
+                            <input type="email" name="email" placeholder="Email*">                           
+                        </div>
+                        <div class="single-contact-form">
+                            <input type="text" name="subject" placeholder="Tiêu đề*">
+                        </div>
+                        <div class="single-contact-form message">
+                            <textarea name="message" placeholder="Nội dung.."></textarea>
+                        </div>
+                        <div class="contact-btn">
+                            <button type="submit">Gửi Email</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-output">
+                    <p class="form-messege">
+                </div>
+            </div>
+            <div class="col-lg-4 col-12 md-mt-40 sm-mt-40">
+                <div class="wn__address">
+                    <h2 class="contact__title">Thông tin về chúng tôi.</h2>                 
+                    <div class="wn__addres__wreapper">
+
+                        <div class="single__address">
+                            <i class="icon-location-pin icons"></i>
+                            <div class="content">
+                                <span>Địa chỉ:</span>
+                                <p>615 QL1B, TT. Văn Quan, Văn Quan, Lạng Sơn, Việt Nam</p>
+                            </div>
+                        </div>
+
+                        <div class="single__address">
+                            <i class="icon-phone icons"></i>
+                            <div class="content">
+                                <span>Số điện thoại:</span>
+                                <p>0832-990-xxx</p>
+                            </div>
+                        </div>
+
+                        <div class="single__address">
+                            <i class="icon-envelope icons"></i>
+                            <div class="content">
+                                <span>Địa chỉ email:</span>
+                                <p>thuvienvanquan@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div class="single__address">
+                            <i class="icon-globe icons"></i>
+                            <div class="content">
+                                <span>Website:</span>
+                                <p>www.thuvienvanquan.com</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="google__map mt--80">
+        <div id="googleMap">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d99651.9064385817!2d106.47127442327398!3d21.844566709866715!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x22eabc758d9b13c3!2zVGjGsCBWaeG7h24gVFQgVsSDbiBRdWFu!5e0!3m2!1svi!2s!4v1632187617017!5m2!1svi!2s"
+                    style="border:0; width:100%; height:100%;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</section>
+<!-- End Contact Area -->

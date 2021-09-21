@@ -2408,7 +2408,7 @@ Elements Styles
                 overflow: hidden;
                 position: static;
                 text-align: left;
-                text-transform: uppercase;
+               
             }
 
                 .searchbar__content .content-inner .switcher-currency .label span {
