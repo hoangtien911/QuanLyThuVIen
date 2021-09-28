@@ -67,7 +67,7 @@ namespace QuanLyThuVien.Controllers
             {
                 if (loginUser.status.Equals("Admin"))
                 {
-                    Session["AdminSession"] = loginUser.id;
+                    Session["AdminSession"] = loginUser.id;                     
                     Response.Cookies["AdminCookies"]["id"] = loginUser.id;
                     Response.Cookies["AdminCookies"]["name"] = loginUser.fullName;
                     Response.Cookies["AdminCookies"]["avatar"] = loginUser.avatar;

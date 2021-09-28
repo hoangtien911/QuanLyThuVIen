@@ -104,6 +104,12 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("User/" + id);
             User data = JsonConvert.DeserializeObject<User>(response.Body);
+            if(id == Session["AdminSession"].ToString())
+            {
+                Response.Cookies["AdminCookies"]["id"] = data.id;
+                Response.Cookies["AdminCookies"]["name"] = data.fullName;
+                Response.Cookies["AdminCookies"]["avatar"] = data.avatar;
+            }
             return View(data);
         }
         [HttpPost]

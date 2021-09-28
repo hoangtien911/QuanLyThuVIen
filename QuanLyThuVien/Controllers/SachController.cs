@@ -49,11 +49,7 @@ namespace QuanLyThuVien.Controllers
             ViewBag.soLuongSach = MangTheLoai;
             ViewBag.lenghtBooks = ListBooks().Count / 12 + 1;
 
-            if (Request.Cookies["UserCookies"] != null)
-            {
-                Session["UserSession"] = Request.Cookies["UserCookies"]["userid"];
-                return RedirectToAction("HomePage", "TrangChu");
-            }
+          
             return View();
         }
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT SÁCH vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
