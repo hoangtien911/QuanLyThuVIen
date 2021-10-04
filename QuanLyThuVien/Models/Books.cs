@@ -31,5 +31,6 @@ namespace QuanLyThuVien.Models
 
         public string [] author_temp { get; set; }
         public string[] categories_temp { get; set; }
+        public int count_in { get; set; }
     }
 }

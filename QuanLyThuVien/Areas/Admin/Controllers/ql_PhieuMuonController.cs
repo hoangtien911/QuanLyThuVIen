@@ -131,6 +131,18 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             if (callCard.user_id != null && callCard.books_id_temp != null)
             {
                 client = new FireSharp.FirebaseClient(config);
+                //Trừ sách trong kho
+                foreach(var item in callCard.books_id_temp)
+                {
+                    foreach(var book in ViewBag.listBooks)
+                    {
+                        if(item == book._id)
+                        {
+                            book.count_in--;
+                            client.Set("Books/" + book._id, book);
+                        }
+                    }
+                }
                 // gộp mảng sách sang chuỗi
                 callCard.books_id = string.Join(",", callCard.books_id_temp);
                 callCard.books_id_temp = null;
@@ -164,8 +176,19 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             CallCard data = JsonConvert.DeserializeObject<CallCard>(response.Body);
             //Tách chuỗi sách sang mảng
             if (data.books_id != null)
-                data.books_id_temp = data.books_id.Split(',');           
-            //
+                data.books_id_temp = data.books_id.Split(',');
+            //Cộng sách trong kho để chuẩn bị sửa
+            foreach (var item in data.books_id_temp)
+            {
+                foreach (var book in ViewBag.listBooks)
+                {
+                    if (item == book._id)
+                    {
+                        book.count_in++;
+                        client.Set("Books/" + book._id, book);
+                    }
+                }
+            }
             return View(data);
         }
         [HttpPost]
@@ -175,6 +198,18 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             ViewBag.listBooks = getBooks();
             if (callCard.user_id != null && callCard.books_id_temp != null)
             {
+                //Trừ sách trong kho
+                foreach (var item in callCard.books_id_temp)
+                {
+                    foreach (var book in ViewBag.listBooks)
+                    {
+                        if (item == book._id)
+                        {
+                            book.count_in--;
+                            client.Set("Books/" + book._id, book);
+                        }
+                    }
+                }
                 // gộp mảng sách sang chuỗi
                 callCard.books_id = string.Join(",", callCard.books_id_temp);
                 callCard.books_id_temp = null;
@@ -260,6 +295,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 book.publishedDate = item.Value.publishedDate;
                 book.status = item.Value.status;
                 book.thumbnailUrl = item.Value.thumbnailUrl;
+                book.count_in = item.Value.count_in;
                 list.Add(book);
             }
             return list;

@@ -151,6 +151,7 @@
     <Compile Include="Areas\Admin\Controllers\ql_SachController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_TacGiaController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_TheLoaiController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ThongKeController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\LienHeController.cs" />
     <Compile Include="Controllers\SachController.cs" />
@@ -352,6 +353,9 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Scripts\chart-area-demo.js" />
+    <Content Include="Scripts\chart-pie-demo.js" />
+    <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\chosen\chosen.jquery.js" />
     <Content Include="Scripts\datatables-demo.js" />
     <Content Include="Scripts\dataTables.bootstrap4.js" />
@@ -467,6 +471,7 @@
     <Content Include="fonts\LibraryFonts\fonts\slick.eot" />
     <Content Include="fonts\LibraryFonts\fonts\slick.ttf" />
     <Content Include="fonts\LibraryFonts\fonts\slick.woff" />
+    <Content Include="Areas\Admin\Views\ThongKe\ThongKe.cshtml" />
     <None Include="packages.config" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />

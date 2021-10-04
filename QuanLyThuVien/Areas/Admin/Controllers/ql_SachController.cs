@@ -98,6 +98,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 book.categories = string.Join(",", book.categories_temp);
                 book.author_temp = null;
                 book.categories_temp = null;
+                book.count_in = book.count;
                 //
                 PushResponse response = client.Push("Books/", book);
                 book._id = response.Result.name;

@@ -17,86 +17,92 @@
                     @using (Html.BeginForm())
                     {
                         @Html.AntiForgeryToken()
-                        <div class="form-horizontal">
-                            <h4 class="text-center">Sửa thông tin sách</h4>
-                            <hr />
-                            <div class="row text-sm-right">
-                                @Html.LabelFor(model => model._id, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-3">
-                                    @Html.EditorFor(model => model._id, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model._id, "", new { @class = "text-danger" })
-                                </div>
-                                @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-5">
-                                    @Html.DropDownListFor(model => model.status, new SelectList(new[] { "Còn sách", "Hết sách", "Chưa cập nhật" }), new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
-                                </div>
+                    <div class="form-horizontal">
+                        <h4 class="text-center">Sửa thông tin sách</h4>
+                        <hr />
+                        <div class="row text-sm-right">
+                            @Html.LabelFor(model => model._id, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.EditorFor(model => model._id, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model._id, "", new { @class = "text-danger" })
                             </div>
-                            <div class="row text-sm-right">
-                                @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="row text-sm-right">
-                                @Html.LabelFor(model => model.authors, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.ListBoxFor(model => model.author_temp,
-                                     new MultiSelectList(ViewBag.listAuthor, "id", "name"),
-                                     new { @class = "form-control", id = "select-author" })
-                                </div>
-                            </div>
-                            <div class="row text-sm-right">
-                                @Html.LabelFor(model => model.categories, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.ListBoxFor(model => model.categories_temp,
-                                      new MultiSelectList(ViewBag.listCategories, "id", "name"),
-                                      new { @class = "form-control", id = "select-categories" })
-                                </div>
-                            </div>
-                            <div class="row text-sm-right">
-                                @Html.LabelFor(model => model.shortDescription, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.shortDescription, new { htmlAttributes = new { @class = "form-control" } })
-                                </div>
-                            </div>
-                            <div class="row text-sm-right">
-                                @Html.LabelFor(model => model.longDescription, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.TextAreaFor(model => model.longDescription, new { @class = "form-control" })
-                                </div>
-                            </div>
-                            <div class="row text-sm-right">
-                                @Html.LabelFor(model => model.count, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-3">
-                                    @Html.EditorFor(model => model.count, new { htmlAttributes = new { @class = "form-control" } })
-                                </div>
-                                @Html.LabelFor(model => model.publishedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-5">
-                                    @Html.EditorFor(model => model.publishedDate, new { htmlAttributes = new { @class = "form-control" } })
-                                </div>
-                            </div>
-                            <div class="row text-sm-right">
-                                @Html.LabelFor(model => model.thumbnailUrl, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.thumbnailUrl, new { htmlAttributes = new { @class = "form-control" } })
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <a href="@Url.Action("ListBooks", "ql_Sach")" class="btn btn-google btn-user btn-block">
-                                        <i class="fa fa-fw fa-undo"></i> Trở lại
-                                    </a>
-                                </div>
-                                <div class="col-md-10">
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">
-                                        <i class="fa fa-fw fa-save"></i> Lưu
-                                    </button>
-                                </div>
+                            @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-5">
+                                @Html.DropDownListFor(model => model.status, new SelectList(new[] { "Còn sách", "Hết sách", "Chưa cập nhật" }), new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
                             </div>
                         </div>
+                        <div class="row text-sm-right">
+                            @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="row text-sm-right">
+                            @Html.LabelFor(model => model.authors, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.ListBoxFor(model => model.author_temp,
+                                 new MultiSelectList(ViewBag.listAuthor, "id", "name"),
+                                 new { @class = "form-control", id = "select-author" })
+                            </div>
+                        </div>
+                        <div class="row text-sm-right">
+                            @Html.LabelFor(model => model.categories, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.ListBoxFor(model => model.categories_temp,
+                                  new MultiSelectList(ViewBag.listCategories, "id", "name"),
+                                  new { @class = "form-control", id = "select-categories" })
+                            </div>
+                        </div>
+                        <div class="row text-sm-right">
+                            @Html.LabelFor(model => model.shortDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.shortDescription, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="row text-sm-right">
+                            @Html.LabelFor(model => model.longDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.longDescription, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row text-sm-right">
+                            @Html.LabelFor(model => model.count, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.EditorFor(model => model.count, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.LabelFor(model => model.publishedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-5">
+                                @Html.EditorFor(model => model.publishedDate, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="row text-sm-right">
+                            @Html.LabelFor(model => model.thumbnailUrl, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.thumbnailUrl, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="row text-sm-right" style="display: none;">
+                            @Html.LabelFor(model => model.count_in, htmlAttributes: new { @class = "control-label col-md-2 hidden" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.count_in, new { htmlAttributes = new { @class = "form-control hidden" } })
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-2">
+                                <a href="@Url.Action("ListBooks", "ql_Sach")" class="btn btn-google btn-user btn-block">
+                                    <i class="fa fa-fw fa-undo"></i> Trở lại
+                                </a>
+                            </div>
+                            <div class="col-md-10">
+                                <button type="submit" class="btn btn-primary btn-user btn-block">
+                                    <i class="fa fa-fw fa-save"></i> Lưu
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     }
                 </div>
             </div>
