@@ -5,7 +5,6 @@ using FireSharp.Interfaces;
 using FireSharp.Config;
 using FireSharp.Response;
 using QuanLyThuVien.Models;
-using QuanLyThuVien.Areas.Admin.Data;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
@@ -24,7 +23,21 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             //------------- START Check Session ---------------//
             if (Session["AdminSession"] == null)
                 return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//         
+            //------------- END Check Session ---------------//
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Categories");
+            Dictionary<string, Categories> data = JsonConvert.DeserializeObject<Dictionary<string, Categories>>(response.Body.ToString());
+            var list = new List<Categories>();
+            foreach (var item in data)
+            {
+                Categories categories = new Categories();
+                categories.id = item.Value.id;
+                categories.name = item.Value.name;
+                categories.shortDescription = item.Value.shortDescription;
+                categories.longDescription = item.Value.longDescription;
+                categories.image = item.Value.image;
+                list.Add(categories);
+            }
             if (check != null)
             {
                 if (check.Equals("1"))
@@ -38,15 +51,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                     check = null;
                 }
             }
-            if (Data_Categories.UpdateCount == 0)
-            {
-                Data_Categories.GetAllData();                
-                return View(Data_Categories.CategoriesList);
-            }
-            else
-            {
-                return View(Data_Categories.CategoriesList);
-            }
+            return View(list);
         }
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv THÊM MỚI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
         [HttpGet]
@@ -63,7 +68,11 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {
             if (categories.name != null)
             {
-                Data_Categories.CreateData(categories);
+                client = new FireSharp.FirebaseClient(config);
+                PushResponse response = client.Push("Categories/", categories);
+                categories.id = response.Result.name;
+                client.Set("Categories/" + categories.id, categories);
+                ViewBag.MsCreate = "Thêm mới thể loại thành công!";
                 return View();
             }
             else
@@ -79,15 +88,19 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             //------------- START Check Session ---------------//
             if (Session["AdminSession"] == null)
                 return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//         
-            return View(Data_Categories.GetSingleData(id));
+            //------------- END Check Session ---------------//
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Categories/" + id);
+            Categories data = JsonConvert.DeserializeObject<Categories>(response.Body);
+            return View(data);
         }
         [HttpPost]
         public ActionResult Edit(Categories categories)
         {
             if (categories.name != null)
             {
-                Data_Categories.EditData(categories);
+                client = new FireSharp.FirebaseClient(config);
+                client.Set("Categories/" + categories.id, categories);
                 return RedirectToAction("ListCategories", new { @check = 1 });
             }
             else
@@ -104,9 +117,11 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
             //------------- END Check Session ---------------//
             try
-            {            
-                Categories data = Data_Categories.GetSingleData(id);
-                Data_Categories.DeleteData(id);
+            {
+                client = new FireSharp.FirebaseClient(config);
+                FirebaseResponse response = client.Get("Categories/" + id);
+                Categories data = JsonConvert.DeserializeObject<Categories>(response.Body);
+                client.Delete("Categories/" + id);
                 return RedirectToAction("ListCategories", new { @check = data.name });
             }
             catch
@@ -122,8 +137,11 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             //------------- START Check Session ---------------//
             if (Session["AdminSession"] == null)
                 return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//            
-            return View(Data_Categories.GetSingleData(id));
+            //------------- END Check Session ---------------//
+            client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = client.Get("Categories/" + id);
+            Categories data = JsonConvert.DeserializeObject<Categories>(response.Body);
+            return View(data);
         }
     }
 }

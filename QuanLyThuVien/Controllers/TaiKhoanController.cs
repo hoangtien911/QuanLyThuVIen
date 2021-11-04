@@ -71,7 +71,7 @@ namespace QuanLyThuVien.Controllers
                     Response.Cookies["AdminCookies"]["id"] = loginUser.id;
                     Response.Cookies["AdminCookies"]["name"] = loginUser.fullName;
                     Response.Cookies["AdminCookies"]["avatar"] = loginUser.avatar;
-                    return RedirectToAction("ThongKe", "ThongKe", new { area = "Admin" });
+                    return RedirectToAction("ListBooks", "ql_Sach", new { area = "Admin" });
                 }
                 if (loginUser.status.Equals("User"))
                 {

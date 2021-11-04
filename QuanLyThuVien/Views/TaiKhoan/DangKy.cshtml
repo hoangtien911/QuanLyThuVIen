@@ -1,7 +1,7 @@
 ﻿@model QuanLyThuVien.Models.User
 
 @{
-    ViewBag.Title = "DangNhap";
+    ViewBag.Title = "DangKy";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -15,7 +15,7 @@
                     <nav class="bradcaump-content">
                         <a class="breadcrumb_item" href="@Url.Action("HomePage","TrangChu")">Trang chủ</a>
                         <span class="brd-separetor">/</span>
-                        <span class="breadcrumb_item active">Đăng nhập</span>
+                        <span class="breadcrumb_item active">Đăng ký</span>
                     </nav>
                 </div>
             </div>
@@ -29,28 +29,27 @@
         <div class="row">
             <div class="col-lg-6 col-12 mx-auto">
                 <div class="my__account__wrapper">
-                    <h3 class="account__title">ĐĂNG NHẬP</h3>
+                    <h3 class="account__title">ĐĂNG KÝ</h3>
                     @using (Html.BeginForm(FormMethod.Post))
-                    {        
+                    {
+                        <span class="forget_pass">Thông báo</span>
                         <div class="account__form">
-                            <span class="forget_pass" style="margin-top: 0;" id="thongBao">@(ViewBag.thongbao != null ? ViewBag.thongbao : "")</span>
                             <div class="input__box">
                                 <label>Tên tài khoản<span>*</span></label>
                                 @Html.TextBoxFor(model => model.username)
                             </div>
                             <div class="input__box">
                                 <label>Mật khẩu<span>*</span></label>
-                                @Html.TextBoxFor(model => model.password, new { @type = "password" })
+                                @Html.TextBoxFor(model => model.password)
+                            </div>
+                            <div class="input__box">
+                                <label>Nhập lại mật khẩu<span>*</span></label>
+                                <input type="password" id="valiPass">
                             </div>
                             <div class="form__btn">
-                                <button type="submit">Đăng nhập</button>
-                                <label class="label-for-checkbox" style="display: inline-flex">                                
-                                    @Html.CheckBoxFor(model => model.remember, new { @class = "input-checkbox" })                                
-                                    <span class="span_remember" >Ghi nhớ đăng nhập</span>
-                                </label>
+                                <button type="submit" id="btn_DangKy">Đăng ký</button>
                             </div>
-                            <a class="forget_pass" href="#">Quên mật khẩu?</a>
-                            <a class="forget_pass" href="#" style="margin-top: 0;">Đăng ký tài khoản</a>
+                            <a class="forget_pass" href="#">Đã có tài khoản? Đăng nhập.</a>
                         </div>
                     }
                 </div>
