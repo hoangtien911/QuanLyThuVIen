@@ -152,6 +152,7 @@
     <Compile Include="Areas\Admin\Controllers\ql_TacGiaController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_TheLoaiController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThongKeController.cs" />
+    <Compile Include="Areas\Admin\Data\Data_Categories.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\LienHeController.cs" />
     <Compile Include="Controllers\SachController.cs" />
@@ -427,7 +428,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -481,7 +481,6 @@
     <Content Include="Views\Sach\ChiTietTacGia.cshtml" />
     <Content Include="Views\Sach\ChiTietTheLoai.cshtml" />
     <Content Include="Views\TaiKhoan\DangNhap.cshtml" />
-    <Content Include="Views\TaiKhoan\DangKy.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\TaiKhoan\ChiTietUser.cshtml" />
     <Content Include="Views\LienHe\LienHe.cshtml" />
