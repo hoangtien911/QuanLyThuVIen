@@ -56,6 +56,8 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                     callCard.id = item.Value.id;
                     callCard.books_id = item.Value.books_id;
                     callCard.user_id = item.Value.user_id;
+                    FirebaseResponse getUsername = client.Get("User/" + item.Value.user_id + "/username");
+                    callCard.user_id = JsonConvert.DeserializeObject<string>(getUsername.Body);
                     callCard.date_issued = item.Value.date_issued;
                     callCard.date_return = item.Value.date_return;
                     callCard.date_returned = item.Value.date_returned;
