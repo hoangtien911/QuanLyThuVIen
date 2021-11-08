@@ -41,7 +41,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             }
             tiLe = (SachCon / TongSach) * 100;
             ViewBag.TiLeSach = (int) tiLe;
-            ViewBag.BookCount = BookData.Count;
+            ViewBag.BookCount = TongSach;
             //
             response = client.Get("CallCard");
             Dictionary<string, CallCard> CallCardData = JsonConvert.DeserializeObject<Dictionary<string, CallCard>>(response.Body.ToString());
