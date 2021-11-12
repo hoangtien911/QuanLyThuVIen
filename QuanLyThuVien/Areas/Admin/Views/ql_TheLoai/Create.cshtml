@@ -39,19 +39,19 @@
                             <div class="row text-sm-right">
                                 @Html.LabelFor(model => model.shortDescription, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.EditorFor(model => model.shortDescription, new { htmlAttributes = new { @class = "form-control" } })                                   
+                                    @Html.EditorFor(model => model.shortDescription, new { htmlAttributes = new { @class = "form-control" } })
                                 </div>
-                            </div>                          
+                            </div>
                             <div class="row text-sm-right">
                                 @Html.LabelFor(model => model.longDescription, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.TextAreaFor(model => model.longDescription, new { @class = "form-control" })                                 
+                                    @Html.TextAreaFor(model => model.longDescription, new { @class = "form-control" })
                                 </div>
                             </div>
                             <div class="row text-sm-right">
                                 @Html.LabelFor(model => model.image, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.EditorFor(model => model.image, new { htmlAttributes = new { @class = "form-control" } })                               
+                                    @Html.EditorFor(model => model.image, new { htmlAttributes = new { @class = "form-control" } })
                                 </div>
                             </div>
                             <hr />
@@ -74,10 +74,13 @@
         </div>
     </div>
 </div>
-@{
-    if (ViewBag.MsCreate != null)
+@section scripts
+{
+
+    @if (ViewBag.Message != null)
     {
-        Response.Write("<script>alert('" + ViewBag.MsCreate + "')</script>");
-        ViewBag.MsCreate = null;
+        string ms = ViewBag.Message;
+        Response.Write("<script language=javascript>alert('" + ms + "');</script>");
+        ViewBag.Message = null;
     }
 }

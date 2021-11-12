@@ -29,7 +29,9 @@ namespace QuanLyThuVien.Models
         [Display(Name = "Ảnh bìa")]       
         public string thumbnailUrl { get; set; }
 
+        [Required(ErrorMessage = "Vui lòng nhập tên tác giả")]
         public string [] author_temp { get; set; }
+        [Required(ErrorMessage = "Vui lòng nhập tên thể loại")]
         public string[] categories_temp { get; set; }
         public int count_in { get; set; }
     }

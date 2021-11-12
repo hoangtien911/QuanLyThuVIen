@@ -1,85 +1,50 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using Newtonsoft.Json;
-using FireSharp.Interfaces;
-using FireSharp.Config;
-using FireSharp.Response;
+﻿using System.Web.Mvc;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Areas.Admin.Data;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
     public class ql_TheLoaiController : Controller
-    {
-        // GET: Admin/ql_TheLoai
-        IFirebaseClient client;
-        IFirebaseConfig config = new FirebaseConfig
-        {
-            BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
-            AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
-        };
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH THỂ LOẠI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
-        public ActionResult ListCategories(string check)
-        {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//         
-            if (check != null)
+    {       
+        /* Controller Quản thể loại
+        * 
+        * 1. Danh sách thể loại
+        * 2. Thêm mới thể loại
+        * 3. Sửa thông tin thể loại
+        * 4. Xoá thể loại
+        * 5. Chi tiết thể loại         
+        */
+        //1. Danh sách thể loại
+        public ActionResult ListCategories(string message)
+        {          
+            if (!Data_Categories.UpdateCount)
             {
-                if (check.Equals("1"))
-                {
-                    ViewBag.MsEdit = "Sửa thông tin thể loại thành công!";
-                    check = null;
-                }
-                else
-                {
-                    ViewBag.MsDelete = check;
-                    check = null;
-                }
-            }
-            if (Data_Categories.UpdateCount == 0)
-            {
-                Data_Categories.GetAllData();                
-                return View(Data_Categories.CategoriesList);
+                return View(Data_Categories.GetAllData());
             }
             else
             {
                 return View(Data_Categories.CategoriesList);
             }
         }
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv THÊM MỚI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //2. Thêm mới thể loại
         [HttpGet]
         public ActionResult Create()
-        {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//
+        {          
             return View();
         }
         [HttpPost]
         public ActionResult Create(Categories categories)
         {
             if (categories.name != null)
-            {
+            {               
                 Data_Categories.CreateData(categories);
-                return View();
             }
-            else
-            {
-                ViewBag.MsCreate = "Đã có lỗi xảy ra. Thêm mới thể loại thất bại!";
-                return View();
-            }
+            return View();
         }
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv SỬA vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //3. Sửa thông tin thể loại
         [HttpGet]
         public ActionResult Edit(string id)
-        {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//         
+        {                      
             return View(Data_Categories.GetSingleData(id));
         }
         [HttpPost]
@@ -88,41 +53,20 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             if (categories.name != null)
             {
                 Data_Categories.EditData(categories);
-                return RedirectToAction("ListCategories", new { @check = 1 });
-            }
-            else
-            {
-                ViewBag.MsEdit = "Đã có lỗi xảy ra. Sửa thông tin thể loại thất bại!";
-                return View();
-            }
+                return RedirectToAction("ListCategories");
+            }          
+            return View();          
         }
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv XOÁ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //4. Xoá thông tin thể loại
         public ActionResult Delete(string id)
         {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//
-            try
-            {            
-                Categories data = Data_Categories.GetSingleData(id);
-                Data_Categories.DeleteData(id);
-                return RedirectToAction("ListCategories", new { @check = data.name });
-            }
-            catch
-            {
-                ViewBag.MsDelete = "Đã có lỗi xảy ra. Xoá thể loại thất bại!";
-                return RedirectToAction("ListCategories");
-            }
+            Data_Categories.DeleteData(id);
+            return RedirectToAction("ListCategories");
         }
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //5. Chi tiết thể loại
         [HttpGet]
         public ActionResult Detail(string id)
         {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//            
             return View(Data_Categories.GetSingleData(id));
         }
     }

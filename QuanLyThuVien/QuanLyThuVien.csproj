@@ -152,7 +152,11 @@
     <Compile Include="Areas\Admin\Controllers\ql_TacGiaController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_TheLoaiController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThongKeController.cs" />
+    <Compile Include="Areas\Admin\Data\Data_Authors.cs" />
+    <Compile Include="Areas\Admin\Data\Data_Books.cs" />
+    <Compile Include="Areas\Admin\Data\Data_CallCard.cs" />
     <Compile Include="Areas\Admin\Data\Data_Categories.cs" />
+    <Compile Include="Areas\Admin\Data\Data_Users.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\LienHeController.cs" />
     <Compile Include="Controllers\SachController.cs" />

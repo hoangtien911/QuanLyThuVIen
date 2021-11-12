@@ -1,124 +1,46 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
-using Newtonsoft.Json;
-using FireSharp.Interfaces;
-using FireSharp.Config;
-using FireSharp.Response;
 using QuanLyThuVien.Models;
-using System;
+using QuanLyThuVien.Areas.Admin.Data;
+
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
     public class ql_PhieuMuonController : Controller
     {
-        // GET: Admin/ql_PhieuMuon
-        IFirebaseClient client;
-        IFirebaseConfig config = new FirebaseConfig
+        /* Controller Quản lý phiếu mượn
+         * 
+         * 1. Danh sách phiếu mượn
+         * 2. Thêm mới phiếu mượn
+         * 3. Sửa thông tin phiếu mượn
+         * 4. Xoá phiếu mượn
+         * 5. Chi tiết phiếu mượn
+         * 6. Lấy danh sách người dùng
+         * 7. Lấy danh sách sách
+         * 8. Hàm kiểm tra trạng thái sách theo ngày mượn - trả - hẹn trả
+         */
+
+        //1. Danh sách phiếu mượn
+        public ActionResult ListCallCard(string message)
         {
-            BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
-            AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
-        };
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv DANH SÁCH PHIẾU MƯỢN vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
-        public ActionResult ListCallCard(string check)
-        {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" }); 
-            //------------- END Check Session ---------------//
-            client = new FireSharp.FirebaseClient(config);
-            FirebaseResponse response = client.Get("CallCard");
-            Dictionary<string, CallCard> data = JsonConvert.DeserializeObject<Dictionary<string, CallCard>>(response.Body.ToString());
-            var list = new List<CallCard>();
-            foreach (var item in data)
-            {
-                CallCard callCard = new CallCard();
-                callCard.id = item.Value.id;
-                callCard.books_id = item.Value.books_id;
-                callCard.user_id = item.Value.user_id;
-                callCard.date_issued = item.Value.date_issued;
-                callCard.date_return = item.Value.date_return;
-                callCard.date_returned = item.Value.date_returned;
-                callCard.status = item.Value.status;
-                list.Add(callCard);
-            }
-            if (check != null)
-            {
-                if (check.Equals("1"))
-                {
-                    ViewBag.MsEdit = "Sửa thông tin phiếu mượn thành công!";
-                    check = null;
-                }
-                else
-                {
-                    ViewBag.MsDelete = check;
-                    check = null;
-                }
-            }
+           
             ViewBag.listUser = getUser();
             ViewBag.listBooks = getBooks();
-            return View(list);
-        }
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv CHI TIẾT vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
-        [HttpGet]
-        public ActionResult Detail(string id)
-        {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//
-            client = new FireSharp.FirebaseClient(config);
-            FirebaseResponse response = client.Get("CallCard/" + id);
-            CallCard data = JsonConvert.DeserializeObject<CallCard>(response.Body);           
-            foreach (var item in getUser())
+            if (!Data_CallCard.UpdateCount)
             {
-                if (item.id.Equals(data.user_id))
-                {
-                    ViewBag.UserDetail = item;
-                    break;
-                }
+                return View(Data_CallCard.GetAllData());
             }
-            //Tách chuỗi sách sang mảng
-            if (data.books_id != null)
-                data.books_id_temp = data.books_id.Split(',');
-            //
-            int i = 0;
-            string namebooks = "";
-            foreach (string bookid in data.books_id_temp)
+            else
             {
-                foreach (var book in getBooks())
-                {
-                    if (i < data.books_id_temp.Length - 1)
-                    {
-                        if (bookid.Equals(book._id))
-                        {
-                            namebooks += book.title + ", ";
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        if (bookid.Equals(book._id))
-                        {
-                            namebooks += book.title + ".";
-                            break;
-                        }
-                    }
-                }
-                i++;
-                if (i == data.books_id_temp.Length)
-                    break;
+                return View(Data_CallCard.CallcardList);
             }
-            ViewBag.nameBooks = namebooks;
-            return View(data);
         }
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv THÊM MỚI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+       
+        //2. Thêm mới phiếu mượn
         [HttpGet]
         public ActionResult Create()
         {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//
             ViewBag.listUser = getUser();
             ViewBag.listBooks = getBooks();
             return View();
@@ -128,66 +50,54 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {
             ViewBag.listUser = getUser();
             ViewBag.listBooks = getBooks();
+            string message = "";
             if (callCard.user_id != null && callCard.books_id_temp != null)
-            {
-                client = new FireSharp.FirebaseClient(config);
+            {             
                 //Trừ sách trong kho
                 foreach(var item in callCard.books_id_temp)
                 {
-                    foreach(var book in ViewBag.listBooks)
+                    Books books_temp = Data_Books.GetSingleData(item);
+                    books_temp.count_in--;
+                    if (books_temp.count_in < 0)
                     {
-                        if(item == book._id)
-                        {
-                            book.count_in--;
-                            client.Set("Books/" + book._id, book);
-                        }
+                        message += books_temp.title + ", ";
+                    }
+                    else
+                    {
+                        Data_Books.EditData(books_temp);
                     }
                 }
-                // gộp mảng sách sang chuỗi
-                callCard.books_id = string.Join(",", callCard.books_id_temp);
-                callCard.books_id_temp = null;
-                //kiểm tra trạng thái
-                callCard.status = checkStatus(callCard);
-                PushResponse response = client.Push("CallCard/", callCard);
-                callCard.id = response.Result.name;
-                client.Set("CallCard/" + callCard.id, callCard);
-                ViewBag.MsCreate = "Thêm mới phiếu mượn thành công!";
-                return View();
+                //nếu message rỗng (số lượng sách không âm)
+                if (message.Equals(""))
+                {
+                    //Gộp mảng id sách sang chuỗi
+                    callCard.books_id = string.Join(",", callCard.books_id_temp);
+                    callCard.books_id_temp = null;
+                    //Kiểm tra trạng thái
+                    callCard.status = checkStatus(callCard);
+                    //Thêm mới
+                    Data_CallCard.CreateData(callCard);
+                }
             }
-            else
-            {
-                ViewBag.MsCreate = "Đã có lỗi xảy ra. Thêm mới phiếu mượn thất bại!";
-                return View();
-            }
+            return View();
         }
 
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv SỬA vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+        //3. Sửa thông tin phiếu mượn
         [HttpGet]
         public ActionResult Edit(string id)
         {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//
             ViewBag.listUser = getUser();
             ViewBag.listBooks = getBooks();
-            client = new FireSharp.FirebaseClient(config);
-            FirebaseResponse response = client.Get("CallCard/" + id);
-            CallCard data = JsonConvert.DeserializeObject<CallCard>(response.Body);
-            //Tách chuỗi sách sang mảng
+            CallCard data = Data_CallCard.GetSingleData(id);
+            //Tách chuỗi id sách sang mảng
             if (data.books_id != null)
                 data.books_id_temp = data.books_id.Split(',');
-            //Cộng sách trong kho để chuẩn bị sửa
+            //Cộng sách chuẩn bị sửa
             foreach (var item in data.books_id_temp)
             {
-                foreach (var book in ViewBag.listBooks)
-                {
-                    if (item == book._id)
-                    {
-                        book.count_in++;
-                        client.Set("Books/" + book._id, book);
-                    }
-                }
+                Books books_temp = Data_Books.GetSingleData(item);
+                books_temp.count_in++;
+                Data_Books.EditData(books_temp);
             }
             return View(data);
         }
@@ -196,110 +106,94 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {
             ViewBag.listUser = getUser();
             ViewBag.listBooks = getBooks();
+            string message = "";
             if (callCard.user_id != null && callCard.books_id_temp != null)
             {
                 //Trừ sách trong kho
                 foreach (var item in callCard.books_id_temp)
                 {
-                    foreach (var book in ViewBag.listBooks)
+                    Books books_temp = Data_Books.GetSingleData(item);
+                    books_temp.count_in--;
+                    if (books_temp.count_in < 0)
                     {
-                        if (item == book._id)
-                        {
-                            book.count_in--;
-                            client.Set("Books/" + book._id, book);
-                        }
+                        message += books_temp.title + ", ";
+                    }
+                    else
+                    {
+                        Data_Books.EditData(books_temp);
                     }
                 }
-                // gộp mảng sách sang chuỗi
-                callCard.books_id = string.Join(",", callCard.books_id_temp);
-                callCard.books_id_temp = null;
-                //kiểm tra trạng thái
-                callCard.status = checkStatus(callCard);
-                client = new FireSharp.FirebaseClient(config);
-                client.Set("CallCard/" + callCard.id, callCard);
-                return RedirectToAction("ListCallCard", new { @check = 1 });
+                //nếu message rỗng (số lượng sách không âm)
+                if (message.Equals(""))
+                {
+                    //Gộp mảng id sách sang chuỗi
+                    callCard.books_id = string.Join(",", callCard.books_id_temp);
+                    callCard.books_id_temp = null;
+                    //Kiểm tra trạng thái
+                    callCard.status = checkStatus(callCard);
+                    //Sửa sách
+                    Data_CallCard.EditData(callCard);
+                }
+            }
+            return RedirectToAction("ListCallCard");
+        }
+        //4. Xoá phiếu mượn
+        public ActionResult Delete(string id)
+        {
+            Data_CallCard.DeleteData(id);
+                return RedirectToAction("ListCallCard");
+           
+        }
+        //5. Chi tiết phiếu mượn
+        [HttpGet]
+        public ActionResult Detail(string id)
+        {
+            CallCard data = Data_CallCard.GetSingleData(id);
+            ViewBag.UserDetail = Data_Users.GetSingleData(data.user_id);
+            //Tách chuỗi sách sang mảng
+            if (data.books_id != null)
+                data.books_id_temp = data.books_id.Split(',');
+            //
+            int i = 0;
+            int length_listBooks = data.books_id_temp.Length - 1;
+            string namebooks = "";
+            foreach (var bookid in data.books_id_temp)
+            {
+                Books books_temp = Data_Books.GetSingleData(bookid);
+                if (i < length_listBooks)
+                    namebooks += books_temp.title + ", ";
+                else
+                    namebooks += books_temp.title + ".";
+                i++;
+            }
+            ViewBag.nameBooks = namebooks;
+            return View(data);
+        }
+        //6. Lấy danh sách người dùng
+        public List<User> getUser()
+        {
+            if (!Data_Users.UpdateCount)
+            {
+                return (Data_Users.GetAllData());
             }
             else
             {
-                ViewBag.MsEdit = "Đã có lỗi xảy ra. Sửa thông tin phiếu mượn thất bại!";
-                return View();
+                return (Data_Users.UserList);
             }
-
         }
-
-        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv XOÁ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
-        public ActionResult Delete(string id)
-        {
-            //------------- START Check Session ---------------//
-            if (Session["AdminSession"] == null)
-                return RedirectToAction("PageNotFound", "Error", new { area = "", status = "Bạn không có quyền truy cập vào trang này!" });
-            //------------- END Check Session ---------------//
-            try
-            {
-                client = new FireSharp.FirebaseClient(config);
-                FirebaseResponse response = client.Get("CallCard/" + id);
-                CallCard data = JsonConvert.DeserializeObject<CallCard>(response.Body);
-                client.Delete("CallCard/" + id);
-                return RedirectToAction("ListCallCard", new { @check = data.id });
-            }
-            catch
-            {
-                ViewBag.MsDelete = "Đã có lỗi xảy ra. Xoá phiếu mượn thất bại!";
-                return RedirectToAction("ListCallCard");
-            }
-
-        }
-
-        /// <returns></returns>
-        public List<User> getUser()
-        {
-            client = new FireSharp.FirebaseClient(config);
-            FirebaseResponse response = client.Get("User");
-            Dictionary<string, User> data = JsonConvert.DeserializeObject<Dictionary<string, User>>(response.Body.ToString());
-            var list = new List<User>();
-            foreach (var item in data)
-            {
-                User user = new User();
-                user.id = item.Value.id;
-                user.username = item.Value.username;
-                user.email = item.Value.email;
-                user.password = item.Value.password;
-                user.fullName = item.Value.fullName;
-                user.dateOfBirth = item.Value.dateOfBirth;
-                user.gender = item.Value.gender;
-                user.adress = item.Value.adress;
-                user.phone = item.Value.phone;
-                user.dateOfRegist = item.Value.dateOfRegist;
-                user.avatar = item.Value.avatar;
-                user.status = item.Value.status;
-                list.Add(user);
-            }
-            return list;
-        }
+        //7. Lấy danh sách sách
         public List<Books> getBooks()
         {
-            client = new FireSharp.FirebaseClient(config);
-            FirebaseResponse response = client.Get("Books");
-            Dictionary<string, Books> data = JsonConvert.DeserializeObject<Dictionary<string, Books>>(response.Body.ToString());
-            var list = new List<Books>();
-            foreach (var item in data)
+            if (!Data_Books.UpdateCount)
             {
-                Books book = new Books();
-                book._id = item.Value._id;
-                book.title = item.Value.title;
-                book.authors = item.Value.authors;
-                book.categories = item.Value.categories;
-                book.shortDescription = item.Value.shortDescription;
-                book.longDescription = item.Value.longDescription;
-                book.count = item.Value.count;
-                book.publishedDate = item.Value.publishedDate;
-                book.status = item.Value.status;
-                book.thumbnailUrl = item.Value.thumbnailUrl;
-                book.count_in = item.Value.count_in;
-                list.Add(book);
+                return (Data_Books.GetAllData());
             }
-            return list;
+            else
+            {
+                return (Data_Books.BooksList);
+            }
         }
+        //8. Hàm kiểm tra trạng thái sách theo ngày mượn - trả - hẹn trả
         public string checkStatus (CallCard callCard)
         {
             if (callCard.date_return != null)

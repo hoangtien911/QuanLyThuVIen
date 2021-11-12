@@ -79,14 +79,9 @@
     </div>
 </div>
 @{
-    if (ViewBag.MsEdit != null)
+    if (ViewBag.Message != null)
     {
-        Response.Write("<script>alert('" + ViewBag.MsEdit + "')</script>");
-        ViewBag.MsEdit = null;
-    }
-    if (ViewBag.MsDelete != null)
-    {
-        Response.Write("<script>alert('Đã xoá thể loại " + ViewBag.MsDelete + "')</script>");
-        ViewBag.MsDelete = null;
-    }
+        Response.Write("<script>alert('" + ViewBag.Message + "')</script>");
+        //ViewBag.Message = "";
+    }  
 }
