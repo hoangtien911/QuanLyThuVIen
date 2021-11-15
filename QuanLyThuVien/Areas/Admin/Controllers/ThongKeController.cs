@@ -29,7 +29,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             //Lấy số lượng sách
             Thread t2 = new Thread(() =>
             {              
-                int TongSach = 0;
+                float TongSach = 0;
                 float SachCon = 0;
                 float tiLe = 0;
                 foreach (var book in Data_Books.BooksList)
@@ -38,7 +38,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                     SachCon += book.count_in;
 
                 }
-                tiLe = (int) (SachCon / TongSach) * 100;
+                tiLe = (SachCon / TongSach) * 100;
                 ViewBag.TiLeSach = tiLe;
                 ViewBag.BookCount = Data_Books.BooksList.Count;
             });
