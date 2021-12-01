@@ -19,7 +19,9 @@ namespace QuanLyThuVien.Areas.Admin.Data
          * 4. Lấy dữ liệu 1 sách theo id
          * 5. Thêm mới 1 sách
          * 6. Sửa thông tin 1 sách
-         * 7. Xoá 1 sách        
+         * 7. Xoá 1 sách
+         * 8. Kiểm tra trạng thái
+         * 9. Kiểm tra sách đã tồn tại hay chưa
          */
 
         //1. Config
@@ -39,8 +41,9 @@ namespace QuanLyThuVien.Areas.Admin.Data
             FirebaseResponse response = client.Get("Books");
             Dictionary<string, Books> data = JsonConvert.DeserializeObject<Dictionary<string, Books>>(response.Body.ToString());
 
-            foreach (var item in data)
+            for(int i = data.Count-1; i >= 0; i--)
             {
+                var item = data.ElementAt(i);
                 Books book = new Books();
                 book._id = item.Value._id;
                 book.title = item.Value.title;
@@ -49,9 +52,11 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 book.shortDescription = item.Value.shortDescription;
                 book.longDescription = item.Value.longDescription;
                 book.count = item.Value.count;
+                book.count_in = item.Value.count_in;
                 book.publishedDate = item.Value.publishedDate;
                 book.status = item.Value.status;
                 book.thumbnailUrl = item.Value.thumbnailUrl;
+                TestStatus(book);
                 BooksList.Add(book);
             }
             UpdateCount = true;
@@ -60,18 +65,20 @@ namespace QuanLyThuVien.Areas.Admin.Data
         //4. Lấy dữ liệu 1 sách theo id
         public static Books GetSingleData(string id)
         {
-            Books data = null;
+            Books data = new Books();
             if (!UpdateCount)
             {
                 client = new FireSharp.FirebaseClient(config);
                 FirebaseResponse response = client.Get("Books/" + id);
                 data = JsonConvert.DeserializeObject<Books>(response.Body);
+                
             }
             else
             {
                 int index = BooksList.FindIndex(book => book._id.Equals(id));
-                data = BooksList.ElementAt(index);
+                data = BooksList.ElementAt(index);                
             }
+            TestStatus(data);
             return data;
         }
         //5. Thêm mới 1 sách
@@ -81,17 +88,16 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 GetAllData();
             }
-
-            foreach (var item in BooksList)
+            //Kiểm tra
+            TestStatus(book);
+            if(!CheckBook(book, ""))
             {
-                if (book.title.Equals(item.title))
-                {
-                    return false;
-                }
-            }
+                return false;
+            }            
+            //
             Thread t1 = new Thread(() =>
             {
-                BooksList.Add(book);
+                BooksList.Insert(0,book);
             });
             Thread t2 = new Thread(() =>
             {
@@ -106,7 +112,7 @@ namespace QuanLyThuVien.Areas.Admin.Data
         }
         //6. Sửa thông tin 1 sách
         public static bool EditData(Books books)
-        {
+        {           
             if (!UpdateCount)
             {
                 GetAllData();
@@ -116,6 +122,12 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 if (books._id.Equals(item._id))
                 {
+                    //kiểm tra tồn tại
+                    TestStatus(books);
+                    if (!CheckBook(books, item._id)){
+                        return false;
+                    }                   
+                    //
                     Thread t1 = new Thread(() =>
                     {
                         client = new FireSharp.FirebaseClient(config);
@@ -141,7 +153,6 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 GetAllData();
             }
-
             foreach (var item in BooksList)
             {
                 if (id.Equals(item._id))
@@ -162,6 +173,34 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 }
             }
             return false;
+        }
+        //8. Kiểm tra trạng thái
+        private static void TestStatus(Books b)
+        {
+            if (b.count_in == 0)
+            {
+                b.status = "Hết sách";
+            }
+            if (b.count_in > 0 && b.count_in <= b.count)
+            {
+                b.status = "Còn sách";
+            }
+        } 
+        //9. Kiểm tra sách đã tồn tại hay chưa
+        private static bool CheckBook(Books b, string id)
+        {
+            foreach (var item in BooksList)
+            {
+                if (b.title.Equals(item.title))
+                {
+                    if(item._id == id){
+                        continue;
+                    }
+                    else
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }

@@ -26,7 +26,7 @@
                         var c = "function" == typeof require && require;
                         if (!f && c) return c(i, !0);
                         if (u) return u(i, !0);
-                        var a = new Error("Cannot find module '" + i + "'");
+                        var a = new Error("Không tìm thấy module '" + i + "'");
                         throw ((a.code = "MODULE_NOT_FOUND"), a);
                     }
                     var p = (n[i] = { exports: {} });
@@ -959,7 +959,7 @@
                             t.data.length &&
                             ((s = createElement("tbody")),
                                 t.data.forEach((e) => {
-                                    if (t.headings && t.headings.length !== e.length) throw new Error("The number of rows do not match the number of headings.");
+                                    if (t.headings && t.headings.length !== e.length) throw new Error("Số lượng hàng không khớp với số lượng tiêu đề.");
                                     const a = createElement("tr");
                                     e.forEach((t) => {
                                         const e = createElement("td", { html: t });
@@ -971,10 +971,10 @@
                             s && (this.table.tBodies.length && this.table.removeChild(this.table.tBodies[0]), this.table.appendChild(s));
                     },
                         defaultConfig = {
-                            sortable: !0,
+                            sortable: 0,
                             searchable: !0,
                             paging: !0,
-                            perPage: 15,
+                            perPage: 10,
                             perPageSelect: [5, 10, 15, 20, 25],
                             nextPrev: !0,
                             firstLast: !1,
@@ -992,7 +992,7 @@
                             fixedHeight: !1,
                             header: !0,
                             footer: !1,
-                            labels: { placeholder: "Search...", perPage: "{select}", noRows: "No entries found", info: "Showing {start} to {end} of {rows} entries" },
+                            labels: { placeholder: "Tìm kiếm...", perPage: "{select}", noRows: "Không có dữ liệu", info: "Hiển thị mục {start} tới {end} của {rows} mục" },
                             layout: { top: "{select}{search}", bottom: "{info}{pager}" },
                         };
                     class DataTable {
@@ -1007,7 +1007,7 @@
                                     null === t.tHead && (!this.options.data || (this.options.data && !this.options.data.headings)) && (this.options.sortable = !1),
                                     t.tBodies.length && !t.tBodies[0].rows.length && this.options.data && !this.options.data.data)
                             )
-                                throw new Error("You seem to be using the data option, but you've not defined any rows.");
+                                throw new Error("Có vẻ như bạn đang sử dụng tùy chọn dữ liệu, nhưng bạn chưa xác định bất kỳ hàng nào.");
                             (this.table = t), this.init();
                         }
                         static extend(t, e) {
@@ -1126,7 +1126,10 @@
                                     (s = s.replace("{select}", t));
                             } else s = s.replace("{select}", "");
                             if (e.searchable) {
-                                const t = `<div class='dataTable-search'><input class='dataTable-input' placeholder='${e.labels.placeholder}' type='text'></div>`;
+                                const t = `<div class='dataTable-search form-group position-relative has-icon-right' style='width: 500px;'>
+                                                <input type='text' class='dataTable-input form-control' placeholder='${e.labels.placeholder}'>
+                                                <div class='form-control-icon'><i data-feather='search'></i></div>
+                                           </div>`;                              
                                 s = s.replace("{search}", t);
                             } else s = s.replace("{search}", "");
                             this.hasHeadings && this.render("header"), this.table.classList.add("dataTable-table");

@@ -2,11 +2,12 @@
 using System.Web.Mvc;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Areas.Admin.Data;
+using Newtonsoft.Json;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
     public class ql_SachController : Controller
-    {       
+    {
         /* Controller Quản lý sách
          * 
          * 1. Danh sách sách
@@ -21,80 +22,149 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         //1. Danh sách sách
         public ActionResult ListBooks(string message)
         {
+            if (!Data_Books.UpdateCount)
+                Data_Books.GetAllData();
+            //lấy tên sách và tên thể loại theo id
+            foreach (var book in Data_Books.BooksList)
+            {
+                if (book.authors != null)
+                {
+                    book.author_temp = book.authors.Split(',');
+                    string[] authorName = new string[book.author_temp.Length];
+                    for (int i = 0; i < book.author_temp.Length; i++)
+                    {
+                        authorName[i] = Data_Authors.GetSingleData(book.author_temp[i]).name;
+                    }
+                    book.author_temp = authorName;
+                }
+
+                if (book.categories != null)
+                {
+                    book.categories_temp = book.categories.Split(',');
+                    string[] cateName = new string[book.categories_temp.Length];
+                    for (int i = 0; i < book.categories_temp.Length; i++)
+                    {
+                        cateName[i] = Data_Categories.GetSingleData(book.categories_temp[i]).name;
+                    }
+                    book.categories_temp = cateName;
+                }
+            }
+            ViewBag.BooksList = Data_Books.BooksList;
             ViewBag.listAuthor = getAuthor();
             ViewBag.listCategories = getCategories();
-            if (!Data_Books.UpdateCount)
-            {               
-                return View(Data_Books.GetAllData());
+            return View();
+
+        }
+        //2. Thêm mới và sửa sách       
+        [HttpPost]
+        public JsonResult Create_Edit(Books book)
+        {
+            if (book.title != null && book.author_temp != null && book.categories_temp != null)
+            {
+                // gộp mảng tác giả, thể loại sang chuỗi
+                book.authors = string.Join(",", book.author_temp);
+                book.categories = string.Join(",", book.categories_temp);
+                book.author_temp = null;
+                book.categories_temp = null;                             
+                //
+                if(book._id == null)
+                {
+                    book.count_in = book.count;
+                    if (Data_Books.CreateData(book))
+                    {
+                        return Json(new { status = "ADD_OK" });
+                    }
+                    else
+                    {
+                        return Json(new { status = "ADD_FALSE" });
+                    }
+                }
+                else
+                {                    
+                    if (Data_Books.EditData(book))
+                    {
+                        return Json(new { status = "EDIT_OK"});
+                    }
+                    else
+                    {
+                        return Json(new { status = "EDIT_FALSE" });
+                    }
+                }
+                       
             }
             else
             {
-                return View(Data_Books.BooksList);
+                string propetyName = "";
+                if (book.title == null)
+                    propetyName += "Tên sách, ";
+                if (book.author_temp == null)
+                    propetyName += "Tác giả, ";
+                if (book.categories_temp == null)
+                    propetyName += "Thể loại, ";
+                return Json(new { status = "NO_INPUT_DATA", propery = propetyName });
             }
-        }       
-        //2. Thêm mới sách
+
+
+        }
+        //3. Lấy thông tin sách cần xoá
         [HttpGet]
-        public ActionResult Create()
+        public JsonResult GetBookDelete(string id)
         {
-            ViewBag.listAuthor = getAuthor();
-            ViewBag.listCategories = getCategories();
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Create(Books book)
-        {
-            ViewBag.listAuthor = getAuthor();
-            ViewBag.listCategories = getCategories();
-            if (book.title != null && book.author_temp != null && book.categories_temp != null)
+            Books book = Data_Books.GetSingleData(id);
+            if (book != null)
             {
-                // gộp mảng tác giả, thể loại sang chuỗi
-                book.authors = string.Join(",", book.author_temp);
-                book.categories = string.Join(",", book.categories_temp);
-                book.author_temp = null;
-                book.categories_temp = null;
-                book.count_in = book.count;
-                //
-                Data_Books.CreateData(book);
+
+                book.author_temp = book.authors.Split(',');
+                string[] authorName = new string[book.author_temp.Length];
+                for (int i = 0; i < book.author_temp.Length; i++)
+                {
+                    authorName[i] = Data_Authors.GetSingleData(book.author_temp[i]).name;
+                }
+                book.author_temp = authorName;
+                        
+                book.categories_temp = book.categories.Split(',');
+                string[] cateName = new string[book.categories_temp.Length];
+                for (int i = 0; i < book.categories_temp.Length; i++)
+                {
+                    cateName[i] = Data_Categories.GetSingleData(book.categories_temp[i]).name;
+                }
+                book.categories_temp = cateName;
+
+                return Json(book, JsonRequestBehavior.AllowGet);
             }
-            return View();
+            return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+
         }
-        //3. Sửa thông tin sách
         [HttpGet]
-        public ActionResult Edit(string id)
+        //4. Lấy thông tin sách cần sửa
+        public JsonResult GetBook(string id)
         {
-            ViewBag.listAuthor = getAuthor();
-            ViewBag.listCategories = getCategories();
-            Books data = Data_Books.GetSingleData(id);
-            //Tách chuỗi tác giả, thể loại sang mảng
-            if (data.authors != null)
-                data.author_temp = data.authors.Split(',');
-            if (data.categories != null)
-                data.categories_temp = data.categories.Split(',');
-            //
-            return View(data);
-        }
-        [HttpPost]
-        public ActionResult Edit(Books book)
-        {
-            ViewBag.listAuthor = getAuthor();
-            ViewBag.listCategories = getCategories();
-            if (book.title != null && book.author_temp != null && book.categories_temp != null)
+            Books books = Data_Books.GetSingleData(id);
+            if (books != null)
             {
-                // gộp mảng tác giả, thể loại sang chuỗi
-                book.authors = string.Join(",", book.author_temp);
-                book.categories = string.Join(",", book.categories_temp);
-                book.author_temp = null;
-                book.categories_temp = null;
-                //
-                Data_Books.EditData(book);
+
+                books.author_temp = books.authors.Split(',');
+                books.categories_temp = books.categories.Split(',');
+
+                return Json(books, JsonRequestBehavior.AllowGet);
             }
-            return RedirectToAction("ListBooks");
-        }
-        //4. Xoá sách
-        public ActionResult Delete(string id)
+
+            return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+
+        }      
+        //5. Xoá sách
+        [HttpPost]
+        public JsonResult Delete(string id)
         {
-            Data_Books.DeleteData(id);
-            return RedirectToAction("ListBooks");
+            if (Data_Books.DeleteData(id))
+            {
+                return Json(new { status = "DELETE_OK" });
+            }
+            else
+            {
+                return Json(new { status = "DELETE_FALSE" });
+            }
+            
         }
         //5. Chi tiết sách
         [HttpGet]
@@ -118,7 +188,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         public List<Categories> getCategories()
         {
             if (!Data_Categories.UpdateCount)
-            {               
+            {
                 return (Data_Categories.GetAllData());
             }
             else

@@ -22,19 +22,19 @@ namespace QuanLyThuVien.Areas.Admin.Data
          * 7. Xoá 1 thể loại        
          */
         //1. Config
-        private static IFirebaseClient client;
+       
         private static IFirebaseConfig config = new FirebaseConfig
         {
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
         };
+        private static IFirebaseClient client = new FireSharp.FirebaseClient(config);
         //2. Biến dữ liệu
         public static bool UpdateCount = false;
         public static List<Categories> CategoriesList = new List<Categories>();
         //3. Lấy tất cả dữ liệu thể loại
         public static List<Categories> GetAllData()
-        {
-            client = new FireSharp.FirebaseClient(config);
+        {           
             FirebaseResponse response = client.Get("Categories");
             Dictionary<string, Categories> data = JsonConvert.DeserializeObject<Dictionary<string, Categories>>(response.Body.ToString());
 
@@ -54,18 +54,15 @@ namespace QuanLyThuVien.Areas.Admin.Data
         //4. Lấy dữ liệu 1 thể loại theo id
         public static Categories GetSingleData(string id)
         {
-            Categories data = null;
+            Categories data = new Categories();
             if (!UpdateCount)
             {
-                client = new FireSharp.FirebaseClient(config);
-                FirebaseResponse response = client.Get("Categories/" + id);
-                data = JsonConvert.DeserializeObject<Categories>(response.Body);
-            }
-            else
-            {
-                int index = CategoriesList.FindIndex(cate => cate.id.Equals(id));
-                data = CategoriesList.ElementAt(index);
-            }
+                GetAllData();
+            }         
+            int index = CategoriesList.FindIndex(cate => cate.id.Equals(id));
+            if (index < 0)
+                index = 0;
+            data = CategoriesList.ElementAt(index);
             return data;
         }
         //5. Thêm mới 1 thể loại

@@ -22,20 +22,20 @@ namespace QuanLyThuVien.Areas.Admin.Data
          * 7. Xoá 1 tác giả        
          */
 
-        //1. Cấu hình
-        private static IFirebaseClient client;
+        //1. Cấu hình     
         private static IFirebaseConfig config = new FirebaseConfig
         {
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
         };
+        private static IFirebaseClient client = new FireSharp.FirebaseClient(config);
         //2. Biến dữ liệu
         public static bool UpdateCount = false;
         public static List<Author> AuthorsList = new List<Author>();
+      
         //3, Lấy tất cả dữ liệu tác giả
         public static List<Author> GetAllData()
-        {
-            client = new FireSharp.FirebaseClient(config);
+        {           
             FirebaseResponse response = client.Get("Author");
             Dictionary<string, Author> data = JsonConvert.DeserializeObject<Dictionary<string, Author>>(response.Body.ToString());
 
@@ -56,18 +56,15 @@ namespace QuanLyThuVien.Areas.Admin.Data
         //4. Lấy dữ liệu 1 tác giả theo id
         public static Author GetSingleData(string id)
         {
-            Author data = null;
+            Author data = new Author();
             if (!UpdateCount)
-            {
-                client = new FireSharp.FirebaseClient(config);
-                FirebaseResponse response = client.Get("Author/" + id);
-                data = JsonConvert.DeserializeObject<Author>(response.Body);
+            {                
+                GetAllData();
             }
-            else
-            {
-                int index = AuthorsList.FindIndex(ath => ath.id.Equals(id));
-                data = AuthorsList.ElementAt(index);
-            }
+            int index = AuthorsList.FindIndex(ath => ath.id.Equals(id));
+            if (index < 0)
+                index = 0;
+            data = AuthorsList.ElementAt(index);         
             return data;
         }
         //5. Thêm mới 1 tác giả
@@ -90,8 +87,7 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 AuthorsList.Add(author);
             });
             Thread t2 = new Thread(() =>
-            {
-                client = new FireSharp.FirebaseClient(config);
+            {               
                 PushResponse response = client.Push("Author/", author);
                 author.id = response.Result.name;
                 client.Set("Author/" + author.id, author);
@@ -113,8 +109,7 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 if (author.id.Equals(item.id))
                 {
                     Thread t1 = new Thread(() =>
-                    {
-                        client = new FireSharp.FirebaseClient(config);
+                    {                       
                         client.Set("Author/" + author.id, author);
                     });
                     Thread t2 = new Thread(() =>
@@ -143,8 +138,7 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 if (id.Equals(item.id))
                 {
                     Thread t1 = new Thread(() =>
-                    {
-                        client = new FireSharp.FirebaseClient(config);
+                    {                      
                         client.Delete("Author/" + id);
                     });
                     Thread t2 = new Thread(() =>

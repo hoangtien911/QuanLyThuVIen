@@ -64,7 +64,7 @@
         }
 
 .breadcrumb-header .breadcrumb {
-    justify-content: flex-end
+    justify-content: flex-start
 }
 
 .alert.alert-dismissible .close:focus,
@@ -113,17 +113,7 @@ footer {
     padding: 1rem 1.5rem
 }
 
-@media screen and (max-width:767px) {
-    #main {
-        margin-left: 0
-    }
 
-    .breadcrumb-header .breadcrumb {
-        justify-content: flex-start;
-        padding: 0;
-        font-size: .8rem
-    }
-}
 
 .alert {
     border: none
@@ -769,7 +759,6 @@ footer {
     border: 1px solid #dfe3e7;
     -webkit-appearance: none;
     -moz-appearance: none;
-    appearance: none;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out
 }
@@ -962,19 +951,9 @@ footer {
                     margin-left: .3rem
                 }
 
-@media screen and (max-width:767px) {
-    .sidebar-wrapper {
-        left: -270px
-    }
-
-        .sidebar-wrapper .sidebar-toggler.x {
-            display: block
-        }
-}
-
 .card {
     box-shadow: -8px 12px 18px 0 rgba(25, 42, 70, .13) !important;
-    margin-bottom: 2.2rem !important;
+    margin-bottom: 0 !important;
     margin: 20px 20px 0 20px;
 }
 
@@ -1013,7 +992,9 @@ footer {
         }
 
     .card .card-header {
-        border: none
+        padding: 10px 2.3rem;
+        
+        box-shadow: 0 5px 10px -5px grey;
     }
 
         .card .card-header h4 {
@@ -1033,7 +1014,8 @@ footer {
     }
 
     .card .card-body {
-        padding: 1.4rem 1.7rem
+        padding: 1.4rem 1.7rem;
+        padding-bottom: 0;
     }
 
     .card .card-heading {
@@ -1106,7 +1088,6 @@ footer {
 
         .pricing .card-highlighted ul li i,
         .pricing .card-highlighted ul li svg {
-            color: tint-color(#28a745, 2)
         }
 
     .pricing .card-highlighted .card-footer {
@@ -1275,8 +1256,8 @@ footer {
 
 .dataTable-table td, .dataTable-table thead th, .table td, .table thead th {
     vertical-align: middle;
-    
 }
+
     .dataTable-table td p, .table td p {
         text-overflow: ellipsis;
         overflow: hidden;
@@ -1286,8 +1267,11 @@ footer {
         margin: 0;
         text-align: center;
     }
+
 .dataTable-table thead th, .table thead th {
-    border-bottom: 2px solid #475f7b
+    border-bottom: 2px solid #475f7b;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .dataTable-container {
@@ -1648,4 +1632,45 @@ footer {
 
 .bg-gray-700 {
     background-color: #4a5568 !important
+}
+
+.link-action {
+    width: 170px;
+}
+    .link-action a {
+        font-weight: bold;
+    }        
+
+.link-edit {
+    color: darkgoldenrod !important;
+}
+
+.link-delete {
+    color: crimson !important;    
+}
+
+.link-detail {
+    color: Highlight !important;
+}
+
+.link-edit:hover {
+    color: darkgoldenrod !important;
+    box-shadow: 0 2px;
+    padding: 2px;
+    
+}
+
+.link-delete:hover {
+    color: crimson !important;
+    box-shadow: 0 2px;
+    padding: 2px;
+}
+
+.link-detail:hover {
+    color: Highlight !important;
+    box-shadow: 0 2px;
+    padding: 2px;
+}
+.hide{
+    display: none !important
 }

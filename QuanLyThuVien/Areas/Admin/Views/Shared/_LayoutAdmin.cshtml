@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/css/bootstrap.css">
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/vendors/simple-datatables/style.css">
+    <link rel="stylesheet" href="~/Areas/Admin/JavaScript/choices.js/chosen.css">
+    <link rel="stylesheet" href="~/Areas/Admin/JavaScript/quill/quill.snow.css">
+    <link rel="stylesheet" href="~/Areas/Admin/JavaScript/quill/quill.bubble.css">
+    <link rel="stylesheet" href="~/Areas/Admin/JavaScript/datepicker/datepicker.css">
+
     <!-- Custom CSS-->
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/css/app.css">
 
@@ -24,121 +29,16 @@
                 </div>
                 <div class="sidebar-menu">
                     <ul class="menu">
-
-
-                        <li class='sidebar-title'>Main Menu</li>
-
-
-
-                        <li class="sidebar-item  ">
+                        <!---->
+                        <li class='sidebar-title'>Quản lý</li>
+                        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_Sach" ? "active" : "")">
                             <a href="index.html" class='sidebar-link'>
-                                <i data-feather="home" width="20"></i>
-                                <span>Dashboard</span>
+                                <i data-feather="book" width="20"></i>
+                                <span>Quản lý sách</span>
                             </a>
-
                         </li>
-
-
-
-
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i data-feather="triangle" width="20"></i>
-                                <span>Components</span>
-                            </a>
-
-                            <ul class="submenu ">
-
-                                <li>
-                                    <a href="component-alert.html">Alert</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-badge.html">Badge</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-breadcrumb.html">Breadcrumb</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-buttons.html">Buttons</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-card.html">Card</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-carousel.html">Carousel</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-dropdowns.html">Dropdowns</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-list-group.html">List Group</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-modal.html">Modal</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-navs.html">Navs</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-pagination.html">Pagination</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-progress.html">Progress</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-spinners.html">Spinners</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-tooltips.html">Tooltips</a>
-                                </li>
-
-                            </ul>
-
-                        </li>
-
-
-
-
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i data-feather="briefcase" width="20"></i>
-                                <span>Extra Components</span>
-                            </a>
-
-                            <ul class="submenu ">
-
-                                <li>
-                                    <a href="component-extra-avatar.html">Avatar</a>
-                                </li>
-
-                                <li>
-                                    <a href="component-extra-divider.html">Divider</a>
-                                </li>
-
-                            </ul>
-
-                        </li>
-
-
-
-
+                        <!---->
                         <li class='sidebar-title'>Forms &amp; Tables</li>
-
-
-
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i data-feather="file-text" width="20"></i>
@@ -174,10 +74,6 @@
                             </ul>
 
                         </li>
-
-
-
-
                         <li class="sidebar-item  ">
                             <a href="form-layout.html" class='sidebar-link'>
                                 <i data-feather="layout" width="20"></i>
@@ -185,10 +81,6 @@
                             </a>
 
                         </li>
-
-
-
-
                         <li class="sidebar-item  ">
                             <a href="form-editor.html" class='sidebar-link'>
                                 <i data-feather="layers" width="20"></i>
@@ -196,10 +88,6 @@
                             </a>
 
                         </li>
-
-
-
-
                         <li class="sidebar-item  ">
                             <a href="table.html" class='sidebar-link'>
                                 <i data-feather="grid" width="20"></i>
@@ -207,25 +95,15 @@
                             </a>
 
                         </li>
-
-
-
-
-                        <li class="sidebar-item active ">
+                        <li class="sidebar-item ">
                             <a href="table-datatable.html" class='sidebar-link'>
                                 <i data-feather="file-plus" width="20"></i>
                                 <span>Datatable</span>
                             </a>
 
                         </li>
-
-
-
-
+                        <!---->
                         <li class='sidebar-title'>Extra UI</li>
-
-
-
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i data-feather="user" width="20"></i>
@@ -249,10 +127,6 @@
                             </ul>
 
                         </li>
-
-
-
-
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i data-feather="trending-up" width="20"></i>
@@ -272,14 +146,7 @@
                             </ul>
 
                         </li>
-
-
-
-
                         <li class='sidebar-title'>Pages</li>
-
-
-
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i data-feather="user" width="20"></i>
@@ -303,10 +170,6 @@
                             </ul>
 
                         </li>
-
-
-
-
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i data-feather="alert-circle" width="20"></i>
@@ -330,13 +193,8 @@
                             </ul>
 
                         </li>
-
-
-
-
                     </ul>
                 </div>
-                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
         </div>
         <div id="main">
@@ -392,7 +250,7 @@
                             <a href="#" data-bs-toggle="dropdown"
                                class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                                 <div class="avatar me-1">
-                                    <img src="assets/images/avatar/avatar-s-1.png" alt="" srcset="">
+                                    <img src="~/Areas/Admin/image/favicon.png" alt="" srcset="">
                                 </div>
                                 <div class="d-none d-md-block d-lg-inline-block">Hi, Saugi</div>
                             </a>
@@ -408,16 +266,15 @@
                 </div>
             </nav>
 
-            @RenderBody()
+            <div class="main-content container-fluid" id="body_build">
+                @RenderBody()
+            </div>
 
             <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="float-start">
-                        <p>2020 &copy; Voler</p>
-                    </div>
+                <div class="footer clearfix mb-0 text-muted">                   
                     <div class="float-end">
                         <p>
-                            Crafted with <span class='text-danger'><i data-feather="heart"></i></span> by <a href="http://ahmadsaugi.com">Ahmad Saugi</a>
+                            2020 &copy; Voler <span class='text-danger'><i data-feather="heart"></i></span> Custom by <a href="#">Hoàng Tiến</a>
                         </p>
                     </div>
                 </div>
@@ -427,13 +284,20 @@
 
 
     <!-- JavaScript -->
+
+    <script src="~/Areas/Admin/JavaScript/jquery-3.6.0.js"></script>
     <script src="~/Areas/Admin/JavaScript/feather-icons/feather.js"></script>
     <script src="~/Areas/Admin/JavaScript/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="~/Areas/Admin/JavaScript/simple-datatables/simple-datatables.js"></script>  
+    <script src="~/Areas/Admin/JavaScript/simple-datatables/simple-datatables.js"></script>
+    <script src="~/Areas/Admin/JavaScript/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Areas/Admin/JavaScript/choices.js/chosen.jquery.js"></script>
     <!-- Custom JS -->
     <script src="~/Areas/Admin/JavaScript/vendors.js"></script>
     <script src="~/Areas/Admin/JavaScript/main.js"></script>
     <script src="~/Areas/Admin/JavaScript/app.js"></script>
+    <script src="~/Areas/Admin/JavaScript/quill/quill.js"></script>
+    <script src="~/Areas/Admin/JavaScript/pages/form-editor.js"></script>
+
 
     @RenderSection("scripts", required: false)
 </body>

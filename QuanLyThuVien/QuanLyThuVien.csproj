@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FireSharp, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -179,6 +181,12 @@
     <Content Include="Areas\Admin\image\logo.png" />
     <Content Include="Areas\Admin\image\logo.svg" />
     <Content Include="Areas\Admin\JavaScript\app.js" />
+    <Content Include="Areas\Admin\JavaScript\choices.js\chosen-sprite%402x.png" />
+    <Content Include="Areas\Admin\JavaScript\choices.js\chosen-sprite.png" />
+    <Content Include="Areas\Admin\JavaScript\choices.js\chosen.css" />
+    <Content Include="Areas\Admin\JavaScript\choices.js\chosen.jquery.js" />
+    <Content Include="Areas\Admin\JavaScript\datepicker\bootstrap-datepicker.js" />
+    <Content Include="Areas\Admin\JavaScript\datepicker\datepicker.css" />
     <Content Include="Areas\Admin\JavaScript\feather-icons.js" />
     <Content Include="Areas\Admin\JavaScript\feather-icons\feather-sprite.svg" />
     <Content Include="Areas\Admin\JavaScript\feather-icons\feather.js" />
@@ -469,12 +477,19 @@
     <Content Include="Areas\Admin\JavaScript\feather-icons\icons\zap.svg" />
     <Content Include="Areas\Admin\JavaScript\feather-icons\icons\zoom-in.svg" />
     <Content Include="Areas\Admin\JavaScript\feather-icons\icons\zoom-out.svg" />
+    <Content Include="Areas\Admin\JavaScript\jquery-3.6.0.js" />
     <Content Include="Areas\Admin\JavaScript\main.js" />
     <Content Include="Areas\Admin\JavaScript\pages\dashboard.js" />
     <Content Include="Areas\Admin\JavaScript\pages\form-editor.js" />
     <Content Include="Areas\Admin\JavaScript\pages\ui-apexchart.js" />
     <Content Include="Areas\Admin\JavaScript\pages\ui-chartjs.js" />
     <Content Include="Areas\Admin\JavaScript\pages\widgets.js" />
+    <Content Include="Areas\Admin\JavaScript\quill\quill.bubble.css" />
+    <Content Include="Areas\Admin\JavaScript\quill\quill.core.css" />
+    <Content Include="Areas\Admin\JavaScript\quill\quill.core.js" />
+    <Content Include="Areas\Admin\JavaScript\quill\quill.js" />
+    <Content Include="Areas\Admin\JavaScript\quill\quill.min.js" />
+    <Content Include="Areas\Admin\JavaScript\quill\quill.snow.css" />
     <Content Include="Areas\Admin\JavaScript\vendors.js" />
     <Content Include="Areas\Admin\StyleSheet\css\app.css" />
     <Content Include="Areas\Admin\StyleSheet\css\bootstrap.css" />
@@ -747,7 +762,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Areas\Admin\Views\ql_Sach\ListBooks.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_Sach\Create.cshtml" />
     <Content Include="Areas\Admin\Views\ql_Sach\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\ql_Sach\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ql_NguoiDung\ListUser.cshtml" />
@@ -788,6 +802,7 @@
     <Content Include="Areas\Admin\JavaScript\feather-icons\feather.js.map" />
     <Content Include="Areas\Admin\JavaScript\feather-icons\feather.min.js.map" />
     <Content Include="Areas\Admin\JavaScript\feather-icons\icons.json" />
+    <Content Include="Areas\Admin\JavaScript\quill\quill.min.js.map" />
     <None Include="packages.config" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />

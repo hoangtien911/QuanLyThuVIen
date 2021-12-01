@@ -1,209 +1,484 @@
-﻿@model IEnumerable<QuanLyThuVien.Models.Books>
+﻿@model QuanLyThuVien.Models.Books
 
 @{
-    ViewBag.Title = "Danh sách các sách";
+    ViewBag.Title = "Danh sách sách";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-<div class="container-fluid">
+<div class="page-title">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-last">
+            <nav aria-label="breadcrumb" class='breadcrumb-header'>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Quản lý sách</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách sách</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
 
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <div class="row">
-                <h6 class="col-md-9 font-weight-bold text-primary font-Title">Quản lý sách</h6>
-                <div class="col-md-3">
-                    <a href="@Url.Action("Create", "ql_Sach")" class="btn btn-success btn-user btn-block" style="font-weight:bold">
-                        <i class="fa fa-fw fa-plus-square"></i> Thêm mới sách
-                    </a>
-                </div>
+<section class="section">
+    <div class="card">
+        <div class="card-header row">
+            <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #0097ff;">@ViewBag.Title</h3>
+            <div class="col-6 d-flex justify-content-end">
+                <a class="btn icon icon-left btn-primary" onclick="ClearModal()" style="font-weight: bold; width: 200px">
+                    <i data-feather="plus-square"></i>Thêm mới
+                </a>
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="table1" width="100%" cellspacing="0">
-                    <thead>
+            <table class='table table-hover' id="table1">
+                <thead>
+                    <tr>
+                        <th>Tên sách</th>
+                        <th>Tác giả</th>
+                        <th>Thể loại</th>
+                        <th>Giới thiệu</th>
+                        <th>Số sách còn</th>
+                        <th>Ảnh bìa</th>
+                        <th>Trạng thái</th>
+                        <th>Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.BooksList)
+                    {
                         <tr>
-                            <th class="text-center">
-                                @Html.DisplayNameFor(model => model.title)
-                            </th>
-                            <th class="text-center">
-                                @Html.DisplayNameFor(model => model.authors)
-                            </th>
-                            <th class="text-center">
-                                @Html.DisplayNameFor(model => model.categories)
-                            </th>
-                            <th class="text-center">
-                                @Html.DisplayNameFor(model => model.shortDescription)
-                            </th>
-                            <th class="text-center">
-                                @Html.DisplayNameFor(model => model.longDescription)
-                            </th>
-                            <th class="text-center">
-                                @Html.DisplayNameFor(model => model.count)
-                            </th>
-                            <th class="text-center">
-                                @Html.DisplayNameFor(model => model.publishedDate)
-                            </th>
-                            <th class="text-center">
-                                @Html.DisplayNameFor(model => model.status)
-                            </th>
-                            <th class="text-center">
-                                @Html.DisplayNameFor(model => model.thumbnailUrl)
-                            </th>
-
-                            <th></th>
+                            <td style="width: 200px;">
+                                <p>@item.title</p>
+                            </td>
+                            <td style="white-space: nowrap">
+                                @{
+                                    int i = 0;
+                                    foreach (var authorName in item.author_temp)
+                                    {
+                                        if (i == 2)
+                                        {
+                                            <p>@authorName ...</p>
+                                            break;
+                                        }
+                                        <p>@authorName</p>
+                                        i++;
+                                    }
+                                }
+                            </td>
+                            <td style="width:150px; white-space: nowrap">
+                                @{
+                                    i = 0;
+                                    foreach (var cateName in item.categories_temp)
+                                    {
+                                        if (i == 2)
+                                        {
+                                            <p>@cateName ...</p>
+                                            break;
+                                        }
+                                        <p>@cateName</p>
+                                        i++;
+                                    }
+                                }
+                            </td>
+                            <td style="width: 400px;">
+                                <p>@item.shortDescription</p>
+                            </td>
+                            <td>
+                                <p>@item.count_in</p>
+                            </td>
+                            <td>
+                                <img src="@item.thumbnailUrl" style="height: 75px;" />
+                            </td>
+                            <td>
+                                @switch (item.status)
+                                {
+                                    case "Còn sách":
+                                        {
+                                            <span class="badge bg-success">Còn sách</span>
+                                            break;
+                                        }
+                                    case "Hết sách":
+                                        {
+                                            <span class="badge bg-danger">Hết sách</span>
+                                            break;
+                                        }
+                                    case "Chưa cập nhật":
+                                        {
+                                            <span class="badge bg-light">Chưa cập nhật</span>
+                                            break;
+                                        }
+                                }
+                            </td>
+                            <td class="link-action" style="width: 170px;">
+                                <a class="link-edit" onclick="GetBook('@item._id')">
+                                    <i class="badge-circle badge-circle-light-secondary font-medium-1" data-feather="edit"></i>Sửa
+                                </a><br />
+                                <a class="link-delete" onclick="GetBookDelete('@item._id')">
+                                    <i class="badge-circle badge-circle-light-secondary font-medium-1" data-feather="trash-2"></i>Xoá
+                                </a><br />
+                                <a class="link-detail" href="@Url.Action("Detail", "ql_Sach" , new { id = item._id})">
+                                    <i class="badge-circle badge-circle-light-secondary font-medium-1" data-feather="info"></i>Chi tiết
+                                </a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td style="max-width: 200px;">
-                                    <p>
-                                        @Html.DisplayFor(modelItem => item.title)
-                                    </p>
-                                </td>
-                                <td style="max-width: 220px; width: 200px;">
-                                    @{ //Hiển thị tên tác giả từ chuỗi id
-                                        if (item.authors != null)
-                                        {
-                                            int i = 0;
-                                            string[] authorList = item.authors.Split(',');
-                                            foreach (var ath in authorList)
-                                            {
-                                                foreach (var athName in ViewBag.listAuthor)
-                                                {
-                                                    if (ath.Equals(athName.id))
-                                                    {
-                                                        if (i == 2)
-                                                        {
-                                                            <p>
-                                                                @athName.name ...
-                                                            </p>
-                                                            break;
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>
-                                                                @athName.name
-                                                            </p>                                                           
-                                                        }
-                                                    }
-                                                }
-                                                i++;
-                                                if (i == 3)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                </td>
-                                <td style="max-width: 220px; width: 200px;">
-                                    @{
-                                        if (item.categories != null)
-                                        {
-                                            int i = 0;
-                                            string[] categoriesList = item.categories.Split(',');
-                                            foreach (var cate in categoriesList)
-                                            {
-                                                foreach (var cateName in ViewBag.listCategories)
-                                                {
-                                                    if (cate.Equals(cateName.id))
-                                                    {
-                                                        if (i == 2)
-                                                        {
-                                                            <p>
-                                                                @cateName.name ...
-                                                            </p>
-                                                            break;
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>
-                                                                @cateName.name
-                                                            </p>
-                                                        }
-                                                    }
-                                                }
-                                                i++;
-                                                if (i == 3)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                </td>
-                                <td style="max-width: 200px;">
-                                    <p>
-                                        @Html.DisplayFor(modelItem => item.shortDescription)
-                                    </p>
-                                </td>
-                                <td style="max-width: 300px;">
-                                    <p>
-                                        @Html.DisplayFor(modelItem => item.longDescription)
-                                    <p>
-                                </td>
-                                <td class="text-center">
-                                    <p>
-                                        @Html.DisplayFor(modelItem => item.count)
-                                    </p>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 
-                                </td>
-                                <td style="width:130px; max-width: 150px;">
-                                    @{
-                                        DateTime date_temp = new DateTime(0001, 01, 01);
-                                        if (DateTime.Compare(item.publishedDate, date_temp) == 0)
-                                        {
-                                            <p>
-                                                Chưa có thông tin
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(modelItem => item.publishedDate)
-                                        }
+<!-- CREATE EDIT MODAL -->
+<div class="modal fade text-left w-100" id="Add_Edit_BookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="Modal_title">Thêm mới sách</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="FormAddBook">
+                    <!--Row 1-->
+                    <div class="row">
+                        <div class="col-sm-6 mb-1" style="padding-right: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">ID</span>
+                                <input type="text" class="form-control" disabled="disabled" id="Add_id" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-1" style="padding-left: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">Trạng thái</span>
+                                <select class="form-control" id="Add_status">
+                                    <option>Còn sách</option>
+                                    <option>Hết sách</option>
+                                    <option>Chưa cập nhật</option>
+                                </select>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 2-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Tên sách *</span>
+                                <input type="text" class="form-control" id="Add_title" />
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 3-->
+                    <div class="row mutil-choice">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Tác giả * </span>
+                                <select class="form-control" id="Add_author" name="Add_author" multiple="multiple">
+                                    @foreach (var author in ViewBag.listAuthor)
+                                    {
+                                        <option value="@author.id">@author.name</option>
+
                                     }
-                                </td>
-                                <td class="text-center">
-                                    <p>
-                                        @Html.DisplayFor(modelItem => item.status)
-                                    </p>
+                                </select>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 4-->
+                    <div class="row mutil-choice">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Thể loại * </span>
+                                <select class="form-control" id="Add_cate" multiple="multiple">
+                                    @foreach (var cate in ViewBag.listCategories)
+                                    {
+                                        <option value="@cate.id">@cate.name</option>
 
-                                </td>
-                                <td style="max-width: 150px;">
-                                    <img src="@Html.DisplayFor(modelItem => item.thumbnailUrl)" style="max-width: 150px; max-height:75px;" />
-                                </td>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 5-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Giới thiệu</span>
+                                <textarea class="form-control" rows="3" style="resize: none;" id="Add_short"></textarea>
 
-                                <td class="link-action">
-                                    <a class="link-edit" href="@Url.Action("Edit", "ql_Sach" , new { id = item._id})" onclick="return confirm('Bạn có muốn sửa sách @Html.DisplayFor(modelItem => item.title)?')">
-                                        <i class="fas fa-fw fa-edit"></i>Sửa
-                                    </a><br />
-                                    <a class="link-delete" href="@Url.Action("Delete", "ql_Sach" , new { id = item._id})" onclick="return confirm('Bạn có muốn xoá sách @Html.DisplayFor(modelItem => item.title)?')">
-                                        <i class="fas fa-fw fa-trash"></i>Xoá
-                                    </a><br />
-                                    <a class="link-detail" href="@Url.Action("Detail", "ql_Sach" , new { id = item._id})">
-                                        <i class="fas fa-fw fa-info"></i>Chi tiết
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 6-->
+                    <div class="row">
+                        <div class="input-group" style="height: 400px">
+                            <span class="input-group-text">Giới thiệu chi tiết</span>
+                            <div style="flex: 1 1 auto; width: min-content;">
+                                <div id="full_editor" style="height: 358px">
+                                </div>
+                                <textarea class="hide" id="Add_long"></textarea>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 7-->
+                    <div class="row">
+                        <div class="col-sm-6 mb-1" style="padding-right: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">Năm xuất bản</span>
+                                <input type="number" class="form-control" name="datepicker" id="Add_pubDate" />
+                            </div>
+                            <p></p>
+                        </div>
+                        <div class="col-sm-6 mb-1" style="padding-left: 10px;">
+                            <div class="row">
+                                <div class="col-sm-6" style="padding-right: 5px">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Số lượng</span>
+                                        <input type="number" class="form-control" id="Add_count" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" style="padding-left: 5px">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Số sách còn</span>
+                                        <input type="number" class="form-control" id="Add_countIn" disabled="disabled" />
+                                    </div>
+                                </div>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 8-->
+                    <div class="row">
+                        <input type="file" class="hide" id="Add_Thumb_hide" />
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Ảnh bìa</span>
+                                <label class="form-control" style="background-color: white" id="Add_thumb"></label>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!---->
+                    <p style="color:firebrick">Dấu (*) là bắt buộc.</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="bx bx-check d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Huỷ</span>
+                </button>
+                <button type="button" class="btn btn-primary ml-1" onclick="SaveBook()">
+                    <i class="bx bx-check d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Lưu</span>
+                </button>
             </div>
         </div>
     </div>
 </div>
-@{
-    if (ViewBag.MsEdit != null)
-    {
-        Response.Write("<script>alert('" + ViewBag.MsEdit + "')</script>");
-        ViewBag.MsEdit = null;
-    }
-    if (ViewBag.MsDelete != null)
-    {
-        Response.Write("<script>alert('Đã xoá sách " + ViewBag.MsDelete + "')</script>");
-        ViewBag.MsDelete = null;
-    }
+<!-- END CREATE EDIT MODAL -->
+<!-- DELETE MODAL-->
+<div class="modal fade text-left" id="Delete_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title white" id="Delete_title">Bạn có muốn xoá sách này?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
+            </div>
+            <div class="modal-body" id="Delete_modal_body">
+                <p id="D_title"></p>
+                <p id="D_ID" class="hide"></p>
+                <ul>
+                    <li id="D_author"></li>
+                    <li id="D_cate"></li>
+                    <li id="D_date"></li>
+                </ul>
+            </div>
+            <div class="modal-footer">               
+                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Huỷ</span>
+                </button>
+                <button type="button" class="btn btn-danger ml-1" data-bs-dismiss="modal" onclick="DeleteBook()">
+                    <i class="bx bx-check d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Xoá</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END DELETE MODAL-->
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            //cấu hình chosen framework
+            $("#Add_author").chosen({
+                no_results_text: "Không tìm thấy tác giả",
+                max_selected_options: 5
+            });
+            $("#Add_author").bind("chosen:maxselected", function () { alert("Chỉ được chọn nhiều nhất 5 tác giả."); });
+            $("#Add_cate").chosen({
+                no_results_text: "Không tìm thấy thể loại",
+                max_selected_options: 5,
+            });
+            $("#Add_cate").bind("chosen:maxselected", function () { alert("Chỉ được chọn nhiều nhất 5 thể loại."); });
+            $("#Add_status").chosen({
+                disable_search: true
+            });
+        });
+        //Chọn file ảnh
+        $('#Add_thumb').on('click', function () {
+            $('#Add_Thumb_hide').click();
+        });
+        $('#Add_Thumb_hide').on('change', function () {
+            var filename = $('#Add_Thumb_hide').val();
+            $('#Add_thumb').empty();
+            $('#Add_thumb').text(filename);
+        });
+        //Tuỳ chỉnh datetime picker
+        $(function () {
+            $('#Add_pubDate').datepicker({
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years",
+                autoclose: true
+            });
+        });
+        //AJAX gửi dữ liệu tới controller
+        function SaveBook() {
+            document.getElementById("Add_long").value = quillEditor.root.innerHTML;
+            var bookData = {
+                _id: $('#Add_id').val(),
+                status: $('#Add_status').val(),
+                title: $('#Add_title').val(),
+                author_temp: $('#Add_author').val(),
+                categories_temp: $('#Add_cate').val(),
+                shortDescription: $('#Add_short').val(),
+                longDescription: $('#Add_long').val(),
+                count: $('#Add_count').val(),
+                count_in: $('#Add_countIn').val(),
+                publishedDate: $('#Add_pubDate').val(),
+                thumbnailUrl: $('#Add_Thumb_hide').val()
+            }
+            $.ajax({
+                url: "/Admin/ql_Sach/Create_Edit",
+                data: JSON.stringify(bookData),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    if (res.status != null) {
+                        {
+                            if (res.status == "ADD_OK") {
+                                $('#ModalCancel').click();   
+                                //$("#table1").load(" #table1");
+                                window.location.reload();
+                            }
+                            if (res.status == "EDIT_OK") {
+                                $('#ModalCancel').click();                             
+                                //$("#table1").load(" #table1");
+                                window.location.reload();
+                            }
+                            if (res.status == "ADD_FALSE") {
+                                alert("Sách đã tồn tại.");
+                            }
+                            if (res.status == "EDIT_FALSE") {
+                                alert("Sách đã tồn tại. Hãy kiểm tra lại tên sách.");
+                            }
+                            if (res.status == "NO_INPUT_DATA") {
+                                alert(res.propery + "chưa được nhập.")
+                            }
+                        }
+                    }
+                },
+                error: function () {
+                    alert("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang.");
+                }
+            });
+        };
+        //Setup edit modal
+        function GetBook(id) {
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_Sach/GetBook/" + id,
+                dataType: "json",
+                success: function (res) {
+                    $('#Add_id').val(res._id);
+                    $('#Add_status').val(res.status).trigger('chosen:updated');
+                    $('#Add_title').val(res.title);
+                    $('#Add_author').val(res.author_temp).trigger('chosen:updated');
+                    $('#Add_cate').val(res.categories_temp).trigger('chosen:updated');
+                    $('#Add_short').val(res.shortDescription);
+                    $('#Add_long').val("");
+                    quillEditor.root.innerHTML = res.longDescription;
+                    $('#Add_count').val(res.count);
+                    $('#Add_countIn').val(res.count_in);
+                    $('#Add_countIn').removeAttr("disabled");
+                    $('#Add_pubDate').val(res.publishedDate);
+                    $('#Add_thumb').empty();
+                    $('#Add_thumb').text(res.thumbnailUrl);
+                    $('#Add_Edit_BookModal').modal('show');
+                }
+            })
+        };
+        //setup create modal
+        function ClearModal() {
+            $('#Add_id').val("");
+            $('#Add_status').val("Còn sách").trigger('chosen:updated');
+            $('#Add_title').val("");
+            $('#Add_author').val("").trigger('chosen:updated');
+            $('#Add_cate').val("").trigger('chosen:updated');
+            $('#Add_short').val("");
+            $('#Add_long').val("");
+            quillEditor.root.innerHTML = "";
+            $('#Add_count').val("");
+            $('#Add_countIn').val("");
+            $('#Add_countIn').attr('disabled', 'disabled');
+            $('#Add_pubDate').val("");
+            $('#Add_Thumb').empty;
+            $('#Add_thumb').text("");
+            $('#Add_Thumb_hide').val("");
+            $('#Add_Edit_BookModal').modal('show');
+
+        };
+        //Setup delete modal
+        function GetBookDelete(id) {
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_Sach/GetBookDelete/" + id,
+                dataType: "json",
+                success: function (res) {
+                    document.getElementById("D_ID").innerHTML = res._id;
+
+                    document.getElementById("D_title").innerHTML = "Sách: " + res.title;
+                    document.getElementById("D_author").innerHTML = "Tác giả: " + res.author_temp.join(',');
+                    document.getElementById("D_cate").innerHTML = "Thể loại: " + res.categories_temp.join(',');
+                    document.getElementById("D_date").innerHTML = "Năm xuất bản: " + res.publishedDate;
+                    $('#Delete_Modal').modal('show');
+                }
+            })
+        };
+        //Delete book
+        function DeleteBook() {
+            var id = document.getElementById("D_ID").innerHTML;
+            $.ajax({
+                type: "POST",
+                url: "/Admin/ql_Sach/Delete/" + id,
+                dataType: "json",
+                success: function (res) {
+                    if (res.status == "DELETE_OK") {                                        
+                       // $("#table1").load(" #table1");
+                        window.location.reload();
+                    }
+                    if (res.status == "DELETE_FALSE") {
+                        alert("Xoá thất bại. Kiểm tra lại kết nối mạng hoặc tải lại trang.");
+                    }
+                }
+            })
+        };
+    </script>
 }
