@@ -20,10 +20,10 @@
 
 <section class="section">
     <div class="card">
-        <div class="card-header row">
-            <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #0097ff;">@ViewBag.Title</h3>
+        <div class="card-header row" style="margin-bottom: 10px;">
+            <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #fff;">@ViewBag.Title</h3>
             <div class="col-6 d-flex justify-content-end">
-                <a class="btn icon icon-left btn-primary" onclick="ClearModal()" style="font-weight: bold; width: 200px">
+                <a class="btn icon icon-left btn-primary" onclick="ClearModal()" style="font-weight: bold; width: 200px; background-color:#0097ff; border-color: #fff">
                     <i data-feather="plus-square"></i>Thêm mới
                 </a>
             </div>
@@ -86,7 +86,7 @@
                                 <p>@item.count_in</p>
                             </td>
                             <td>
-                                <img src="@item.thumbnailUrl" style="height: 75px;" />
+                                <img src="@item.thumbnailUrl" style="height: 75px; width: 75px;" />
                             </td>
                             <td>
                                 @switch (item.status)
@@ -108,15 +108,15 @@
                                         }
                                 }
                             </td>
-                            <td class="link-action" style="width: 170px;">
-                                <a class="link-edit" onclick="GetBook('@item._id')">
-                                    <i class="badge-circle badge-circle-light-secondary font-medium-1" data-feather="edit"></i>Sửa
+                            <td class="link-action" style="min-width:135px; width: 135px;">                                
+                                <a name="edit_link" class="link-edit" onclick="GetBook('@item._id')">
+                                    <i class="fa fa-edit"></i> Sửa
                                 </a><br />
-                                <a class="link-delete" onclick="GetBookDelete('@item._id')">
-                                    <i class="badge-circle badge-circle-light-secondary font-medium-1" data-feather="trash-2"></i>Xoá
+                                <a name="delete_link" class="link-delete" onclick="GetBookDelete('@item._id')">
+                                    <i class="fa fa-trash"></i> Xoá
                                 </a><br />
-                                <a class="link-detail" href="@Url.Action("Detail", "ql_Sach" , new { id = item._id})">
-                                    <i class="badge-circle badge-circle-light-secondary font-medium-1" data-feather="info"></i>Chi tiết
+                                <a name="detail_link" class="link-detail" href="@Url.Action("Detail", "ql_Sach" , new { id = item._id})">
+                                    <i class="fa fa-info-circle"></i> Chi tiết
                                 </a>
                             </td>
                         </tr>
@@ -257,7 +257,7 @@
                         <div class="col mb-1">
                             <div class="input-group">
                                 <span class="input-group-text">Ảnh bìa</span>
-                                <label class="form-control" style="background-color: white" id="Add_thumb"></label>
+                                <label class="form-control" style="background-color: white; overflow: hidden; text-overflow: ellipsis; " id="Add_thumb"></label>
                             </div>
                             <p></p>
                         </div>
@@ -271,7 +271,7 @@
                     <i class="bx bx-check d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Huỷ</span>
                 </button>
-                <button type="button" class="btn btn-primary ml-1" onclick="SaveBook()">
+                <button name="SaveBook" type="button" class="btn btn-primary ml-1" onclick="SaveBook()">
                     <i class="bx bx-check d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Lưu</span>
                 </button>
@@ -312,8 +312,26 @@
 </div>
 <!-- SCRIPTS-->
 @section scripts{
-    <script type="text/javascript">
+    <script type="text/javascript">  
         $(function () {
+            //Cấu hình toasts
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }  
             //cấu hình chosen framework
             $("#Add_author").chosen({
                 no_results_text: "Không tìm thấy tác giả",
@@ -333,37 +351,42 @@
         $('#Add_thumb').on('click', function () {
             $('#Add_Thumb_hide').click();
         });
-        var thumbBase64;
+        var thumbSrc = ""
         $('#Add_Thumb_hide').on('change', function (e) {
             //lấy file
             var fff = e.target.files;
             var no_files = 0;
             if (fff !== undefined)
-                no_files = fff.length;
-            //Tạo local URL cho Image
-            var ImageUrlLocal = URL.createObjectURL(fff[no_files - 1]);
-            //Set Tên Image cho Label để hiển thị
-            var ImageName = fff[no_files - 1].name;
-            $("#Add_thumb").empty();
-            $("#Add_thumb").append(ImageName);
-            //Chuyển URL Ảnh sang Base64
-            function toDataURL(url, callback) {
-                var xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    var reader = new FileReader();
-                    reader.onloadend = function () {
-                        callback(reader.result);
-                    }
-                    reader.readAsDataURL(xhr.response);
-                };
-                xhr.open('GET', url);
-                xhr.responseType = 'blob';
-                xhr.send();
-            };             
-            toDataURL(ImageUrlLocal, function (dataUrl) {
-                ResizeImage(dataUrl);
-            });
-            
+                no_files = fff.length;           
+
+            $('#Add_thumb').empty();
+            $('#Add_thumb').text(fff[no_files - 1].name);
+
+            // Resize ảnh
+            const resize_width = 600;
+            const item = fff[no_files -1];
+            const reader = new FileReader();
+            reader.readAsDataURL(item);
+            reader.name = item.name;
+            reader.size = item.size;
+            reader.onload = function (event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.name = event.target.name;
+                img.size = event.target.size;
+                img.onload = function (el) {
+                    const elem = document.createElement('canvas');
+                    const scaleResize = resize_width / el.target.width;
+                    elem.width = resize_width;
+                    elem.height = el.target.height * scaleResize;
+                    const ctx = elem.getContext('2d');
+                    ctx.drawImage(el.target, 0, 0, elem.width, elem.height);
+                    const srcEncoded = ctx.canvas.toDataURL('image/jpeg', 1);     
+
+                    thumbSrc = srcEncoded;
+                }
+            }          
+            ///            
         });
         //Tuỳ chỉnh datetime picker
         $(function () {
@@ -376,12 +399,7 @@
         });   
         //AJAX gửi dữ liệu tới controller
         function SaveBook() {
-            document.getElementById("Add_long").value = quillEditor.root.innerHTML;    
-
-            var resize = resizeImage(thumbBase64, 600, 600);
-
-            console.log(resize);
-          
+            document.getElementById("Add_long").value = quillEditor.root.innerHTML;           
             var bookData = {
                 _id: $('#Add_id').val(),
                 status: $('#Add_status').val(),
@@ -393,8 +411,8 @@
                 count: $('#Add_count').val(),
                 count_in: $('#Add_countIn').val(),
                 publishedDate: $('#Add_pubDate').val(),
-                thumbnailUrl: null,
-            }
+                thumbnailUrl: thumbSrc
+            }         
             $.ajax({
                 url: "/Admin/ql_Sach/Create_Edit",
                 data: JSON.stringify(bookData),
@@ -405,29 +423,31 @@
                     if (res.status != null) {
                         {
                             if (res.status == "ADD_OK") {
-                                $('#ModalCancel').click();
-                                //$("#table1").load(" #table1");
-                                window.location.reload();
+                                $('#ModalCancel').click();                                
+                                toastr["success"]("Thêm mới sách: " + bookData.title + " thành công!", "Thêm mới thành công");    
+                                $("#body_build").load(" #body_build > *");
+                                //window.location.reload(true);
                             }
                             if (res.status == "EDIT_OK") {
                                 $('#ModalCancel').click();
-                                //$("#table1").load(" #table1");
-                                window.location.reload();
+                                $("#body_build").load(" #body_build > *");
+                                toastr["success"]("Sửa thông tin sách: " + bookData.title + " thành công!", "Sửa thông tin thành công");                                
                             }
                             if (res.status == "ADD_FALSE") {
-                                alert("Sách đã tồn tại.");
+                                toastr["warning"]("Sách: " + bookData.title + " đã có trong hệ thống!", "Thêm mới thất bại");
                             }
                             if (res.status == "EDIT_FALSE") {
-                                alert("Sách đã tồn tại. Hãy kiểm tra lại tên sách.");
+                                toastr["warning"]("Sách: " + bookData.title + " đã có trong hệ thống!", "Sửa thông tin thất bại");                              
                             }
-                            if (res.status == "NO_INPUT_DATA") {
-                                alert(res.propery + "chưa được nhập.")
+                            if (res.status == "NO_INPUT_DATA") {                             
+                                toastr["error"](res.propery + " chưa được nhập!", "Lưu thất bại");                               
                             }
                         }
                     }
                 },
                 error: function () {
                     alert("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang.");
+                    toastr["error"]("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Lỗi");                    
                 }
             });
         };
@@ -452,6 +472,7 @@
                     $('#Add_pubDate').val(res.publishedDate);
                     $('#Add_thumb').empty();
                     $('#Add_thumb').text(res.thumbnailUrl);
+                    thumbSrc = res.thumbnailUrl;
                     $('#Add_Edit_BookModal').modal('show');
                 }
             })
@@ -501,12 +522,15 @@
                 url: "/Admin/ql_Sach/Delete/" + id,
                 dataType: "json",
                 success: function (res) {
-                    if (res.status == "DELETE_OK") {
-                        // $("#table1").load(" #table1");
-                        window.location.reload();
+                    if (res.status == "DELETE_OK") {                                      
+                        //window.location.reload(true);
+                        $("#body_build").load(" #body_build > *");
+                        toastr["success"]("Sách đã được xoá!", "Xoá thành công");
+                        
+
                     }
-                    if (res.status == "DELETE_FALSE") {
-                        alert("Xoá thất bại. Kiểm tra lại kết nối mạng hoặc tải lại trang.");
+                    if (res.status == "DELETE_FALSE") {                       
+                        toastr["error"]("Xoá thất bại. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Xoá thất bại");   
                     }
                 }
             })

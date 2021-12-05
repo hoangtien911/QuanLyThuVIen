@@ -993,8 +993,7 @@ footer {
 
     .card .card-header {
         padding: 10px 2.3rem;
-        
-        box-shadow: 0 5px 10px -5px grey;
+        background-color: #0097ff;
     }
 
         .card .card-header h4 {
