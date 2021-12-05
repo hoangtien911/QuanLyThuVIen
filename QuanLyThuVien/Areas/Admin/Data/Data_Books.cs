@@ -6,6 +6,12 @@ using FireSharp.Response;
 using QuanLyThuVien.Models;
 using Newtonsoft.Json;
 using System.Threading;
+using System.IO;
+using Firebase.Auth;
+using Firebase.Storage;
+using System.Threading.Tasks;
+using System;
+using System.Web;
 
 namespace QuanLyThuVien.Areas.Admin.Data
 {
@@ -25,8 +31,13 @@ namespace QuanLyThuVien.Areas.Admin.Data
          */
 
         //1. Config
+        private static string ApiKey = "AIzaSyDd-xlH3_suIqaZkcN52qLqGMoDXzyuwfM";
+        private static string Bucket = "libmanagerdatabase.appspot.com";
+        private static string AuthEmail = "htienictu@gmail.com";
+        private static string AuthPassword = "htienictu";
+
         private static IFirebaseClient client;
-        private static IFirebaseConfig config = new FirebaseConfig
+        private static IFirebaseConfig config = new FireSharp.Config.FirebaseConfig
         {
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
@@ -105,9 +116,9 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 PushResponse response = client.Push("Books/", book);
                 book._id = response.Result.name;
                 client.Set("Books/" + book._id, book);
-            });
+            });            
             t1.Start();
-            t2.Start();
+            t2.Start();           
             return true;
         }
         //6. Sửa thông tin 1 sách
@@ -201,6 +212,6 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 }
             }
             return true;
-        }
+        }      
     }
 }

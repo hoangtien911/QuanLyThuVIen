@@ -186,3 +186,8 @@ E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.csproj.
 E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.csproj.CopyComplete
 E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.dll
 E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.pdb
+E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\bin\Firebase.Auth.dll
+E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\bin\Firebase.Storage.dll
+E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\bin\System.Diagnostics.DiagnosticSource.dll
+E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\bin\System.Diagnostics.DiagnosticSource.xml
+E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.csprojAssemblyReference.cache

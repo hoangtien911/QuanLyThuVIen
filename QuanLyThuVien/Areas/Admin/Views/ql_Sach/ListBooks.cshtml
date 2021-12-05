@@ -4,6 +4,7 @@
     ViewBag.Title = "Danh sách sách";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+<!-- PAGE BODY-->
 <div class="page-title">
     <div class="row">
         <div class="col-12 col-md-6 order-md-1 order-last">
@@ -126,7 +127,7 @@
     </div>
 </section>
 
-<!-- CREATE EDIT MODAL -->
+<!-- CREATE-EDIT MODAL -->
 <div class="modal fade text-left w-100" id="Add_Edit_BookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
@@ -252,7 +253,7 @@
                     </div>
                     <!-- Row 8-->
                     <div class="row">
-                        <input type="file" class="hide" id="Add_Thumb_hide" />
+                        <input type="file" class="hide" accept="image/*" id="Add_Thumb_hide" />                      
                         <div class="col mb-1">
                             <div class="input-group">
                                 <span class="input-group-text">Ảnh bìa</span>
@@ -278,7 +279,6 @@
         </div>
     </div>
 </div>
-<!-- END CREATE EDIT MODAL -->
 <!-- DELETE MODAL-->
 <div class="modal fade text-left" id="Delete_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
@@ -297,7 +297,7 @@
                     <li id="D_date"></li>
                 </ul>
             </div>
-            <div class="modal-footer">               
+            <div class="modal-footer">
                 <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                     <i class="bx bx-x d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Huỷ</span>
@@ -310,8 +310,7 @@
         </div>
     </div>
 </div>
-<!-- END DELETE MODAL-->
-
+<!-- SCRIPTS-->
 @section scripts{
     <script type="text/javascript">
         $(function () {
@@ -334,10 +333,37 @@
         $('#Add_thumb').on('click', function () {
             $('#Add_Thumb_hide').click();
         });
-        $('#Add_Thumb_hide').on('change', function () {
-            var filename = $('#Add_Thumb_hide').val();
-            $('#Add_thumb').empty();
-            $('#Add_thumb').text(filename);
+        var thumbBase64;
+        $('#Add_Thumb_hide').on('change', function (e) {
+            //lấy file
+            var fff = e.target.files;
+            var no_files = 0;
+            if (fff !== undefined)
+                no_files = fff.length;
+            //Tạo local URL cho Image
+            var ImageUrlLocal = URL.createObjectURL(fff[no_files - 1]);
+            //Set Tên Image cho Label để hiển thị
+            var ImageName = fff[no_files - 1].name;
+            $("#Add_thumb").empty();
+            $("#Add_thumb").append(ImageName);
+            //Chuyển URL Ảnh sang Base64
+            function toDataURL(url, callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    var reader = new FileReader();
+                    reader.onloadend = function () {
+                        callback(reader.result);
+                    }
+                    reader.readAsDataURL(xhr.response);
+                };
+                xhr.open('GET', url);
+                xhr.responseType = 'blob';
+                xhr.send();
+            };             
+            toDataURL(ImageUrlLocal, function (dataUrl) {
+                ResizeImage(dataUrl);
+            });
+            
         });
         //Tuỳ chỉnh datetime picker
         $(function () {
@@ -347,10 +373,15 @@
                 minViewMode: "years",
                 autoclose: true
             });
-        });
+        });   
         //AJAX gửi dữ liệu tới controller
         function SaveBook() {
-            document.getElementById("Add_long").value = quillEditor.root.innerHTML;
+            document.getElementById("Add_long").value = quillEditor.root.innerHTML;    
+
+            var resize = resizeImage(thumbBase64, 600, 600);
+
+            console.log(resize);
+          
             var bookData = {
                 _id: $('#Add_id').val(),
                 status: $('#Add_status').val(),
@@ -362,7 +393,7 @@
                 count: $('#Add_count').val(),
                 count_in: $('#Add_countIn').val(),
                 publishedDate: $('#Add_pubDate').val(),
-                thumbnailUrl: $('#Add_Thumb_hide').val()
+                thumbnailUrl: null,
             }
             $.ajax({
                 url: "/Admin/ql_Sach/Create_Edit",
@@ -374,12 +405,12 @@
                     if (res.status != null) {
                         {
                             if (res.status == "ADD_OK") {
-                                $('#ModalCancel').click();   
+                                $('#ModalCancel').click();
                                 //$("#table1").load(" #table1");
                                 window.location.reload();
                             }
                             if (res.status == "EDIT_OK") {
-                                $('#ModalCancel').click();                             
+                                $('#ModalCancel').click();
                                 //$("#table1").load(" #table1");
                                 window.location.reload();
                             }
@@ -470,8 +501,8 @@
                 url: "/Admin/ql_Sach/Delete/" + id,
                 dataType: "json",
                 success: function (res) {
-                    if (res.status == "DELETE_OK") {                                        
-                       // $("#table1").load(" #table1");
+                    if (res.status == "DELETE_OK") {
+                        // $("#table1").load(" #table1");
                         window.location.reload();
                     }
                     if (res.status == "DELETE_FALSE") {
