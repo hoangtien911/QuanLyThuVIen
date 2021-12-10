@@ -23,8 +23,8 @@
         <div class="card-header row" style="margin-bottom: 10px;">
             <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #fff;">@ViewBag.Title</h3>
             <div class="col-6 d-flex justify-content-end">
-                <a class="btn icon icon-left btn-primary" onclick="ClearModal()" style="font-weight: bold; width: 200px; background-color:#0097ff; border-color: #fff">
-                    <i data-feather="plus-square"></i>Thêm mới
+                <a class="btn icon icon-left btn-primary" id="link-add" style="font-weight: bold; width: 200px; background-color:#0097ff; border-color: #fff">
+                    <i class="fa fa-plus-square"></i> Thêm mới
                 </a>
             </div>
         </div>
@@ -42,86 +42,88 @@
                         <th>Tác vụ</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var item in ViewBag.BooksList)
-                    {
-                        <tr>
-                            <td style="width: 200px;">
-                                <p>@item.title</p>
-                            </td>
-                            <td style="white-space: nowrap">
-                                @{
-                                    int i = 0;
-                                    foreach (var authorName in item.author_temp)
-                                    {
-                                        if (i == 2)
-                                        {
-                                            <p>@authorName ...</p>
-                                            break;
-                                        }
-                                        <p>@authorName</p>
-                                        i++;
-                                    }
-                                }
-                            </td>
-                            <td style="width:150px; white-space: nowrap">
-                                @{
-                                    i = 0;
-                                    foreach (var cateName in item.categories_temp)
-                                    {
-                                        if (i == 2)
-                                        {
-                                            <p>@cateName ...</p>
-                                            break;
-                                        }
-                                        <p>@cateName</p>
-                                        i++;
-                                    }
-                                }
-                            </td>
-                            <td style="width: 400px;">
-                                <p>@item.shortDescription</p>
-                            </td>
-                            <td>
-                                <p>@item.count_in</p>
-                            </td>
-                            <td>
-                                <img src="@item.thumbnailUrl" style="height: 75px; width: 75px;" />
-                            </td>
-                            <td>
-                                @switch (item.status)
-                                {
-                                    case "Còn sách":
-                                        {
-                                            <span class="badge bg-success">Còn sách</span>
-                                            break;
-                                        }
-                                    case "Hết sách":
-                                        {
-                                            <span class="badge bg-danger">Hết sách</span>
-                                            break;
-                                        }
-                                    case "Chưa cập nhật":
-                                        {
-                                            <span class="badge bg-light">Chưa cập nhật</span>
-                                            break;
-                                        }
-                                }
-                            </td>
-                            <td class="link-action" style="min-width:135px; width: 135px;">                                
-                                <a name="edit_link" class="link-edit" onclick="GetBook('@item._id')">
-                                    <i class="fa fa-edit"></i> Sửa
-                                </a><br />
-                                <a name="delete_link" class="link-delete" onclick="GetBookDelete('@item._id')">
-                                    <i class="fa fa-trash"></i> Xoá
-                                </a><br />
-                                <a name="detail_link" class="link-detail" href="@Url.Action("Detail", "ql_Sach" , new { id = item._id})">
-                                    <i class="fa fa-info-circle"></i> Chi tiết
-                                </a>
-                            </td>
-                        </tr>
-                    }
+                <tbody id="_TBODY">
                 </tbody>
+                @*<tbody>
+                        @foreach (var item in ViewBag.BooksList)
+                        {
+                            <tr>
+                                <td style="width: 200px;">
+                                    <p>@item.title</p>
+                                </td>
+                                <td style="white-space: nowrap">
+                                    @{
+                                        int i = 0;
+                                        foreach (var authorName in item.author_temp)
+                                        {
+                                            if (i == 2)
+                                            {
+                                                <p>@authorName ...</p>
+                                                break;
+                                            }
+                                            <p>@authorName</p>
+                                            i++;
+                                        }
+                                    }
+                                </td>
+                                <td style="width:150px; white-space: nowrap">
+                                    @{
+                                        i = 0;
+                                        foreach (var cateName in item.categories_temp)
+                                        {
+                                            if (i == 2)
+                                            {
+                                                <p>@cateName ...</p>
+                                                break;
+                                            }
+                                            <p>@cateName</p>
+                                            i++;
+                                        }
+                                    }
+                                </td>
+                                <td style="max-width: 400px;">
+                                    <p>@item.shortDescription</p>
+                                </td>
+                                <td>
+                                    <p>@item.count_in</p>
+                                </td>
+                                <td>
+                                    <img src="@item.thumbnailUrl" style="height: 75px; width: 75px;" />
+                                </td>
+                                <td>
+                                    @switch (item.status)
+                                    {
+                                        case "Còn sách":
+                                            {
+                                                <span class="badge bg-success">Còn sách</span>
+                                                break;
+                                            }
+                                        case "Hết sách":
+                                            {
+                                                <span class="badge bg-danger">Hết sách</span>
+                                                break;
+                                            }
+                                        case "Chưa cập nhật":
+                                            {
+                                                <span class="badge bg-light">Chưa cập nhật</span>
+                                                break;
+                                            }
+                                    }
+                                </td>
+                                <td class="link-action" style="min-width:135px; width: 135px;">
+                                    <a name="edit_link" class="link-edit" onclick="GetBook('@item._id')">
+                                        <i class="fa fa-edit"></i> Sửa
+                                    </a><br />
+                                    <a name="delete_link" class="link-delete" onclick="GetBookDelete('@item._id')">
+                                        <i class="fa fa-trash"></i> Xoá
+                                    </a><br />
+                                    <a name="detail_link" class="link-detail" onclick="GetBookDetail('@item._id')">
+                                        <i class="fa fa-info-circle"></i> Chi tiết
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>*@
             </table>
         </div>
     </div>
@@ -132,9 +134,9 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="Modal_title">Thêm mới sách</h4>
+                <h4 class="modal-title" id="Add_Edit_BookModal_title">Thêm mới sách</h4>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <i data-feather="x"></i>
+                    <i class="fa fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -216,7 +218,7 @@
                     <div class="row">
                         <div class="input-group" style="height: 400px">
                             <span class="input-group-text">Giới thiệu chi tiết</span>
-                            <div style="flex: 1 1 auto; width: min-content;">
+                            <div style="flex: 1 1 auto;">
                                 <div id="full_editor" style="height: 358px">
                                 </div>
                                 <textarea class="hide" id="Add_long"></textarea>
@@ -253,7 +255,7 @@
                     </div>
                     <!-- Row 8-->
                     <div class="row">
-                        <input type="file" class="hide" accept="image/*" id="Add_Thumb_hide" />                      
+                        <input type="file" class="hide" accept="image/*" id="Add_Thumb_hide" />
                         <div class="col mb-1">
                             <div class="input-group">
                                 <span class="input-group-text">Ảnh bìa</span>
@@ -268,12 +270,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
-                    <i class="bx bx-check d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Huỷ</span>
+                    <i class="fa fa-times"></i> Huỷ
                 </button>
                 <button name="SaveBook" type="button" class="btn btn-primary ml-1" onclick="SaveBook()">
-                    <i class="bx bx-check d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Lưu</span>
+                    <i class="fa fa-save"></i> Lưu
                 </button>
             </div>
         </div>
@@ -286,7 +286,9 @@
         <div class="modal-content">
             <div class="modal-header bg-danger">
                 <h5 class="modal-title white" id="Delete_title">Bạn có muốn xoá sách này?</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
             </div>
             <div class="modal-body" id="Delete_modal_body">
                 <p id="D_title"></p>
@@ -298,13 +300,60 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Huỷ</span>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="fa fa-times"></i> Huỷ
                 </button>
                 <button type="button" class="btn btn-danger ml-1" data-bs-dismiss="modal" onclick="DeleteBook()">
-                    <i class="bx bx-check d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Xoá</span>
+                    <i class="fa fa-trash"></i> Xoá
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DETAIL MODAL -->
+<div class="modal fade text-left w-100" id="Detail_BookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin sách</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-5" style=" box-shadow: 0 0 40px 0; border-radius: 50px; display:flex; align-items: center">
+                        <img id="image_detail" class="img_Detail" />
+                    </div>
+                    <div class="col-7" style="padding: 0 0 0 20px;">
+                        <h2 id="title_detail" class="title_Detail">Tên sách</h2>
+                        <div class="row">
+                            <div class="col-9">
+                                <p id="name_author" class="name_Author">Tác giả: </p>
+                            </div>
+                            <div class="col-3">
+                                <img id="avatat_author" class="avatar_Author" />
+                            </div>
+                        </div>
+                        <p id="name_cate" class="name_Cate">Thể loại: </p>
+                        <p id="date_detail"></p>
+                        <div class="row">
+                            <div class="col-6"><p id="count_detail"></p></div>
+                            <div class="col-6"><p id="countin_detail"></p></div>
+                        </div>
+                        <p id="des_short" class="des_Short">Giới thiệu: </p>
+                        <div id="des_long" class="ql-editor row">
+
+                        </div>
+
+
+                        <p id="countin_detail"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="fa fa-chevron-left"></i> Trở lại
                 </button>
             </div>
         </div>
@@ -312,8 +361,10 @@
 </div>
 <!-- SCRIPTS-->
 @section scripts{
-    <script type="text/javascript">  
-        $(function () {
+    <script type="text/javascript">
+        var thumbSrc = "";
+        $(document).ready(function () {        
+            GetListBook();
             //Cấu hình toasts
             toastr.options = {
                 "closeButton": true,
@@ -331,7 +382,7 @@
                 "hideEasing": "linear",
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
-            }  
+            }
             //cấu hình chosen framework
             $("#Add_author").chosen({
                 no_results_text: "Không tìm thấy tác giả",
@@ -346,113 +397,59 @@
             $("#Add_status").chosen({
                 disable_search: true
             });
-        });
-        //Chọn file ảnh
-        $('#Add_thumb').on('click', function () {
-            $('#Add_Thumb_hide').click();
-        });
-        var thumbSrc = ""
-        $('#Add_Thumb_hide').on('change', function (e) {
-            //lấy file
-            var fff = e.target.files;
-            var no_files = 0;
-            if (fff !== undefined)
-                no_files = fff.length;           
+            //Chọn file ảnh
+            $('#Add_thumb').on('click', function () {
+                $('#Add_Thumb_hide').click();
+            });
+            $('#Add_Thumb_hide').on('change', function (e) {
+                //lấy file
+                var fff = e.target.files;
+                var no_files = 0;
+                if (fff !== undefined)
+                    no_files = fff.length;
 
-            $('#Add_thumb').empty();
-            $('#Add_thumb').text(fff[no_files - 1].name);
+                $('#Add_thumb').empty();
+                $('#Add_thumb').text(fff[no_files - 1].name);
 
-            // Resize ảnh
-            const resize_width = 600;
-            const item = fff[no_files -1];
-            const reader = new FileReader();
-            reader.readAsDataURL(item);
-            reader.name = item.name;
-            reader.size = item.size;
-            reader.onload = function (event) {
-                const img = new Image();
-                img.src = event.target.result;
-                img.name = event.target.name;
-                img.size = event.target.size;
-                img.onload = function (el) {
-                    const elem = document.createElement('canvas');
-                    const scaleResize = resize_width / el.target.width;
-                    elem.width = resize_width;
-                    elem.height = el.target.height * scaleResize;
-                    const ctx = elem.getContext('2d');
-                    ctx.drawImage(el.target, 0, 0, elem.width, elem.height);
-                    const srcEncoded = ctx.canvas.toDataURL('image/jpeg', 1);     
+                // Resize ảnh
+                const resize_width = 600;
+                const item = fff[no_files - 1];
+                const reader = new FileReader();
+                reader.readAsDataURL(item);
+                reader.name = item.name;
+                reader.size = item.size;
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.name = event.target.name;
+                    img.size = event.target.size;
+                    img.onload = function (el) {
+                        const elem = document.createElement('canvas');
+                        const scaleResize = resize_width / el.target.width;
+                        elem.width = resize_width;
+                        elem.height = el.target.height * scaleResize;
+                        const ctx = elem.getContext('2d');
+                        ctx.drawImage(el.target, 0, 0, elem.width, elem.height);
+                        const srcEncoded = ctx.canvas.toDataURL('image/jpeg', 1);
 
-                    thumbSrc = srcEncoded;
+                        thumbSrc = srcEncoded;
+                    }
                 }
-            }          
-            ///            
-        });
-        //Tuỳ chỉnh datetime picker
-        $(function () {
+                ///
+            });
+            //Tuỳ chỉnh datetime picker
             $('#Add_pubDate').datepicker({
                 format: "yyyy",
                 viewMode: "years",
                 minViewMode: "years",
                 autoclose: true
             });
-        });   
-        //AJAX gửi dữ liệu tới controller
-        function SaveBook() {
-            document.getElementById("Add_long").value = quillEditor.root.innerHTML;           
-            var bookData = {
-                _id: $('#Add_id').val(),
-                status: $('#Add_status').val(),
-                title: $('#Add_title').val(),
-                author_temp: $('#Add_author').val(),
-                categories_temp: $('#Add_cate').val(),
-                shortDescription: $('#Add_short').val(),
-                longDescription: $('#Add_long').val(),
-                count: $('#Add_count').val(),
-                count_in: $('#Add_countIn').val(),
-                publishedDate: $('#Add_pubDate').val(),
-                thumbnailUrl: thumbSrc
-            }         
-            $.ajax({
-                url: "/Admin/ql_Sach/Create_Edit",
-                data: JSON.stringify(bookData),
-                type: "POST",
-                contentType: "application/json;charset=utf-8",
-                dataType: "json",
-                success: function (res) {
-                    if (res.status != null) {
-                        {
-                            if (res.status == "ADD_OK") {
-                                $('#ModalCancel').click();                                
-                                toastr["success"]("Thêm mới sách: " + bookData.title + " thành công!", "Thêm mới thành công");    
-                                $("#body_build").load(" #body_build > *");
-                                //window.location.reload(true);
-                            }
-                            if (res.status == "EDIT_OK") {
-                                $('#ModalCancel').click();
-                                $("#body_build").load(" #body_build > *");
-                                toastr["success"]("Sửa thông tin sách: " + bookData.title + " thành công!", "Sửa thông tin thành công");                                
-                            }
-                            if (res.status == "ADD_FALSE") {
-                                toastr["warning"]("Sách: " + bookData.title + " đã có trong hệ thống!", "Thêm mới thất bại");
-                            }
-                            if (res.status == "EDIT_FALSE") {
-                                toastr["warning"]("Sách: " + bookData.title + " đã có trong hệ thống!", "Sửa thông tin thất bại");                              
-                            }
-                            if (res.status == "NO_INPUT_DATA") {                             
-                                toastr["error"](res.propery + " chưa được nhập!", "Lưu thất bại");                               
-                            }
-                        }
-                    }
-                },
-                error: function () {
-                    alert("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang.");
-                    toastr["error"]("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Lỗi");                    
-                }
-            });
-        };
+        });              
         //Setup edit modal
-        function GetBook(id) {
+        $(document).on("click", ".link-edit", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            document.getElementById('Add_Edit_BookModal_title').innerHTML = "Sửa thông tin sách";
             $.ajax({
                 type: "GET",
                 url: "/Admin/ql_Sach/GetBook/" + id,
@@ -476,9 +473,11 @@
                     $('#Add_Edit_BookModal').modal('show');
                 }
             })
-        };
+        });
         //setup create modal
-        function ClearModal() {
+        $(document).on("click", "#link-add", function (e) {
+            e.preventDefault();
+            document.getElementById('Add_Edit_BookModal_title').innerHTML = "Thêm mới sách"
             $('#Add_id').val("");
             $('#Add_status').val("Còn sách").trigger('chosen:updated');
             $('#Add_title').val("");
@@ -495,10 +494,11 @@
             $('#Add_thumb').text("");
             $('#Add_Thumb_hide').val("");
             $('#Add_Edit_BookModal').modal('show');
-
-        };
+        });
         //Setup delete modal
-        function GetBookDelete(id) {
+        $(document).on("click", ".link-delete", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
             $.ajax({
                 type: "GET",
                 url: "/Admin/ql_Sach/GetBookDelete/" + id,
@@ -513,7 +513,33 @@
                     $('#Delete_Modal').modal('show');
                 }
             })
-        };
+        });
+        //Detail book
+        $(document).on("click", ".link-detail", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_Sach/GetBookDelete/" + id,
+                dataType: "json",
+                success: function (res) {
+                    document.getElementById('image_detail').src = res.thumbnailUrl;
+                    document.getElementById('avatat_author').src = res.thumbnailUrl;
+                    $('#title_detail').text(res.title);
+                    $('#name_author').html("<strong>Tác giả: </strong>" + res.author_temp.join(', '));
+                    $('#name_cate').html("<strong>Thể loại: </strong>" + res.categories_temp.join(', '));
+                    $('#des_short').html("<strong>Giới thiệu: </strong>" + res.shortDescription);
+                    $('#date_detail').html("<strong>Năm xuất bản: </strong>" + res.publishedDate);
+                    $('#count_detail').html("<strong>Tổng số sách: </strong>" + res.count);
+                    $('#countin_detail').html("<strong>Số sách còn tại thư viện: </strong>" + res.count_in);
+
+                    document.getElementById("des_long").innerHTML = "<p><strong>Giới thiệu chi tiết: </strong></p>";
+                    document.getElementById("des_long").innerHTML += res.longDescription;
+
+                    $('#Detail_BookModal').modal('show');
+                }
+            })
+        });       
         //Delete book
         function DeleteBook() {
             var id = document.getElementById("D_ID").innerHTML;
@@ -522,18 +548,142 @@
                 url: "/Admin/ql_Sach/Delete/" + id,
                 dataType: "json",
                 success: function (res) {
-                    if (res.status == "DELETE_OK") {                                      
+                    if (res.status == "DELETE_OK") {
                         //window.location.reload(true);
-                        $("#body_build").load(" #body_build > *");
+                        //$("#body_build").load(" #body_build > *");
                         toastr["success"]("Sách đã được xoá!", "Xoá thành công");
-                        
+                        GetListBook();
+
 
                     }
-                    if (res.status == "DELETE_FALSE") {                       
-                        toastr["error"]("Xoá thất bại. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Xoá thất bại");   
+                    if (res.status == "DELETE_FALSE") {
+                        toastr["error"]("Xoá thất bại. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Xoá thất bại");
                     }
                 }
             })
+        };     
+        //Save Book Add - Edit
+        function SaveBook() {
+            document.getElementById("Add_long").value = quillEditor.root.innerHTML;
+            var bookData = {
+                _id: $('#Add_id').val(),
+                status: $('#Add_status').val(),
+                title: $('#Add_title').val(),
+                author_temp: $('#Add_author').val(),
+                categories_temp: $('#Add_cate').val(),
+                shortDescription: $('#Add_short').val(),
+                longDescription: $('#Add_long').val(),
+                count: $('#Add_count').val(),
+                count_in: $('#Add_countIn').val(),
+                publishedDate: $('#Add_pubDate').val(),
+                thumbnailUrl: thumbSrc
+            }
+            $.ajax({
+                url: "/Admin/ql_Sach/Create_Edit",
+                data: JSON.stringify(bookData),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    if (res.status != null) {
+                        {
+                            if (res.status == "ADD_OK") {
+                                $('#ModalCancel').click();
+                                toastr["success"]("Thêm mới sách: " + bookData.title + " thành công!", "Thêm mới thành công");
+                                //window.location.reload(true);
+                                GetListBook();
+                            }
+                            if (res.status == "EDIT_OK") {
+                                $('#ModalCancel').click();
+                                //$("#body_build").load(" #body_build > *");
+                                toastr["success"]("Sửa thông tin sách: " + bookData.title + " thành công!", "Sửa thông tin thành công");
+                                GetListBook();
+                            }
+                            if (res.status == "ADD_FALSE") {
+                                toastr["warning"]("Sách: " + bookData.title + " đã có trong hệ thống!", "Thêm mới thất bại");
+                            }
+                            if (res.status == "EDIT_FALSE") {
+                                toastr["warning"]("Sách: " + bookData.title + " đã có trong hệ thống!", "Sửa thông tin thất bại");
+                            }
+                            if (res.status == "NO_INPUT_DATA") {
+                                toastr["error"](res.propery + " chưa được nhập!", "Lưu thất bại");
+                            }
+                        }
+                    }
+                },
+                error: function () {
+                    alert("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang.");
+                    toastr["error"]("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Lỗi");
+                }
+            });
         };
+        //Start datatable        
+        const tableNew = document.querySelector('#table1');
+        let dataTableNew = null;
+        function GetListBook() {
+            $('#_TBODY').html("");      
+                $.ajax({
+                    type: "GET",
+                    url: "/Admin/ql_Sach/GetListBook",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (res) {
+                        var html = '';
+                        $.each(res, function (key, item) {
+                            //lấy tên tác giả
+                            var i = 0;
+                            var authorName = '';
+                            $.each(item.author_temp, function (keyA, itemA) {
+                                if (i == 2) {
+                                    authorName += '<p>' + itemA + ' ...</p>';
+                                    return false;
+                                }
+                                else
+                                    authorName += '<p>' + itemA + '</p>';
+                                i += 1;
+                            });
+                            //lấy tên thể loại
+                            i = 0;
+                            var cateName = '';
+                            $.each(item.categories_temp, function (keyA, itemC) {
+                                if (i == 2) {
+                                    cateName += '<p>' + itemC + ' ...</p>';
+                                    return false;
+                                }
+                                else
+                                    cateName += '<p>' + itemC + '</p>';
+                                i += 1;
+                            });
+                            //
+                            html += '<tr style="text-algin: center;">';
+                            html += '<td style="width: 200px;"><p>' + item.title + '</p></td>';
+                            html += '<td style="white-space: nowrap">' + authorName + '</td>';
+                            html += '<td style="width:150px; white-space: nowrap">' + cateName + '</td>';
+                            html += '<td style="max-width: 400px;"><p>' + item.shortDescription + '</p></td>';
+                            html += '<td><p>' + item.count_in + '</p></td>';
+                            html += '<td><img src="' + item.thumbnailUrl + '" style="height: 75px; width: 75px;" /></td>';
+                            if (item.status == 'Còn sách')
+                                html += '<td><span class="badge bg-success">Còn sách</span></td>';
+                            if (item.status == 'Hết sách')
+                                html += '<td><span class="badge bg-danger">Hết sách</span></td>';
+                            if (item.status == 'Chưa cập nhật')
+                                html += '<td><span class="badge bg-light">Chưa cập nhật</span></td>';
+                            html += '<td class="link-action" style="min-width:135px; width: 135px;">';
+                            var idItem = "'" + item._id + "'";
+                            html += '<a class="link-edit" data-id="' + item._id + '"><i class="fa fa-edit"></i> Sửa</a><br />';
+                            html += '<a class="link-delete" data-id="' + item._id + '"><i class="fa fa-trash"></i> Xoá</a><br />';
+                            html += '<a class="link-detail" data-id="' + item._id + '"><i class="fa fa-info-circle"></i> Chi tiết</a>';
+                            html += '</td >';
+                            html += '</tr>';
+                        });
+                        $('#_TBODY').html(html);
+
+                        dataTableNew = new simpleDatatables.DataTable(tableNew, {
+                            perPage: 10,
+                            paging: true
+                        });                       
+                }
+                });           
+        }
     </script>
 }

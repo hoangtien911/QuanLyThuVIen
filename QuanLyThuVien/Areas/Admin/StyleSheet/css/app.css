@@ -1638,38 +1638,91 @@ footer {
 }
     .link-action a {
         font-weight: bold;
-    }        
+    }
 
 .link-edit {
     color: darkgoldenrod !important;
+    cursor: pointer;
 }
 
 .link-delete {
-    color: crimson !important;    
+    color: crimson !important;
+    cursor: pointer;
 }
 
 .link-detail {
     color: Highlight !important;
+    cursor: pointer;
 }
 
 .link-edit:hover {
     color: darkgoldenrod !important;
     box-shadow: 0 2px;
-    padding: 2px;
-    
+    padding: 2px;   
 }
 
 .link-delete:hover {
     color: crimson !important;
     box-shadow: 0 2px;
-    padding: 2px;
+    padding: 2px; 
 }
 
 .link-detail:hover {
     color: Highlight !important;
     box-shadow: 0 2px;
-    padding: 2px;
+    padding: 2px;   
 }
 .hide{
     display: none !important
+}
+.img_Detail{
+    width: 100%;
+    padding: 20% 0;
+}
+.title_Detail {
+    font-family: serif;
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+.name_Author {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+    line-height: 50px;
+}
+.avatar_Author {
+    max-width: 50px;
+    max-height: 50px;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -25px;
+    border-radius: 50%;
+}
+.name_Cate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+}
+
+.ql-editor img{
+    max-width: 500px;
+}
+.col-7 .ql-editor {
+    padding: 0;
+    box-sizing: unset;
+    line-height: 2;
+    height: auto;
+    overflow-y: unset;
+    padding: 0;
+    tab-size: 1;
+    text-align: left;
+    white-space: unset;
+    word-wrap: unset;
 }

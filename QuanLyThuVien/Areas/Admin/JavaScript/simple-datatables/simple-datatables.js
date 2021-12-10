@@ -1128,7 +1128,7 @@
                             if (e.searchable) {
                                 const t = `<div class='dataTable-search form-group position-relative has-icon-right' style='width: 500px;'>
                                                 <input type='text' class='dataTable-input form-control' placeholder='${e.labels.placeholder}'>
-                                                <div class='form-control-icon'><i data-feather='search'></i></div>
+                                                <div class='form-control-icon'><i class='fa fa-search'></i></div>
                                            </div>`;                              
                                 s = s.replace("{search}", t);
                             } else s = s.replace("{search}", "");

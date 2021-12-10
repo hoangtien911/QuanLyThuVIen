@@ -12,15 +12,47 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         /* Controller Quản lý sách
          * 
          * 1. Danh sách sách
-         * 2. Thêm mới sách
-         * 3. Sửa thông tin sách
-         * 4. Xoá sách
-         * 5. Chi tiết sách
+         * 2. Thêm mới và sửa sách
+         * 3. Lấy thông tin sách cần xoá
+         * 4. Lấy thông tin sách cần sửa
+         * 5. Xoá sách
          * 6. Lấy danh sách tác giả
          * 7. Lấy danh sách thể loại
          */
 
         //1. Danh sách sách
+        [HttpGet]
+        public JsonResult GetListBook()
+        {
+            if (!Data_Books.UpdateCount)
+                Data_Books.GetAllData();
+            //lấy tên sách và tên thể loại theo id
+            foreach (var book in Data_Books.BooksList)
+            {
+                if (book.authors != null)
+                {
+                    book.author_temp = book.authors.Split(',');
+                    string[] authorName = new string[book.author_temp.Length];
+                    for (int i = 0; i < book.author_temp.Length; i++)
+                    {
+                        authorName[i] = Data_Authors.GetSingleData(book.author_temp[i]).name;
+                    }
+                    book.author_temp = authorName;
+                }
+
+                if (book.categories != null)
+                {
+                    book.categories_temp = book.categories.Split(',');
+                    string[] cateName = new string[book.categories_temp.Length];
+                    for (int i = 0; i < book.categories_temp.Length; i++)
+                    {
+                        cateName[i] = Data_Categories.GetSingleData(book.categories_temp[i]).name;
+                    }
+                    book.categories_temp = cateName;
+                }
+            }
+            return Json(Data_Books.BooksList, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult ListBooks(string message)
         {
             if (!Data_Books.UpdateCount)
@@ -166,13 +198,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 return Json(new { status = "DELETE_FALSE" });
             }
             
-        }
-        //5. Chi tiết sách
-        [HttpGet]
-        public ActionResult Detail(string id)
-        {
-            return View(Data_Books.GetSingleData(id));
-        }
+        }       
         //6. Lấy danh sách tác giả
         public List<Author> getAuthor()
         {

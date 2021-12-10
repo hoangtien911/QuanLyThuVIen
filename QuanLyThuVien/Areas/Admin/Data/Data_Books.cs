@@ -31,11 +31,6 @@ namespace QuanLyThuVien.Areas.Admin.Data
          */
 
         //1. Config
-        private static string ApiKey = "AIzaSyDd-xlH3_suIqaZkcN52qLqGMoDXzyuwfM";
-        private static string Bucket = "libmanagerdatabase.appspot.com";
-        private static string AuthEmail = "htienictu@gmail.com";
-        private static string AuthPassword = "htienictu";
-
         private static IFirebaseClient client;
         private static IFirebaseConfig config = new FireSharp.Config.FirebaseConfig
         {
@@ -104,17 +99,17 @@ namespace QuanLyThuVien.Areas.Admin.Data
             if(!CheckBook(book, ""))
             {
                 return false;
-            }            
+            }
             //
+            client = new FireSharp.FirebaseClient(config);
+            PushResponse response = client.Push("Books/", book);
+            book._id = response.Result.name;
             Thread t1 = new Thread(() =>
             {
                 BooksList.Insert(0,book);
             });
             Thread t2 = new Thread(() =>
-            {
-                client = new FireSharp.FirebaseClient(config);
-                PushResponse response = client.Push("Books/", book);
-                book._id = response.Result.name;
+            {             
                 client.Set("Books/" + book._id, book);
             });            
             t1.Start();

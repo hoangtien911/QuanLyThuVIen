@@ -628,7 +628,6 @@
     <Content Include="Areas\Admin\JavaScript\toats\toastr.min.css" />
     <Content Include="Areas\Admin\JavaScript\toats\toastr.min.js" />
     <Content Include="Areas\Admin\JavaScript\vendors.js" />
-    <Content Include="Areas\Admin\StyleSheet\css\all.css" />
     <Content Include="Areas\Admin\StyleSheet\css\app.css" />
     <Content Include="Areas\Admin\StyleSheet\css\bootstrap.css" />
     <Content Include="Areas\Admin\StyleSheet\fontawesome-free-5.15.4-web\attribution.js" />
@@ -2547,8 +2546,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Areas\Admin\Views\ql_Sach\ListBooks.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_Sach\Detail.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_Sach\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ql_NguoiDung\ListUser.cshtml" />
     <Content Include="Areas\Admin\Views\ql_NguoiDung\Create.cshtml" />
     <Content Include="Areas\Admin\Views\ql_NguoiDung\Edit.cshtml" />

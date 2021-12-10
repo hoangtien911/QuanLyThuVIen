@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/vendors/simple-datatables/style.css">
     <link rel="stylesheet" href="~/Areas/Admin/JavaScript/choices.js/chosen.css">
     <link rel="stylesheet" href="~/Areas/Admin/JavaScript/quill/quill.snow.css">
-    <link rel="stylesheet" href="~/Areas/Admin/JavaScript/quill/quill.bubble.css">
     <link rel="stylesheet" href="~/Areas/Admin/JavaScript/datepicker/datepicker.css">
     <link rel="stylesheet" href="~/Areas/Admin/JavaScript/toats/toastr.min.css">   
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/fontawesome-free-5.15.4-web/css/all.css">
@@ -35,10 +34,14 @@
                         <!---->
                         <li class='sidebar-title'>Quản lý</li>
                         <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_Sach" ? "active" : "")">
-                            <a href="index.html" class='sidebar-link'>
-                                <i data-feather="book" width="20"></i>
-                                <span>Quản lý sách</span>
+                            <a href="@Url.Action("ListBooks","ql_Sach")" class='sidebar-link' style="font-weight: bold;">
+                                <i class="fas fa-book" style="margin-right: 20px"></i> Quản lý sách
                             </a>
+                        </li>
+                        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TacGia" ? "active" : "")">
+                        <a href="@Url.Action("ListAuthor","ql_TacGia")" class='sidebar-link' style="font-weight: bold;">
+                            <i class="fas fa-address-book" style="margin-right: 20px"></i> Quản lý tác giả
+                        </a>
                         </li>
                         <!---->
                         <li class='sidebar-title'>Forms &amp; Tables</li>
@@ -296,7 +299,7 @@
     <script src="~/Areas/Admin/JavaScript/quill/quill.js"></script>
     <script src="~/Areas/Admin/JavaScript/toats/toastr.min.js"></script>
     <!-- Custom JS -->
-    <script src="~/Areas/Admin/JavaScript/vendors.js"></script>
+    @*<script src="~/Areas/Admin/JavaScript/vendors.js"></script>*@
     <script src="~/Areas/Admin/JavaScript/main.js"></script>
     <script src="~/Areas/Admin/JavaScript/app.js"></script>
     <script src="~/Areas/Admin/JavaScript/pages/form-editor.js"></script>

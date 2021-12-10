@@ -190,4 +190,3 @@ E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\bin\Firebase.Auth.dll
 E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\bin\Firebase.Storage.dll
 E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\bin\System.Diagnostics.DiagnosticSource.dll
 E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\bin\System.Diagnostics.DiagnosticSource.xml
-E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.csprojAssemblyReference.cache
