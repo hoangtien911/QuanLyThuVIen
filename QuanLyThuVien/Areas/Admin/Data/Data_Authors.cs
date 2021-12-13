@@ -33,8 +33,7 @@ namespace QuanLyThuVien.Areas.Admin.Data
         private static IFirebaseClient client = new FireSharp.FirebaseClient(config);
         //2. Biến dữ liệu
         public static bool UpdateCount = false;
-        public static List<Author> AuthorsList = new List<Author>();
-      
+        public static List<Author> AuthorsList = new List<Author>();      
         //3, Lấy tất cả dữ liệu tác giả
         public static List<Author> GetAllData()
         {           

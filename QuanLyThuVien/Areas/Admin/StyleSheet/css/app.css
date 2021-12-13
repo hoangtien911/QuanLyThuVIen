@@ -1748,3 +1748,24 @@ footer {
     font-size: 1rem;
     font-weight: bold;
 }
+.border_Text_cate {
+    display: flex;
+    margin-top: -13px;
+    margin-left: 418px;
+    margin-bottom: -11px;
+    background: #fff;
+    margin-right: 444px;
+    padding: 0 11px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+.img_cate {
+    object-fit: cover;
+    width: 300px;
+    height: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1rem solid #cbcbcb;
+    border-radius: 30px;
+}

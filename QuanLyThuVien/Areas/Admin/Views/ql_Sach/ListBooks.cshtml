@@ -17,14 +17,14 @@
         </div>
     </div>
 </div>
-
+<!-- Datatable-->
 <section class="section">
     <div class="card">
         <div class="card-header row" style="margin-bottom: 10px;">
             <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #fff;">@ViewBag.Title</h3>
             <div class="col-6 d-flex justify-content-end">
                 <a class="btn icon icon-left btn-primary" id="link-add" style="font-weight: bold; width: 200px; background-color:#0097ff; border-color: #fff">
-                    <i class="fa fa-plus-square"></i> Thêm mới
+                    <i class="fal fa-plus-square"></i> Thêm mới
                 </a>
             </div>
         </div>
@@ -48,7 +48,6 @@
         </div>
     </div>
 </section>
-
 <!-- CREATE-EDIT MODAL -->
 <div class="modal fade text-left w-100" id="Add_Edit_BookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
@@ -192,7 +191,7 @@
                     <i class="fa fa-times"></i> Huỷ
                 </button>
                 <button name="SaveBook" type="button" class="btn btn-primary ml-1" onclick="SaveBook()">
-                    <i class="fa fa-save"></i> Lưu
+                    <i class="fal fa-save"></i> Lưu
                 </button>
             </div>
         </div>
@@ -590,9 +589,9 @@
                             html += '<td><span class="badge bg-light">Chưa cập nhật</span></td>';
                         html += '<td class="link-action" style="min-width:135px; width: 135px;">';
                         var idItem = "'" + item._id + "'";
-                        html += '<a class="link-edit" data-id="' + item._id + '"><i class="fa fa-edit"></i> Sửa</a><br />';
-                        html += '<a class="link-delete" data-id="' + item._id + '"><i class="fa fa-trash"></i> Xoá</a><br />';
-                        html += '<a class="link-detail" data-id="' + item._id + '"><i class="fa fa-info-circle"></i> Chi tiết</a>';
+                        html += '<a class="link-edit" data-id="' + item._id + '"><i class="fal fa-pencil-alt"></i> Sửa</a><br />';
+                        html += '<a class="link-delete" data-id="' + item._id + '"><i class="far fa-trash-alt"></i> Xoá</a><br />';
+                        html += '<a class="link-detail" data-id="' + item._id + '"><i class="fal fa-info-circle"></i> Chi tiết</a>';
                         html += '</td >';
                         html += '</tr>';
                     });

@@ -32,12 +32,17 @@
                         <li class='sidebar-title'>Quản lý</li>
                         <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_Sach" ? "active" : "")">
                             <a href="@Url.Action("ListBooks","ql_Sach")" class='sidebar-link'>
-                                <i class="fas fa-book" style="margin-right: 20px"></i> Quản lý sách
+                                <i class="far fa-book" style="margin-right: 20px"></i> Quản lý sách
                             </a>
                         </li>
                         <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TacGia" ? "active" : "")">
                             <a href="@Url.Action("ListAuthor","ql_TacGia")" class='sidebar-link'>
-                                <i class="fas fa-address-book" style="margin-right: 20px"></i> Quản lý tác giả
+                                <i class="far fa-address-book" style="margin-right: 20px"></i> Quản lý tác giả
+                            </a>
+                        </li>
+                        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TheLoai" ? "active" : "")">
+                            <a href="@Url.Action("ListCategories","ql_TheLoai")" class='sidebar-link'>
+                                <i class="fal fa-book-spells" style="margin-right: 20px"></i> Quản lý thể loại
                             </a>
                         </li>
                         <!---->

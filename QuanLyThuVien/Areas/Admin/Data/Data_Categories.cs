@@ -19,10 +19,12 @@ namespace QuanLyThuVien.Areas.Admin.Data
          * 4. Lấy dữ liệu 1 thể loại theo id
          * 5. Thêm mới 1 thể loại
          * 6. Sửa thông tin 1 thể loại
-         * 7. Xoá 1 thể loại        
+         * 7. Xoá 1 thể loại      
+         * 8. Kiểm tra thể loại đã tồn tại hay chưa
+         * 9. Kiểm tra dữ liệu
          */
-        //1. Config
-       
+
+        //1. Cấu hình
         private static IFirebaseConfig config = new FirebaseConfig
         {
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
@@ -38,16 +40,20 @@ namespace QuanLyThuVien.Areas.Admin.Data
             FirebaseResponse response = client.Get("Categories");
             Dictionary<string, Categories> data = JsonConvert.DeserializeObject<Dictionary<string, Categories>>(response.Body.ToString());
 
-            foreach (var item in data)
+
+            for (int i = data.Count - 1; i >= 0; i--)
             {
+                var item = data.ElementAt(i);
                 Categories categories = new Categories();
                 categories.id = item.Value.id;
                 categories.name = item.Value.name;
                 categories.shortDescription = item.Value.shortDescription;
                 categories.longDescription = item.Value.longDescription;
                 categories.image = item.Value.image;
+                CheckData(categories);
                 CategoriesList.Add(categories);
             }
+           
             UpdateCount = true;
             return CategoriesList;
         }
@@ -58,11 +64,15 @@ namespace QuanLyThuVien.Areas.Admin.Data
             if (!UpdateCount)
             {
                 GetAllData();
-            }         
-            int index = CategoriesList.FindIndex(cate => cate.id.Equals(id));
-            if (index < 0)
-                index = 0;
-            data = CategoriesList.ElementAt(index);
+                FirebaseResponse response = client.Get("Categories/" + id);
+                data = JsonConvert.DeserializeObject<Categories>(response.Body);
+            }
+            else
+            {
+                int index = CategoriesList.FindIndex(cate => cate.id.Equals(id));
+                data = CategoriesList.ElementAt(index);
+            }
+           
             return data;
         }
         //5. Thêm mới 1 thể loại
@@ -72,22 +82,17 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 GetAllData();
             }
-            foreach (var item in CategoriesList)
-            {
-                if (categories.name.Equals(item.name))
-                {
-                    return false;
-                }
-            }
+            if (!CheckCategories(categories, ""))
+                return false;
+            CheckData(categories);
+            PushResponse response = client.Push("Categories/", categories);
+            categories.id = response.Result.name;
             Thread t1 = new Thread(() =>
             {
-                CategoriesList.Add(categories);
+                CategoriesList.Insert(0,categories);
             });
             Thread t2 = new Thread(() =>
-            {
-                client = new FireSharp.FirebaseClient(config);
-                PushResponse response = client.Push("Categories/", categories);
-                categories.id = response.Result.name;
+            {                              
                 client.Set("Categories/" + categories.id, categories);
             });
             t1.Start();
@@ -105,6 +110,9 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 if (categories.id.Equals(item.id))
                 {
+                    if (!CheckCategories(categories, categories.id))
+                        return false;
+                    CheckData(categories);
                     Thread t1 = new Thread(() =>
                     {
                         client = new FireSharp.FirebaseClient(config);
@@ -123,7 +131,7 @@ namespace QuanLyThuVien.Areas.Admin.Data
             }
             return false;
         }
-        //Xoá 1 thể loại
+        //7. Xoá 1 thể loại
         public static bool DeleteData(string id)
         {
             if (!UpdateCount)
@@ -151,6 +159,31 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 }
             }
             return false;
+        }
+        //8. Kiểm tra thể loại đã tồn tại hay chưa
+        private static bool CheckCategories(Categories cate, string id)
+        {
+            foreach (var item in CategoriesList)
+            {
+                if (cate.name.Equals(item.name))
+                {
+                    if (item.id == id)
+                    {
+                        continue;
+                    }
+                    else
+                        return false;
+                }
+            }
+            return true;
+        }
+        //9. Kiểm tra dữ liệu
+        private static void CheckData(Categories cate)
+        {
+            if (cate.shortDescription == null)
+                cate.shortDescription = "Không có thông tin.";
+            if (cate.longDescription == null)
+                cate.longDescription = "Không có thông tin.";           
         }
     }
 }

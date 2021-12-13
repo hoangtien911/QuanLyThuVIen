@@ -10,64 +10,61 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         * 
         * 1. Danh sách thể loại
         * 2. Thêm mới thể loại
-        * 3. Sửa thông tin thể loại
-        * 4. Xoá thể loại
-        * 5. Chi tiết thể loại         
+        * 3. Lấy 1 thể loại
+        * 4. Xoá thể loại       
         */
         //1. Danh sách thể loại
-        public ActionResult ListCategories(string message)
-        {          
+        public ActionResult ListCategories()
+        {
+            return View();
+        }
+        public JsonResult GetListCate()
+        {
             if (!Data_Categories.UpdateCount)
+                Data_Categories.GetAllData();
+            return Json(Data_Categories.CategoriesList, JsonRequestBehavior.AllowGet);
+        }
+        //2. Thêm mới và sửa thể loại
+        public JsonResult Create_Edit(Categories categories)
+        {
+            if (categories.name != null)
             {
-                return View(Data_Categories.GetAllData());
+                //Create
+                if (categories.id == null)
+                {
+                    if (Data_Categories.CreateData(categories))
+                        return Json(new { status = "ADD_OK" });
+                    else
+                        return Json(new { status = "ADD_FALSE" });
+                }
+                //Edit
+                else
+                {
+                    if (Data_Categories.EditData(categories))
+                        return Json(new { status = "EDIT_OK" });
+                    else
+                        return Json(new { status = "EDIT_FALSE" });
+                }
             }
             else
-            {
-                return View(Data_Categories.CategoriesList);
-            }
-        }
-        //2. Thêm mới thể loại
-        [HttpGet]
-        public ActionResult Create()
-        {          
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Create(Categories categories)
+                return Json(new { status = "NO_INPUT_DATA" });
+        }      
+        //3. Lấy một thể loại
+        public JsonResult GetCategories(string id)
         {
-            if (categories.name != null)
-            {               
-                Data_Categories.CreateData(categories);
-            }
-            return View();
-        }
-        //3. Sửa thông tin thể loại
-        [HttpGet]
-        public ActionResult Edit(string id)
-        {                      
-            return View(Data_Categories.GetSingleData(id));
-        }
-        [HttpPost]
-        public ActionResult Edit(Categories categories)
-        {
-            if (categories.name != null)
-            {
-                Data_Categories.EditData(categories);
-                return RedirectToAction("ListCategories");
-            }          
-            return View();          
+            Categories categories = Data_Categories.GetSingleData(id);
+            if (categories != null)
+                return Json(categories, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
         }
         //4. Xoá thông tin thể loại
         public ActionResult Delete(string id)
         {
-            Data_Categories.DeleteData(id);
-            return RedirectToAction("ListCategories");
-        }
-        //5. Chi tiết thể loại
-        [HttpGet]
-        public ActionResult Detail(string id)
-        {
-            return View(Data_Categories.GetSingleData(id));
-        }
+            if (Data_Categories.DeleteData(id))
+                return Json(new { status = "DELETE_OK" });
+            else
+                return Json(new { status = "DELETE_FALSE" });
+        }       
     }
 }

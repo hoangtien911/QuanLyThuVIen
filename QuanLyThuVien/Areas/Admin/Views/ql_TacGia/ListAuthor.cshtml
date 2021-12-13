@@ -17,14 +17,14 @@
         </div>
     </div>
 </div>
-
+<!-- Datatable-->
 <section class="section">
     <div class="card">
         <div class="card-header row" style="margin-bottom: 10px;">
             <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #fff;">@ViewBag.Title</h3>
             <div class="col-6 d-flex justify-content-end">
                 <a class="btn icon icon-left btn-primary" id="link-add" style="font-weight: bold; width: 200px; background-color:#0097ff; border-color: #fff">
-                    <i class="fa fa-plus-square"></i> Thêm mới
+                    <i class="fal fa-plus-square"></i> Thêm mới
                 </a>
             </div>
         </div>
@@ -128,7 +128,7 @@
                     <i class="fa fa-times"></i> Huỷ
                 </button>
                 <button name="SaveBook" type="button" class="btn btn-primary ml-1" onclick="SaveAuthor()">
-                    <i class="fa fa-save"></i> Lưu
+                    <i class="fal fa-save"></i></i> Lưu
                 </button>
             </div>
         </div>
@@ -323,7 +323,7 @@
                 }
             })
         });
-        //Detail book
+        //Setup detail modal
         $(document).on("click", ".link-detail", function (e) {
             e.preventDefault();
             var id = $(this).data("id");
@@ -343,7 +343,7 @@
                 }
             })
         })
-        //Delete book
+        //Delete
         function DeleteAuthor() {
             var id = document.getElementById("D_ID").innerHTML;
             $.ajax({
@@ -362,7 +362,7 @@
                 }
             });
         };
-        //Save Book Add - Edit
+        //Add - Edit
         function SaveAuthor() {
             document.getElementById("Add_note").value = quillEditor.root.innerHTML;
             var authorData = {
@@ -429,9 +429,9 @@
                         html += '<td style="white-space: nowrap"><p>' + item.website + '</p></td>';
                         html += '<td><p><img src="' + item.avatar + '" style="height: 75px; width: 75px; object-fit: cover;" /></p></td>';
                         html += '<td class="link-action" style="min-width:135px; width: 135px;">';
-                        html += '<a class="link-edit" data-id="' + item.id + '"><i class="fa fa-edit"></i> Sửa</a><br />';
-                        html += '<a class="link-delete" data-id="' + item.id + '"><i class="fa fa-trash"></i> Xoá</a><br />';
-                        html += '<a class="link-detail" data-id="' + item.id + '"><i class="fa fa-info-circle"></i> Chi tiết</a>';
+                        html += '<a class="link-edit" data-id="' + item.id + '"><i class="fal fa-pencil-alt"></i> Sửa</a><br />';
+                        html += '<a class="link-delete" data-id="' + item.id + '"><i class="far fa-trash-alt"></i> Xoá</a><br />';
+                        html += '<a class="link-detail" data-id="' + item.id + '"><i class="fal fa-info-circle"></i> Chi tiết</a>';
                         html += '</td >';
                         html += '</tr>';
                     });
