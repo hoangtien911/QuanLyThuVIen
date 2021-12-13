@@ -44,86 +44,6 @@
                 </thead>
                 <tbody id="_TBODY">
                 </tbody>
-                @*<tbody>
-                        @foreach (var item in ViewBag.BooksList)
-                        {
-                            <tr>
-                                <td style="width: 200px;">
-                                    <p>@item.title</p>
-                                </td>
-                                <td style="white-space: nowrap">
-                                    @{
-                                        int i = 0;
-                                        foreach (var authorName in item.author_temp)
-                                        {
-                                            if (i == 2)
-                                            {
-                                                <p>@authorName ...</p>
-                                                break;
-                                            }
-                                            <p>@authorName</p>
-                                            i++;
-                                        }
-                                    }
-                                </td>
-                                <td style="width:150px; white-space: nowrap">
-                                    @{
-                                        i = 0;
-                                        foreach (var cateName in item.categories_temp)
-                                        {
-                                            if (i == 2)
-                                            {
-                                                <p>@cateName ...</p>
-                                                break;
-                                            }
-                                            <p>@cateName</p>
-                                            i++;
-                                        }
-                                    }
-                                </td>
-                                <td style="max-width: 400px;">
-                                    <p>@item.shortDescription</p>
-                                </td>
-                                <td>
-                                    <p>@item.count_in</p>
-                                </td>
-                                <td>
-                                    <img src="@item.thumbnailUrl" style="height: 75px; width: 75px;" />
-                                </td>
-                                <td>
-                                    @switch (item.status)
-                                    {
-                                        case "Còn sách":
-                                            {
-                                                <span class="badge bg-success">Còn sách</span>
-                                                break;
-                                            }
-                                        case "Hết sách":
-                                            {
-                                                <span class="badge bg-danger">Hết sách</span>
-                                                break;
-                                            }
-                                        case "Chưa cập nhật":
-                                            {
-                                                <span class="badge bg-light">Chưa cập nhật</span>
-                                                break;
-                                            }
-                                    }
-                                </td>
-                                <td class="link-action" style="min-width:135px; width: 135px;">
-                                    <a name="edit_link" class="link-edit" onclick="GetBook('@item._id')">
-                                        <i class="fa fa-edit"></i> Sửa
-                                    </a><br />
-                                    <a name="delete_link" class="link-delete" onclick="GetBookDelete('@item._id')">
-                                        <i class="fa fa-trash"></i> Xoá
-                                    </a><br />
-                                    <a name="detail_link" class="link-detail" onclick="GetBookDetail('@item._id')">
-                                        <i class="fa fa-info-circle"></i> Chi tiết
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>*@
             </table>
         </div>
     </div>
@@ -218,7 +138,7 @@
                     <div class="row">
                         <div class="input-group" style="height: 400px">
                             <span class="input-group-text">Giới thiệu chi tiết</span>
-                            <div style="flex: 1 1 auto;">
+                            <div style="flex: 1 1 auto; width: min-content">
                                 <div id="full_editor" style="height: 358px">
                                 </div>
                                 <textarea class="hide" id="Add_long"></textarea>
@@ -265,7 +185,6 @@
                         </div>
                     </div>
                     <!---->
-                    <p style="color:firebrick">Dấu (*) là bắt buộc.</p>
                 </form>
             </div>
             <div class="modal-footer">
@@ -363,7 +282,7 @@
 @section scripts{
     <script type="text/javascript">
         var thumbSrc = "";
-        $(document).ready(function () {        
+        $(document).ready(function () {
             GetListBook();
             //Cấu hình toasts
             toastr.options = {
@@ -444,7 +363,7 @@
                 minViewMode: "years",
                 autoclose: true
             });
-        });              
+        });
         //Setup edit modal
         $(document).on("click", ".link-edit", function (e) {
             e.preventDefault();
@@ -539,7 +458,7 @@
                     $('#Detail_BookModal').modal('show');
                 }
             })
-        });       
+        });
         //Delete book
         function DeleteBook() {
             var id = document.getElementById("D_ID").innerHTML;
@@ -561,7 +480,7 @@
                     }
                 }
             })
-        };     
+        };
         //Save Book Add - Edit
         function SaveBook() {
             document.getElementById("Add_long").value = quillEditor.root.innerHTML;
@@ -617,73 +536,70 @@
                 }
             });
         };
-        //Start datatable        
-        const tableNew = document.querySelector('#table1');
-        let dataTableNew = null;
+        //Start datatable
+        var myTable = document.querySelector('#table1');
+        var dataTable = new simpleDatatables.DataTable(myTable);
         function GetListBook() {
-            $('#_TBODY').html("");      
-                $.ajax({
-                    type: "GET",
-                    url: "/Admin/ql_Sach/GetListBook",
-                    contentType: "application/json;charset=utf-8",
-                    dataType: "json",
-                    success: function (res) {
-                        var html = '';
-                        $.each(res, function (key, item) {
-                            //lấy tên tác giả
-                            var i = 0;
-                            var authorName = '';
-                            $.each(item.author_temp, function (keyA, itemA) {
-                                if (i == 2) {
-                                    authorName += '<p>' + itemA + ' ...</p>';
-                                    return false;
-                                }
-                                else
-                                    authorName += '<p>' + itemA + '</p>';
-                                i += 1;
-                            });
-                            //lấy tên thể loại
-                            i = 0;
-                            var cateName = '';
-                            $.each(item.categories_temp, function (keyA, itemC) {
-                                if (i == 2) {
-                                    cateName += '<p>' + itemC + ' ...</p>';
-                                    return false;
-                                }
-                                else
-                                    cateName += '<p>' + itemC + '</p>';
-                                i += 1;
-                            });
-                            //
-                            html += '<tr style="text-algin: center;">';
-                            html += '<td style="width: 200px;"><p>' + item.title + '</p></td>';
-                            html += '<td style="white-space: nowrap">' + authorName + '</td>';
-                            html += '<td style="width:150px; white-space: nowrap">' + cateName + '</td>';
-                            html += '<td style="max-width: 400px;"><p>' + item.shortDescription + '</p></td>';
-                            html += '<td><p>' + item.count_in + '</p></td>';
-                            html += '<td><img src="' + item.thumbnailUrl + '" style="height: 75px; width: 75px;" /></td>';
-                            if (item.status == 'Còn sách')
-                                html += '<td><span class="badge bg-success">Còn sách</span></td>';
-                            if (item.status == 'Hết sách')
-                                html += '<td><span class="badge bg-danger">Hết sách</span></td>';
-                            if (item.status == 'Chưa cập nhật')
-                                html += '<td><span class="badge bg-light">Chưa cập nhật</span></td>';
-                            html += '<td class="link-action" style="min-width:135px; width: 135px;">';
-                            var idItem = "'" + item._id + "'";
-                            html += '<a class="link-edit" data-id="' + item._id + '"><i class="fa fa-edit"></i> Sửa</a><br />';
-                            html += '<a class="link-delete" data-id="' + item._id + '"><i class="fa fa-trash"></i> Xoá</a><br />';
-                            html += '<a class="link-detail" data-id="' + item._id + '"><i class="fa fa-info-circle"></i> Chi tiết</a>';
-                            html += '</td >';
-                            html += '</tr>';
+            $('#_TBODY').html("");
+            dataTable.destroy();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_Sach/GetListBook",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var html = '';
+                    $.each(res, function (key, item) {
+                        //lấy tên tác giả
+                        var i = 0;
+                        var authorName = '';
+                        $.each(item.author_temp, function (keyA, itemA) {
+                            if (i == 2) {
+                                authorName += '<p>' + itemA + ' ...</p>';
+                                return false;
+                            }
+                            else
+                                authorName += '<p>' + itemA + '</p>';
+                            i += 1;
                         });
-                        $('#_TBODY').html(html);
-
-                        dataTableNew = new simpleDatatables.DataTable(tableNew, {
-                            perPage: 10,
-                            paging: true
-                        });                       
+                        //lấy tên thể loại
+                        i = 0;
+                        var cateName = '';
+                        $.each(item.categories_temp, function (keyA, itemC) {
+                            if (i == 2) {
+                                cateName += '<p>' + itemC + ' ...</p>';
+                                return false;
+                            }
+                            else
+                                cateName += '<p>' + itemC + '</p>';
+                            i += 1;
+                        });
+                        //
+                        html += '<tr style="text-algin: center;">';
+                        html += '<td style="width: 200px;"><p>' + item.title + '</p></td>';
+                        html += '<td style="white-space: nowrap">' + authorName + '</td>';
+                        html += '<td style="width:150px; white-space: nowrap">' + cateName + '</td>';
+                        html += '<td style="max-width: 400px;"><p>' + item.shortDescription + '</p></td>';
+                        html += '<td><p>' + item.count_in + '</p></td>';
+                        html += '<td><img src="' + item.thumbnailUrl + '" style="height: 75px; width: 75px;" /></td>';
+                        if (item.status == 'Còn sách')
+                            html += '<td><span class="badge bg-success">Còn sách</span></td>';
+                        if (item.status == 'Hết sách')
+                            html += '<td><span class="badge bg-danger">Hết sách</span></td>';
+                        if (item.status == 'Chưa cập nhật')
+                            html += '<td><span class="badge bg-light">Chưa cập nhật</span></td>';
+                        html += '<td class="link-action" style="min-width:135px; width: 135px;">';
+                        var idItem = "'" + item._id + "'";
+                        html += '<a class="link-edit" data-id="' + item._id + '"><i class="fa fa-edit"></i> Sửa</a><br />';
+                        html += '<a class="link-delete" data-id="' + item._id + '"><i class="fa fa-trash"></i> Xoá</a><br />';
+                        html += '<a class="link-detail" data-id="' + item._id + '"><i class="fa fa-info-circle"></i> Chi tiết</a>';
+                        html += '</td >';
+                        html += '</tr>';
+                    });
+                    $('#_TBODY').html(html);
+                    dataTable = new simpleDatatables.DataTable(myTable);
                 }
-                });           
+            });
         }
     </script>
 }

@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-
     <!-- CSS -->
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/css/bootstrap.css">
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/vendors/perfect-scrollbar/perfect-scrollbar.css">
@@ -14,8 +13,6 @@
     <link rel="stylesheet" href="~/Areas/Admin/JavaScript/datepicker/datepicker.css">
     <link rel="stylesheet" href="~/Areas/Admin/JavaScript/toats/toastr.min.css">   
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/fontawesome-free-5.15.4-web/css/all.css">
-
-
     <!-- Custom CSS-->
     <link rel="stylesheet" href="~/Areas/Admin/StyleSheet/css/app.css">
 
@@ -34,14 +31,14 @@
                         <!---->
                         <li class='sidebar-title'>Quản lý</li>
                         <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_Sach" ? "active" : "")">
-                            <a href="@Url.Action("ListBooks","ql_Sach")" class='sidebar-link' style="font-weight: bold;">
+                            <a href="@Url.Action("ListBooks","ql_Sach")" class='sidebar-link'>
                                 <i class="fas fa-book" style="margin-right: 20px"></i> Quản lý sách
                             </a>
                         </li>
                         <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TacGia" ? "active" : "")">
-                        <a href="@Url.Action("ListAuthor","ql_TacGia")" class='sidebar-link' style="font-weight: bold;">
-                            <i class="fas fa-address-book" style="margin-right: 20px"></i> Quản lý tác giả
-                        </a>
+                            <a href="@Url.Action("ListAuthor","ql_TacGia")" class='sidebar-link'>
+                                <i class="fas fa-address-book" style="margin-right: 20px"></i> Quản lý tác giả
+                            </a>
                         </li>
                         <!---->
                         <li class='sidebar-title'>Forms &amp; Tables</li>
@@ -274,17 +271,7 @@
 
             <div class="main-content container-fluid" id="body_build">
                 @RenderBody()
-            </div>
-
-            <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="float-end">
-                        <p>
-                            2020 &copy; Voler <span class='text-danger'><i data-feather="heart"></i></span> Custom by <a href="#">Hoàng Tiến</a>
-                        </p>
-                    </div>
-                </div>
-            </footer>
+            </div>           
         </div>
     </div>
 

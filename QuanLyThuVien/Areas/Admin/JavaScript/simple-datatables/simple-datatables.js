@@ -974,7 +974,7 @@
                             sortable: 0,
                             searchable: !0,
                             paging: !0,
-                            perPage: 10,
+                            perPage: 5,
                             perPageSelect: [5, 10, 15, 20, 25],
                             nextPrev: !0,
                             firstLast: !1,

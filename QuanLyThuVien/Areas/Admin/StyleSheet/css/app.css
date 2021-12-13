@@ -913,6 +913,7 @@ footer {
 
             .sidebar-wrapper .menu .sidebar-item.active .sidebar-link {
                 background-color: #e8f3ff
+                ;font-weight: bold;
             }
 
                 .sidebar-wrapper .menu .sidebar-item.active .sidebar-link:before {
@@ -1725,4 +1726,25 @@ footer {
     text-align: left;
     white-space: unset;
     word-wrap: unset;
+}
+.img_Author {
+    object-fit: cover;
+    width: 300px;
+    height: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1rem solid #cbcbcb;
+    border-radius: 50%;
+}
+.border_Text {
+    display: flex;
+    margin-top: -13px;
+    margin-left: 425px;
+    margin-bottom: -11px;
+    background: #fff;
+    margin-right: 444px;
+    padding: 0 11px;
+    font-size: 1rem;
+    font-weight: bold;
 }

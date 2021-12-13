@@ -30,20 +30,19 @@ namespace QuanLyThuVien.Areas.Admin.Data
          * 9. Kiểm tra sách đã tồn tại hay chưa
          */
 
-        //1. Config
-        private static IFirebaseClient client;
+        //1. Config    
         private static IFirebaseConfig config = new FireSharp.Config.FirebaseConfig
         {
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
         };
+        private static IFirebaseClient client = new FireSharp.FirebaseClient(config);
         //2. Biến dữ liệu
         public static bool UpdateCount = false;
         public static List<Books> BooksList = new List<Books>();
         //3. Lấy tất cả dữ liệu sách
         public static List<Books> GetAllData()
         {
-            client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("Books");
             Dictionary<string, Books> data = JsonConvert.DeserializeObject<Dictionary<string, Books>>(response.Body.ToString());
 
@@ -101,7 +100,6 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 return false;
             }
             //
-            client = new FireSharp.FirebaseClient(config);
             PushResponse response = client.Push("Books/", book);
             book._id = response.Result.name;
             Thread t1 = new Thread(() =>
@@ -165,7 +163,6 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 {
                     Thread t1 = new Thread(() =>
                     {
-                        client = new FireSharp.FirebaseClient(config);
                         client.Delete("Books/" + id);
                     });
                     Thread t2 = new Thread(() =>

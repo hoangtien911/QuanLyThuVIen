@@ -4,95 +4,441 @@
     ViewBag.Title = "Danh sách tác giả";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+<!-- PAGE BODY-->
+<div class="page-title">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-last">
+            <nav aria-label="breadcrumb" class='breadcrumb-header'>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Quản lý tác giả</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách tác giả</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
 
-<div class="container-fluid">
-
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <div class="row">
-                <h6 class="col-md-9 font-weight-bold text-primary font-Title">Quản lý tác giả</h6>
-                <div class="col-md-3">
-                    <a href="@Url.Action("Create", "ql_TacGia")" class="btn btn-success btn-user btn-block" style="font-weight:bold">
-                        <i class="fa fa-fw fa-plus-square"></i> Thêm mới tác giả
-                    </a>
-                </div>
+<section class="section">
+    <div class="card">
+        <div class="card-header row" style="margin-bottom: 10px;">
+            <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #fff;">@ViewBag.Title</h3>
+            <div class="col-6 d-flex justify-content-end">
+                <a class="btn icon icon-left btn-primary" id="link-add" style="font-weight: bold; width: 200px; background-color:#0097ff; border-color: #fff">
+                    <i class="fa fa-plus-square"></i> Thêm mới
+                </a>
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr class="text-center">
-                            <th>
-                                @Html.DisplayNameFor(model => model.name)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.email)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.website)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.note)
-                            </th>
-                            <th style="width: 60px;">
-                                @Html.DisplayNameFor(model => model.avatar)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                        <tr>
-                            <td style="width: 200px;">
-                                @Html.DisplayFor(modelItem => item.name)
-                            </td>
-                            <td style="width: 300px;">
-                                @Html.DisplayFor(modelItem => item.email)
-                            </td>
-                            <td style="width: 300px;">
-                                <p>
-                                    @Html.DisplayFor(modelItem => item.website)
-                                </p>
-                            </td>
-                            <td>
-                                <p>
-                                    @Html.DisplayFor(modelItem => item.note)
-                                </p>
-                            </td>
-                            <td style="max-width: 150px;" class="text-center">
-                                <img src="@Html.DisplayFor(modelItem => item.avatar)" style="max-width: 150px; max-height:75px;" />
-                            </td>
-                            <td class="link-action">
-                                <a class="link-edit" href="@Url.Action("Edit", "ql_TacGia" , new { id = item.id})" onclick="return confirm('Bạn có muốn sửa tác giả @Html.DisplayFor(modelItem => item.name)?')">
-                                    <i class="fas fa-fw fa-edit"></i>Sửa
-                                </a><br />
-                                <a class="link-delete" href="@Url.Action("Delete", "ql_TacGia" , new { id = item.id})" onclick="return confirm('Bạn có muốn xoá tác giả @Html.DisplayFor(modelItem => item.name)?')">
-                                    <i class="fas fa-fw fa-trash"></i>Xoá
-                                </a><br />
-                                <a class="link-detail" href="@Url.Action("Detail", "ql_TacGia" , new { id = item.id})">
-                                    <i class="fas fa-fw fa-info"></i>Chi tiết
-                                </a>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
+            <table class='table table-hover' id="table1">
+                <thead>
+                    <tr>
+                        <th>Tên tác giả</th>
+                        <th>Email</th>
+                        <th>Website</th>
+                        <th>Hình ảnh</th>
+                        <th>Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody id="_TBODY">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<!-- CREATE-EDIT MODAL -->
+<div class="modal fade text-left w-100" id="Add_Edit_AuthorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="Add_Edit_AuthorModal_title">Thêm mới tác giả</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="FormAddBook">
+                    <!--Row 1-->
+                    <div class="row">
+                        <div class="col-sm-6 mb-1" style="padding-right: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">ID</span>
+                                <input type="text" class="form-control" disabled="disabled" id="Add_id" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 2-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Tên tác giả *</span>
+                                <input type="text" class="form-control" id="Add_name" />
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 3-->
+                    <div class="row mutil-choice">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Email</span>
+                                <input type="text" class="form-control" id="Add_email" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 4-->
+                    <div class="row mutil-choice">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Website </span>
+                                <input type="text" class="form-control" id="Add_web" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 5-->
+                    <div class="row">
+                        <div class="input-group" style="height: 400px">
+                            <span class="input-group-text">Giới thiệu</span>
+                            <div style="flex: 1 1 auto; width: min-content">
+                                <div id="full_editor" style="height: 358px">
+                                </div>
+                                <textarea class="hide" id="Add_note"></textarea>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 6-->
+                    <div class="row">
+                        <input type="file" class="hide" accept="image/*" id="Add_image_hide" />
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Hình ảnh</span>
+                                <label class="form-control" style="background-color: white; overflow: hidden; text-overflow: ellipsis; " id="Add_image"></label>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!---->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="fa fa-times"></i> Huỷ
+                </button>
+                <button name="SaveBook" type="button" class="btn btn-primary ml-1" onclick="SaveAuthor()">
+                    <i class="fa fa-save"></i> Lưu
+                </button>
             </div>
         </div>
     </div>
 </div>
-@{
-    if (ViewBag.MsEdit != null)
-    {
-        Response.Write("<script>alert('" + ViewBag.MsEdit + "')</script>");
-        ViewBag.MsEdit = null;
-    }
-    if (ViewBag.MsDelete != null)
-    {
-        Response.Write("<script>alert('Đã xoá tác giả " + ViewBag.MsDelete + "')</script>");
-        ViewBag.MsDelete = null;
-    }
+<!-- DELETE MODAL-->
+<div class="modal fade text-left" id="Delete_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title white" id="Delete_title">Bạn có muốn xoá tác giả này?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="Delete_modal_body">
+                <p id="D_hide"></p>
+                <p id="D_ID" class="hide"></p>
+                <ul>
+                    <li id="D_name"></li>
+                    <li id="D_email"></li>
+                    <li id="D_web"></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="fa fa-times"></i> Huỷ
+                </button>
+                <button type="button" class="btn btn-danger ml-1" data-bs-dismiss="modal" onclick="DeleteAuthor()">
+                    <i class="fa fa-trash"></i> Xoá
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DETAIL MODAL -->
+<div class="modal fade text-left w-100" id="Detail_AuthorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin tác giả</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-5">
+                        <img id="image_detail" class="img_Author" />
+                    </div>
+                    <div class="col-7" style="display: table;">
+                        <div style="display: table-cell; vertical-align: middle">
+                            <h2 id="name_Author" style="font-size: 2.8rem; margin: 10px 0 30px 0">Tên tác giả</h2>
+                            <p id="email_Author" style="font-size: 1rem">Email: </p>
+                            <p id="website_Author" style="font-size: 1rem">Website: </p>
+                        </div>
+                    </div>
+                </div>
+                <div style="border: 1px solid; margin: 30px 0 10px 0">
+                    <p class="border_Text">CHI TIẾT VỀ TÁC GIẢ</p>
+                </div>
+                <div id="note_Author" class="ql-editor row" style="font-size: 1rem">
+                    abcd
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="fa fa-chevron-left"></i> Trở lại
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var thumbSrc = "";
+        $(document).ready(function () {
+            GetListAuthor();
+            //Cấu hình toasts
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            //Chọn file ảnh
+            $('#Add_image').on('click', function () {
+                $('#Add_image_hide').click();
+            });
+            $('#Add_image_hide').on('change', function (e) {
+                //lấy file
+                var fff = e.target.files;
+                var no_files = 0;
+                if (fff !== undefined)
+                    no_files = fff.length;
+
+                $('#Add_image').empty();
+                $('#Add_image').text(fff[no_files - 1].name);
+
+                // Resize ảnh
+                const resize_width = 600;
+                const item = fff[no_files - 1];
+                const reader = new FileReader();
+                reader.readAsDataURL(item);
+                reader.name = item.name;
+                reader.size = item.size;
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.name = event.target.name;
+                    img.size = event.target.size;
+                    img.onload = function (el) {
+                        const elem = document.createElement('canvas');
+                        const scaleResize = resize_width / el.target.width;
+                        elem.width = resize_width;
+                        elem.height = el.target.height * scaleResize;
+                        const ctx = elem.getContext('2d');
+                        ctx.drawImage(el.target, 0, 0, elem.width, elem.height);
+                        const srcEncoded = ctx.canvas.toDataURL('image/jpeg', 1);
+
+                        thumbSrc = srcEncoded;
+                    }
+                }
+                ///
+            });
+        });
+        //setup create modal
+        $(document).on("click", "#link-add", function (e) {
+            e.preventDefault();
+            document.getElementById('Add_Edit_AuthorModal_title').innerHTML = "Thêm mới tác giả";
+            $('#Add_id').val("");
+            $('#Add_name').val("");
+            $('#Add_email').val("");
+            $('#Add_web').val("");
+            $('#Add_note').val("");
+            quillEditor.root.innerHTML = "";
+            $('#Add_image').empty;
+            $('#Add_image').text("");
+            $('#Add_image_hide').val("");
+            thumbSrc = "";
+            $('#Add_Edit_AuthorModal').modal('show');
+        });
+        //Setup edit modal
+        $(document).on("click", ".link-edit", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            document.getElementById('Add_Edit_AuthorModal_title').innerHTML = "Sửa thông tin tác giả";
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_TacGia/GetAuthor/" + id,
+                dataType: "json",
+                success: function (res) {
+                    $('#Add_id').val(res.id);
+                    $('#Add_name').val(res.name);
+                    $('#Add_email').val(res.email);
+                    $('#Add_web').val(res.website);
+                    $('#Add_note').val("");
+                    quillEditor.root.innerHTML = res.note;
+                    $('#Add_image').empty();
+                    $('#Add_image').text(res.avatar);
+                    thumbSrc = res.avatar;
+                    $('#Add_Edit_AuthorModal').modal('show');
+                }
+            })
+        });
+        //Setup delete modal
+        $(document).on("click", ".link-delete", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_TacGia/GetAuthor/" + id,
+                dataType: "json",
+                success: function (res) {
+                    document.getElementById("D_ID").innerHTML = res.id;
+                    document.getElementById("D_name").innerHTML = "Tác giả: " + res.name;
+                    document.getElementById("D_email").innerHTML = "Email: " + res.email;
+                    document.getElementById("D_web").innerHTML = "Website: " + res.website;
+                    $('#Delete_Modal').modal('show');
+                }
+            })
+        });
+        //Detail book
+        $(document).on("click", ".link-detail", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_TacGia/GetAuthor/" + id,
+                dataType: "json",
+                success: function (res) {
+                    if (res != null) {
+                        document.getElementById('image_detail').src = res.avatar;
+                        $('#name_Author').text(res.name);
+                        $('#email_Author').html("<strong>Email: </strong>" + res.email);
+                        $('#website_Author').html("<strong>Website: </strong>" + res.website);
+                        document.getElementById('note_Author').innerHTML = res.note;
+                    }
+                    $('#Detail_AuthorModal').modal('show');
+                }
+            })
+        })
+        //Delete book
+        function DeleteAuthor() {
+            var id = document.getElementById("D_ID").innerHTML;
+            $.ajax({
+                type: "POST",
+                url: "/Admin/ql_TacGia/Delete/" + id,
+                dataType: "json",
+                success: function (res) {
+                    if (res.status == "DELETE_OK") {
+                        toastr["success"]("Tác giả đã được xoá!", "Xoá thành công");
+                        GetListAuthor();
+                    }
+                    if (res.status == "DELETE_FALSE") {
+                        toastr["error"]("Xoá thất bại. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Xoá thất bại");
+                    }
+
+                }
+            });
+        };
+        //Save Book Add - Edit
+        function SaveAuthor() {
+            document.getElementById("Add_note").value = quillEditor.root.innerHTML;
+            var authorData = {
+                id: $('#Add_id').val(),
+                name: $('#Add_name').val(),
+                email: $('#Add_email').val(),
+                website: $('#Add_web').val(),
+                note: $('#Add_note').val(),
+                avatar: thumbSrc
+            }
+            $.ajax({
+                url: "/Admin/ql_TacGia/Create_Edit",
+                data: JSON.stringify(authorData),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    if (res.status != null) {
+                        {
+                            if (res.status == "ADD_OK") {
+                                $('#ModalCancel').click();
+                                toastr["success"]("Thêm mới tác giả: " + authorData.name + " thành công!", "Thêm mới thành công");
+                                GetListAuthor();
+                            }
+                            if (res.status == "EDIT_OK") {
+                                $('#ModalCancel').click();
+                                toastr["success"]("Sửa thông tin tác giả: " + authorData.name + " thành công!", "Sửa thông tin thành công");
+                                GetListAuthor();
+                            }
+                            if (res.status == "ADD_FALSE") {
+                                toastr["warning"]("Tác giả: " + authorData.name + " đã có trong hệ thống!", "Thêm mới thất bại");
+                            }
+                            if (res.status == "EDIT_FALSE") {
+                                toastr["warning"]("Tác giả: " + authorData.name + " đã có trong hệ thống!", "Sửa thông tin thất bại");
+                            }
+                            if (res.status == "NO_INPUT_DATA") {
+                                toastr["error"]("Tên tác giả, chưa được nhập!", "Lưu thất bại");
+                            }
+                        }
+                    }
+                },
+                error: function () {
+                    toastr["error"]("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Lỗi");
+                }
+            });
+        };
+        //Start datatable
+        var myTable = document.querySelector('#table1');
+        var dataTable = new simpleDatatables.DataTable(myTable);
+        function GetListAuthor() {
+            dataTable.destroy();
+            $('#_TBODY').empty();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_TacGia/GetListAuthor",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var html = '';
+                    $.each(res, function (key, item) {
+                        html += '<tr>';
+                        html += '<td><p>' + item.name + '</p></td>';
+                        html += '<td style="white-space: nowrap"><p>' + item.email + '</p></td>';
+                        html += '<td style="white-space: nowrap"><p>' + item.website + '</p></td>';
+                        html += '<td><p><img src="' + item.avatar + '" style="height: 75px; width: 75px; object-fit: cover;" /></p></td>';
+                        html += '<td class="link-action" style="min-width:135px; width: 135px;">';
+                        html += '<a class="link-edit" data-id="' + item.id + '"><i class="fa fa-edit"></i> Sửa</a><br />';
+                        html += '<a class="link-delete" data-id="' + item.id + '"><i class="fa fa-trash"></i> Xoá</a><br />';
+                        html += '<a class="link-detail" data-id="' + item.id + '"><i class="fa fa-info-circle"></i> Chi tiết</a>';
+                        html += '</td >';
+                        html += '</tr>';
+                    });
+                    $('#_TBODY').html(html);
+                    dataTable = new simpleDatatables.DataTable(myTable);
+                }
+            });
+        };
+    </script>
 }

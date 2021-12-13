@@ -21,7 +21,12 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
          */
 
         //1. Danh sách sách
-        [HttpGet]
+        public ActionResult ListBooks()
+        {
+            ViewBag.listAuthor = getAuthor();
+            ViewBag.listCategories = getCategories();
+            return View();
+        }
         public JsonResult GetListBook()
         {
             if (!Data_Books.UpdateCount)
@@ -52,44 +57,8 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 }
             }
             return Json(Data_Books.BooksList, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult ListBooks(string message)
-        {
-            if (!Data_Books.UpdateCount)
-                Data_Books.GetAllData();
-            //lấy tên sách và tên thể loại theo id
-            foreach (var book in Data_Books.BooksList)
-            {
-                if (book.authors != null)
-                {
-                    book.author_temp = book.authors.Split(',');
-                    string[] authorName = new string[book.author_temp.Length];
-                    for (int i = 0; i < book.author_temp.Length; i++)
-                    {
-                        authorName[i] = Data_Authors.GetSingleData(book.author_temp[i]).name;
-                    }
-                    book.author_temp = authorName;
-                }
-
-                if (book.categories != null)
-                {
-                    book.categories_temp = book.categories.Split(',');
-                    string[] cateName = new string[book.categories_temp.Length];
-                    for (int i = 0; i < book.categories_temp.Length; i++)
-                    {
-                        cateName[i] = Data_Categories.GetSingleData(book.categories_temp[i]).name;
-                    }
-                    book.categories_temp = cateName;
-                }
-            }
-            ViewBag.BooksList = Data_Books.BooksList;
-            ViewBag.listAuthor = getAuthor();
-            ViewBag.listCategories = getCategories();
-            return View();
-
-        }
+        }      
         //2. Thêm mới và sửa sách       
-        [HttpPost]
         public JsonResult Create_Edit(Books book)
         {
             if (book.title != null && book.author_temp != null && book.categories_temp != null)
@@ -99,7 +68,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                 book.categories = string.Join(",", book.categories_temp);
                 book.author_temp = null;
                 book.categories_temp = null;                             
-                //
+                //Create
                 if(book._id == null)
                 {
                     book.count_in = book.count;
@@ -112,6 +81,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                         return Json(new { status = "ADD_FALSE" });
                     }
                 }
+                //Edit
                 else
                 {                    
                     if (Data_Books.EditData(book))
@@ -140,7 +110,6 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 
         }
         //3. Lấy thông tin sách cần xoá
-        [HttpGet]
         public JsonResult GetBookDelete(string id)
         {
             Books book = Data_Books.GetSingleData(id);
@@ -168,7 +137,6 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             return Json(new { status = false }, JsonRequestBehavior.AllowGet);
 
         }
-        [HttpGet]
         //4. Lấy thông tin sách cần sửa
         public JsonResult GetBook(string id)
         {
@@ -186,7 +154,6 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 
         }      
         //5. Xoá sách
-        [HttpPost]
         public JsonResult Delete(string id)
         {
             if (Data_Books.DeleteData(id))
@@ -196,8 +163,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             else
             {
                 return Json(new { status = "DELETE_FALSE" });
-            }
-            
+            }          
         }       
         //6. Lấy danh sách tác giả
         public List<Author> getAuthor()

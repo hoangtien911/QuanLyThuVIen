@@ -19,7 +19,9 @@ namespace QuanLyThuVien.Areas.Admin.Data
          * 4. Lấy dữ liệu 1 tác giả theo id
          * 5. Thêm mới 1 tác giả
          * 6. Sửa thông tin 1 tác giả
-         * 7. Xoá 1 tác giả        
+         * 7. Xoá 1 tác giả    
+         * 8. Kiểm tra tác giả
+         * 9. Kiểm tra dữ liệu
          */
 
         //1. Cấu hình     
@@ -38,9 +40,10 @@ namespace QuanLyThuVien.Areas.Admin.Data
         {           
             FirebaseResponse response = client.Get("Author");
             Dictionary<string, Author> data = JsonConvert.DeserializeObject<Dictionary<string, Author>>(response.Body.ToString());
-
-            foreach (var item in data)
+           
+            for (int i = data.Count - 1; i >= 0; i--)
             {
+                var item = data.ElementAt(i);
                 Author author = new Author();
                 author.id = item.Value.id;
                 author.email = item.Value.email;
@@ -48,7 +51,8 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 author.name = item.Value.name;
                 author.note = item.Value.note;
                 author.avatar = item.Value.avatar;
-                AuthorsList.Add(author);
+                CheckData(author);
+                AuthorsList.Add(author);               
             }
             UpdateCount = true;
             return AuthorsList;
@@ -60,11 +64,14 @@ namespace QuanLyThuVien.Areas.Admin.Data
             if (!UpdateCount)
             {                
                 GetAllData();
+                FirebaseResponse response = client.Get("Author/" + id);
+                data = JsonConvert.DeserializeObject<Author>(response.Body);
             }
-            int index = AuthorsList.FindIndex(ath => ath.id.Equals(id));
-            if (index < 0)
-                index = 0;
-            data = AuthorsList.ElementAt(index);         
+            else
+            {
+                int index = AuthorsList.FindIndex(ath => ath.id.Equals(id));
+                data = AuthorsList.ElementAt(index);
+            }
             return data;
         }
         //5. Thêm mới 1 tác giả
@@ -74,22 +81,17 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 GetAllData();
             }
-
-            foreach (var item in AuthorsList)
-            {
-                if (author.name.Equals(item.name))
-                {
-                    return false;
-                }
-            }
+            if (!CheckAuthor(author, ""))
+                return false;
+            CheckData(author);
+            PushResponse response = client.Push("Author/", author);
+            author.id = response.Result.name;
             Thread t1 = new Thread(() =>
             {
-                AuthorsList.Add(author);
+                AuthorsList.Insert(0, author);
             });
             Thread t2 = new Thread(() =>
-            {               
-                PushResponse response = client.Push("Author/", author);
-                author.id = response.Result.name;
+            {                             
                 client.Set("Author/" + author.id, author);
             });
             t1.Start();
@@ -108,6 +110,9 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 if (author.id.Equals(item.id))
                 {
+                    if (!CheckAuthor(author, author.id))
+                        return false;
+                    CheckData(author);
                     Thread t1 = new Thread(() =>
                     {                       
                         client.Set("Author/" + author.id, author);
@@ -153,6 +158,33 @@ namespace QuanLyThuVien.Areas.Admin.Data
 
             }
             return false;
+        }
+        //8. Kiểm tra tác giả đã tồn tại hay chưa
+        private static bool CheckAuthor(Author b, string id)
+        {
+            foreach (var item in AuthorsList)
+            {
+                if (b.name.Equals(item.name))
+                {
+                    if (item.id == id)
+                    {
+                        continue;
+                    }
+                    else
+                        return false;
+                }
+            }
+            return true;
+        }
+        //9. Kiểm tra dữ liệu
+        private static void CheckData(Author author)
+        {
+            if (author.email == null)
+                author.email = "Không có thông tin.";
+            if (author.website == null)
+                author.website = "Không có thông tin.";
+            if (author.note == null)
+                author.note = "Chưa được bổ sung.";
         }
     }
 }
