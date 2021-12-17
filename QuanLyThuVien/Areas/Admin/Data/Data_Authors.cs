@@ -83,6 +83,7 @@ namespace QuanLyThuVien.Areas.Admin.Data
             if (!CheckAuthor(author, ""))
                 return false;
             CheckData(author);
+
             PushResponse response = client.Push("Author/", author);
             author.id = response.Result.name;
             Thread t1 = new Thread(() =>

@@ -4,146 +4,560 @@
     ViewBag.Title = "Danh sách người dùng";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
-<div class="container-fluid">
-
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <div class="row">
-                <h6 class="col-md-9 font-weight-bold text-primary font-Title">Quản lý người dùng</h6>
-                <div class="col-md-3">
-                    <a href="@Url.Action("Create", "ql_NguoiDung")" class="btn btn-success btn-user btn-block" style="font-weight:bold">
-                        <i class="fa fa-fw fa-plus-square"></i> Thêm mới người dùng
-                    </a>
-                </div>
+<!-- PAGE BODY-->
+<div class="page-title">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-last">
+            <nav aria-label="breadcrumb" class='breadcrumb-header'>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Quản lý người dùng</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh người dùng</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Datatable-->
+<section class="section">
+    <div class="card">
+        <div class="card-header row" style="margin-bottom: 10px;">
+            <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #fff;">@ViewBag.Title</h3>
+            <div class="col-6 d-flex justify-content-end">
+                <a class="btn icon icon-left btn-primary" id="link-add" style="font-weight: bold; width: 200px; background-color:#0097ff; border-color: #fff">
+                    <i class="fal fa-plus-square"></i> Thêm mới
+                </a>
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr class="text-center">
-                            <th>
-                                @Html.DisplayNameFor(model => model.username)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.email)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.password)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.dateOfBirth)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.fullName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.adress)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.phone)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.dateOfRegist)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.avatar)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.status)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.username)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.email)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.password)
-                                </td>
-                                <td class="text-center" style="width:130px;">
-                                    @{
-                                        DateTime date_temp = new DateTime(0001, 01, 01);
-                                        if (DateTime.Compare(item.dateOfBirth, date_temp) == 0)
-                                        {
-                                            <p>
-                                                Chưa có thông tin
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(modelItem => item.dateOfBirth)
-                                        }
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.fullName)
-                                </td>
-                                <td style="max-width: 300px;">
-                                    <p>
-                                        @Html.DisplayFor(modelItem => item.adress)
-                                    </p>                                  
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.phone)
-                                </td>
-                                <td class="text-center" style="width:130px;">
-                                    @{                                        
-                                        if (DateTime.Compare(item.dateOfRegist, date_temp) == 0)
-                                        {
-                                            <p>
-                                                Chưa có thông tin
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(modelItem => item.dateOfRegist)
-                                        }
-                                    }
-                                </td>
-                                <td style="max-width: 150px;" class="text-center">
-                                    <img src="@Html.DisplayFor(modelItem => item.avatar)" style="max-width: 150px; max-height:75px;" />
-                                </td>
-                                <td class="text-center">
-                                    @Html.DisplayFor(modelItem => item.status)
-                                </td>
-                                <td class="link-action">
-                                    <a class="link-edit" href="@Url.Action("Edit", "ql_NguoiDung" , new { id = item.id})" onclick="return confirm('Bạn có muốn sửa người dùng @Html.DisplayFor(modelItem => item.username)?')">
-                                        <i class="fas fa-fw fa-edit"></i>Sửa
-                                    </a><br />
-                                    <a class="link-delete" href="@Url.Action("Delete", "ql_NguoiDung" , new { id = item.id})" onclick="return confirm('Bạn có muốn xoá người dùng @Html.DisplayFor(modelItem => item.username)?')">
-                                        <i class="fas fa-fw fa-trash"></i>Xoá
-                                    </a><br />
-                                    <a class="link-detail" href="@Url.Action("Detail", "ql_NguoiDung" , new { id = item.id})">
-                                        <i class="fas fa-fw fa-info"></i>Chi tiết
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <table class='table table-hover' id="table1">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Email</th>
+                        <th>Họ tên</th>
+                        <th>Giới tính</th>
+                        <th>Ảnh đại diện</th>
+                        <th>Loại tài khoản</th>
+                        <th style="text-align: start">Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody id="_TBODY">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<!-- CREATE-EDIT MODAL -->
+<div class="modal fade text-left w-100" id="AddEdit_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="AddEdit_Title">Thêm mới sách</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="FormAddBook">
+                    <!--Row 1 id: _id + _status-->
+                    <div class="row">
+                        <div class="col-sm-6 mb-1" style="padding-right: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">ID</span>
+                                <input type="text" class="form-control" disabled="disabled" id="_id" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-1" style="padding-left: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">Loại tài khoản *</span>
+                                <select class="form-control" id="_status">
+                                    <option>Thường</option>
+                                    <option>Admin</option>
+                                    <option>Vi phạm</option>
+                                    <option>Khoá</option>
+                                </select>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 2 id: _username-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Username *</span>
+                                <input type="text" class="form-control" id="_username" />
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 3 id: _password-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Password * </span>
+                                <input type="text" class="form-control" id="_password" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 4 id: _email-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Email * </span>
+                                <input type="text" class="form-control" id="_email" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 5 id: _fullname-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Họ tên </span>
+                                <input type="text" class="form-control" id="_fullname" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 6 id: _phone + _gender-->
+                    <div class="row">
+                        <div class="col-sm-6 mb-1" style="padding-right: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">Số điện thoại</span>
+                                <input type="number" class="form-control" id="_phone" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-1" style="padding-left: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">Giới tính</span>
+                                <select class="form-control" id="_gender">
+                                    <option>Nam</option>
+                                    <option>Nữ</option>
+                                    <option>Khác</option>
+                                </select>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 7 id: _dob + _dor-->
+                    <div class="row">
+                        <div class="col-sm-6 mb-1" style="padding-right: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">Ngày sinh</span>
+                                <input type="text" class="form-control" name="datepicker" id="_dob" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-1" style="padding-left: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">Ngày đăng ký</span>
+                                <input type="text" class="form-control" name="datepicker" id="_dor" />
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 8 id: _adress-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Địa chỉ</span>
+                                <textarea class="form-control" rows="3" style="resize: none;" id="_adress"></textarea>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 9 id: _avatar + _avatar_hide-->
+                    <div class="row">
+                        <input type="file" class="hide" accept="image/*" id="_avatar_hide" />
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Ảnh bìa</span>
+                                <label class="form-control" style="background-color: white; overflow: hidden; text-overflow: ellipsis; " id="_avatar"></label>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!---->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="fa fa-times"></i> Huỷ
+                </button>
+                <button name="SaveBook" type="button" class="btn btn-primary ml-1" onclick="SaveData()">
+                    <i class="fal fa-save"></i> Lưu
+                </button>
             </div>
         </div>
     </div>
 </div>
-@{
-    if (ViewBag.MsEdit != null)
-    {
-        Response.Write("<script>alert('" + ViewBag.MsEdit + "')</script>");
-        ViewBag.MsEdit = null;
-    }
-    if (ViewBag.MsDelete != null)
-    {
-        Response.Write("<script>alert('Đã xoá người dùng " + ViewBag.MsDelete + "')</script>");
-        ViewBag.MsDelete = null;
-    }
+<!-- DELETE MODAL-->
+<div class="modal fade text-left" id="Delete_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title white" id="Delete_title">Bạn có muốn xoá người dùng này?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="Delete_modal_body">
+                <p id="D_id" class="hide"></p>
+                <div class="row">
+                    <div class="col-8">
+                        <ul>
+                            <li id="D_username"></li>
+                            <li id="D_password"></li>
+                            <li id="D_email"></li>
+                            <li id="D_fullname"></li>
+                            <li id="D_gender"></li>
+                            <li id="D_status"></li>
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <img id="D_avatar" class="img_UserDelete" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="fa fa-times"></i> Huỷ
+                </button>
+                <button type="button" class="btn btn-danger ml-1" data-bs-dismiss="modal" onclick="DeleteData()">
+                    <i class="fa fa-trash"></i> Xoá
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DETAIL MODAL -->
+<div class="modal fade text-left w-100" id="Detail_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin người dùng</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-5">
+                        <img id="Dl_avatar" class="img_cate" />
+                    </div>
+                    <div class="col-7" style="display: table;">
+                        <div style="display: table-cell; vertical-align: middle">
+                            <h2 id="Dl_username">Tên tài khoản: </h2>
+                            <h2 id="Dl_password">Mật khẩu: </h2>
+                            <h4 id="Dl_email">Email</h4>
+                            <h4 id="Dl_fullname">Họ tên</h4>
+                            <h4 id="Dl_phone"></h4>
+                            <h4 id="Dl_gender"></h4>
+                            <h4 id="Dl_dob"></h4>
+                            <h4 id="Dl_dor"></h4>
+                            <h4 id="Dl_adress"></h4>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="fa fa-chevron-left"></i> Trở lại
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        //Setup page
+        var thumbSrc = "";
+        var myTable = document.querySelector('#table1');
+        var dataTable = new simpleDatatables.DataTable(myTable);
+        $(document).ready(function () {
+            GetAllData();
+            //Cấu hình toasts
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            //Setup chosen
+            $("#_status").chosen({
+                disable_search: true
+            });
+            $("#_gender").chosen({
+                disable_search: true
+            });
+            //Setup datepicker
+            $('#_dob').datepicker({
+                autoclose: true,
+                format: "dd-mm-yyyy",
+            });
+            var today = new Date();
+            var date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+            $('#_dor').datepicker({
+                autoclose: true,
+                format: "dd-mm-yyyy",
+            });
+            $('#_dor').datepicker('update', date);
+            //Chọn file ảnh
+            $('#_avatar').on('click', function () {
+                $('#_avatar_hide').click();
+            });
+            $('#_avatar_hide').on('change', function (e) {
+                //lấy file
+                var fff = e.target.files;
+                var no_files = 0;
+                if (fff !== undefined)
+                    no_files = fff.length;
+
+                $('#_avatar').empty();
+                $('#_avatar').text(fff[no_files - 1].name);
+
+                // Resize ảnh
+                const resize_width = 600;
+                const item = fff[no_files - 1];
+                const reader = new FileReader();
+                reader.readAsDataURL(item);
+                reader.name = item.name;
+                reader.size = item.size;
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.name = event.target.name;
+                    img.size = event.target.size;
+                    img.onload = function (el) {
+                        const elem = document.createElement('canvas');
+                        const scaleResize = resize_width / el.target.width;
+                        elem.width = resize_width;
+                        elem.height = el.target.height * scaleResize;
+                        const ctx = elem.getContext('2d');
+                        ctx.drawImage(el.target, 0, 0, elem.width, elem.height);
+                        const srcEncoded = ctx.canvas.toDataURL('image/jpeg', 1);
+
+                        thumbSrc = srcEncoded;
+                    }
+                }
+                ///
+            });
+        });
+        //Start datatable
+        function GetAllData() {
+            dataTable.destroy();
+            $('#_TBODY').empty();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_NguoiDung/GetListUser",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var html = '';
+                    $.each(res, function (key, item) {
+                        html += '<tr>';
+                        html += '<td><p>' + item.username + '</p></td>';
+                        html += '<td><p>' + item.password + '</p></td>';
+                        html += '<td><p>' + item.email + '</p></td>';
+                        html += '<td><p>' + item.fullName + '</p></td>';
+                        html += '<td><p>' + item.gender + '</p></td>';
+                        html += '<td><p><img src="' + item.avatar + '" style="height: 75px; width: 75px; object-fit: cover;" /></p></td>';
+                        html += '<td><p>' + item.status + '</p></td>';
+                        html += '<td class="link-action" style="min-width:135px; width: 135px;">';
+                        html += '<a class="link-edit" data-id="' + item.id + '"><i class="fal fa-pencil-alt"></i> Sửa</a><br />';
+                        html += '<a class="link-delete" data-id="' + item.id + '"><i class="far fa-trash-alt"></i> Xoá</a><br />';
+                        html += '<a class="link-detail" data-id="' + item.id + '"><i class="fal fa-info-circle"></i> Chi tiết</a>';
+                        html += '</td >';
+                        html += '</tr>';
+                    });
+                    $('#_TBODY').html(html);
+                    dataTable = new simpleDatatables.DataTable(myTable);
+                }
+            });
+        };
+        //setup create modal
+        $(document).on("click", "#link-add", function (e) {
+            e.preventDefault();
+            document.getElementById('AddEdit_Title').innerHTML = "Thêm mới thể loại";
+            //
+            $('#_id').val("");
+            $('#_status').val("Thường").trigger('chosen:updated');
+            $('#_username').val("");
+            $('#_password').val("");
+            $('#_email').val("");
+            $('#_fullname').val("");
+            $('#_phone').val("");
+            $('#_gender').val("Nam").trigger('chosen:updated');
+            $('#_dob').val("");
+            $('#_dor').val("");
+            $('#_adress').val("");
+            $('#_avatar').empty()
+            $('#_avatar_hide').val("");
+            thumbSrc = "";
+            //
+            $('#AddEdit_Modal').modal('show');
+        });
+        //Setup edit modal
+        $(document).on("click", ".link-edit", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            document.getElementById('AddEdit_Title').innerHTML = "Sửa thông tin người dùng";
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_NguoiDung/GetUser/" + id,
+                dataType: "json",
+                success: function (res) {
+                    //
+                    $('#_id').val(res.id);
+                    $('#_status').val(res.status).trigger('chosen:updated');
+                    $('#_username').val(res.username);
+                    $('#_password').val(res.password);
+                    $('#_email').val(res.email);
+                    $('#_fullname').val(res.fullName);
+                    $('#_phone').val(res.phone);
+                    $('#_gender').val(res.gender).trigger('chosen:updated');
+                    $('#_dob').val(res.dateOfBirth);
+                    $('#_dor').val(res.dateOfRegist);
+                    $('#_adress').val(res.adress);
+                    $('#_avatar').empty();
+                    $('#_avatar').text(res.avatar);
+                    thumbSrc = res.avatar;
+                    //
+                    $('#AddEdit_Modal').modal('show');
+                }
+            })
+        });
+        //Setup delete modal
+        $(document).on("click", ".link-delete", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_NguoiDung/GetUser/" + id,
+                dataType: "json",
+                success: function (res) {
+                    document.getElementById("D_id").innerHTML = res.id;
+                    document.getElementById("D_username").innerHTML = "Tên tài khoản: " + res.username;
+                    document.getElementById("D_password").innerHTML = "Mật khẩu: " + res.password;
+                    document.getElementById("D_email").innerHTML = "Email: " + res.email;
+                    document.getElementById("D_fullname").innerHTML = "Họ tên: " + res.fullName;
+                    document.getElementById("D_gender").innerHTML = "Giới tính: " + res.gender;
+                    document.getElementById("D_status").innerHTML = "Loại tài khoản: " + res.status;
+                    document.getElementById('D_avatar').src = res.avatar;
+                    $('#Delete_Modal').modal('show');
+                }
+            })
+        });
+        //Setup detail modal
+        $(document).on("click", ".link-detail", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_NguoiDung/GetUser/" + id,
+                dataType: "json",
+                success: function (res) {
+                    if (res != null) {
+                        document.getElementById('Dl_avatar').src = res.avatar;
+                        $('#Dl_username').text("Tên tài khoản: " + res.username);
+                        $('#Dl_password').text("Mật khẩu: " + res.password);
+                        $('#Dl_email').text("Email: " + res.email);
+                        $('#Dl_fullname').text("Họ tên: " + res.fullName);
+                        $('#Dl_phone').text("Số điện thoại: " + res.phone);
+                        $('#Dl_gender').text("Giới tính: " + res.gender);
+                        $('#Dl_dob').text("Ngày sinh: " + res.dateOfBirth);
+                        $('#Dl_dor').text("Ngày đăng ký: " + res.dateOfRegist);
+                        $('#Dl_adress').text("Địa chỉ: " + res.adress);
+                    }
+                    $('#Detail_Modal').modal('show');
+                }
+            })
+        })
+        //Add - Edit
+        function SaveData() {
+            var Data = {
+                id: $('#_id').val(),
+                status: $('#_status').val(),
+                username: $('#_username').val(),
+                password: $('#_password').val(),
+                email: $('#_email').val(),
+                fullName: $('#_fullname').val(),
+                phone: $('#_phone').val(),
+                gender: $('#_gender').val(),
+                dateOfBirth: $('#_dob').val(),
+                dateOfRegist: $('#_dor').val(),
+                adress: $('#_adress').val(),                     
+                avatar: thumbSrc,
+            }
+            $.ajax({
+                url: "/Admin/ql_NguoiDung/Create_Edit",
+                data: JSON.stringify(Data),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    if (res.status != null) {
+                        {
+                            if (res.status == "ADD_OK") {
+                                $('#ModalCancel').click();
+                                toastr["success"]("Thêm mới người dùng: " + Data.username + " thành công!", "Thêm mới thành công");
+                                GetAllData();
+                            }
+                            if (res.status == "EDIT_OK") {
+                                $('#ModalCancel').click();
+                                toastr["success"]("Sửa thông tin người dùng: " + Data.username + " thành công!", "Sửa thông tin thành công");
+                                GetAllData();
+                            }
+                            if (res.status == "ADD_FALSE") {
+                                toastr["warning"]("Người dùng: " + Data.username + " đã có trong hệ thống!", "Thêm mới thất bại");
+                            }
+                            if (res.status == "EDIT_FALSE") {
+                                toastr["warning"]("Người dùng: " + Data.username + " đã có trong hệ thống!", "Sửa thông tin thất bại");
+                            }
+                            if (res.status == "NO_INPUT_DATA") {
+                                toastr["error"](res.propery + " chưa được nhập!", "Lưu thất bại");
+                            }
+                        }
+                    }
+                },
+                error: function () {
+                    toastr["error"]("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Lỗi");
+                }
+            });
+        };
+        //Delete
+        function DeleteData() {
+            var id = document.getElementById("D_id").innerHTML;
+            $.ajax({
+                type: "POST",
+                url: "/Admin/ql_NguoiDung/Delete/" + id,
+                dataType: "json",
+                success: function (res) {
+                    if (res.status == "DELETE_OK") {
+                        toastr["success"]("Người dùng đã được xoá!", "Xoá thành công");
+                        GetAllData();
+                    }
+                    if (res.status == "DELETE_FALSE") {
+                        toastr["error"]("Xoá thất bại. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Xoá thất bại");
+                    }
+
+                }
+            });
+        };
+    </script>
 }

@@ -23,12 +23,12 @@ namespace QuanLyThuVien.Areas.Admin.Data
          */
 
         //1. Cấu hình
-        private static IFirebaseClient client;
         private static IFirebaseConfig config = new FirebaseConfig
         {
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
         };
+        private static IFirebaseClient client = new FireSharp.FirebaseClient(config);
         //2. Biến dữ liệu
         public static bool UpdateCount = false;
         public static List<User> UserList = new List<User>();
@@ -38,9 +38,10 @@ namespace QuanLyThuVien.Areas.Admin.Data
             client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("User");
             Dictionary<string, User> data = JsonConvert.DeserializeObject<Dictionary<string, User>>(response.Body.ToString());
-           
-            foreach (var item in data)
+
+            for (int i = data.Count - 1; i >= 0; i--)
             {
+                var item = data.ElementAt(i);
                 User user = new User();
                 user.id = item.Value.id;
                 user.username = item.Value.username;
@@ -54,8 +55,9 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 user.dateOfRegist = item.Value.dateOfRegist;
                 user.avatar = item.Value.avatar;
                 user.status = item.Value.status;
+                CheckData(user);
                 UserList.Add(user);
-            }
+            }          
             UpdateCount = true;
             return UserList;
         }
@@ -83,23 +85,19 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 GetAllData();
             }
+            if (!CheckUser(user, ""))
+                return false;
+            CheckData(user);
 
-            foreach (var item in UserList)
-            {
-                if (user.username.Equals(item.username))
-                {
-                    return false;
-                }
-            }
+            PushResponse response = client.Push("User/", user);
+            user.id = response.Result.name;
+
             Thread t1 = new Thread(() =>
             {
-                UserList.Add(user);
+                UserList.Insert(0, user);
             });
             Thread t2 = new Thread(() =>
-            {
-                client = new FireSharp.FirebaseClient(config);
-                PushResponse response = client.Push("User/", user);
-                user.id = response.Result.name;
+            {                
                 client.Set("User/" + user.id, user);
             });
             t1.Start();
@@ -118,9 +116,11 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 if (user.id.Equals(item.id))
                 {
+                    if (!CheckUser(user, user.id))
+                        return false;
+                    CheckData(user);
                     Thread t1 = new Thread(() =>
                     {
-                        client = new FireSharp.FirebaseClient(config);
                         client.Set("User/" + user.id, user);
                     });
                     Thread t2 = new Thread(() =>
@@ -150,7 +150,6 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 {
                     Thread t1 = new Thread(() =>
                     {
-                        client = new FireSharp.FirebaseClient(config);
                         client.Delete("User/" + id);
                     });
                     Thread t2 = new Thread(() =>
@@ -164,6 +163,39 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 }
             }
             return false;
+        }
+        //8. Kiểm tra người dùng đã tồn tại hay chưa
+        private static bool CheckUser(User user, string id)
+        {
+            foreach (var item in UserList)
+            {
+                if (user.username.Equals(item.username))
+                {
+                    if (item.id == id)
+                    {
+                        continue;
+                    }
+                    else
+                        return false;
+                }
+            }
+            return true;
+        }
+        //9. Kiểm tra dữ liệu
+        private static void CheckData(User user)
+        {
+            if (user.fullName == null)
+                user.fullName = "Không có thông tin.";
+            if (user.gender == null)
+                user.gender = "Không có thông tin.";
+            if (user.adress == null)
+                user.adress = "Không có thông tin.";
+            if (user.phone == null)
+                user.phone = "Không có thông tin.";
+            if (user.dateOfBirth == null)
+                user.phone = "Không có thông tin.";
+            if (user.dateOfRegist == null)
+                user.phone = "Không có thông tin.";
         }
     }
 }

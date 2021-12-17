@@ -27,18 +27,9 @@ namespace QuanLyThuVien.Models
         [Display(Name = "Ảnh đại diện")]
         public string avatar { get; set; }
         [Display(Name = "Trạng thái")]
-        public string status { get; set; }
-
-        [Display(Name = "Năm sinh")]
-        [Required(ErrorMessage = "Vui lòng nhập năm sinh")]
-        [DataType(DataType.Date)]        
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime dateOfBirth { get; set; }
-        [Display(Name = "Ngày đăng ký")]
-        [Required(ErrorMessage = "Vui lòng nhập ngày đăng ký")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime dateOfRegist { get; set; }
+        public string status { get; set; }      
+        public string dateOfBirth { get; set; }      
+        public string dateOfRegist { get; set; }
         public bool remember { get; set; }
     }
 }

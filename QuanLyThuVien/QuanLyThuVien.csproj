@@ -6024,13 +6024,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Areas\Admin\Views\ql_Sach\ListBooks.cshtml" />
     <Content Include="Areas\Admin\Views\ql_NguoiDung\ListUser.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_NguoiDung\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_NguoiDung\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_NguoiDung\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\ql_TacGia\ListAuthor.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_TheLoai\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_TheLoai\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_TheLoai\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\ql_TheLoai\ListCategories.cshtml" />
     <Content Include="Areas\Admin\Views\ql_PhieuMuon\Create.cshtml" />
     <Content Include="Areas\Admin\Views\ql_PhieuMuon\ListCallCard.cshtml" />

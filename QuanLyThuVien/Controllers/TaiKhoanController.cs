@@ -180,7 +180,7 @@ namespace QuanLyThuVien.Controllers
             FirebaseResponse getUserResponse = client.Get("User/" + id);
             User user = JsonConvert.DeserializeObject<User>(getUserResponse.Body.ToString());
             user.fullName = fullName;
-            user.dateOfBirth = DateTime.Parse(dateOfBirth);
+            user.dateOfBirth = dateOfBirth;
             user.phone = phone;
             user.email = email;
             user.gender = gender;

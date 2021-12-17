@@ -16,60 +16,67 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
          */
 
         //1. Danh sách người dùng
-        public ActionResult ListUser(string check)
+        public ActionResult ListUser()
+        {
+            return View();
+        }
+        public JsonResult GetListUser()
         {
             if (!Data_Users.UpdateCount)
-            {               
-                return View(Data_Users.GetAllData());
+                Data_Users.GetAllData();
+            return Json(Data_Users.UserList, JsonRequestBehavior.AllowGet);
+        }
+        //2. Thêm mới và sửa người dùng
+        public ActionResult Create_Edit(User user)
+        {
+            if (user.username != null && user.password != null)
+            {
+                //Create
+                if (user.id == null)
+                {
+                    if (Data_Users.CreateData(user))
+                        return Json(new { status = "ADD_OK" });
+                    else
+                        return Json(new { status = "ADD_FALSE" });
+                }
+                //Edit
+                else
+                {
+                    if (Data_Users.EditData(user))
+                        return Json(new { status = "EDIT_OK" });
+                    else
+                        return Json(new { status = "EDIT_FALSE" });
+                }                
             }
             else
             {
-                return View(Data_Users.UserList);
+                string propetyName = "";
+                if (user.username == null)
+                    propetyName += "Username, ";
+                if (user.email == null)
+                    propetyName += "Email";
+                if (user.password == null)
+                    propetyName += "Password";
+                return Json(new { status = "NO_INPUT_DATA", propery = propetyName });
             }
+                
         }
-        //2. Thêm mới người dùng
-        [HttpGet]
-        public ActionResult Create()
+        //3. Lấy 1 người dùng       
+        public ActionResult GetUser(string id)
         {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Create(User user)
-        {
-            if (user.username != null && user.password != null)
-            {
-                Data_Users.CreateData(user);
-            }
-            return View();       
-        }
-        //3. Sửa thông tin người dùng
-        [HttpGet]
-        public ActionResult Edit(string id)
-        {
-            return View(Data_Users.GetSingleData(id));
-        }
-        [HttpPost]
-        public ActionResult Edit(User user)
-        {
-            if (user.username != null && user.password != null)
-            {
-                Data_Users.EditData(user);
-                return RedirectToAction("ListUser");
-            }
-
-            return View();
+            User user = Data_Users.GetSingleData(id);
+            if(user != null)
+                return Json(user, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { status = false }, JsonRequestBehavior.AllowGet);
         }
         //4. Xoá người dùng
         public ActionResult Delete(string id)
         {
-            Data_Users.DeleteData(id);
-            return RedirectToAction("ListUser");
-        }
-        //5. Chi tiết người dùng
-        [HttpGet]
-        public ActionResult Detail(string id)
-        {
-            return View(Data_Users.GetSingleData(id));
-        }      
+            if (Data_Users.DeleteData(id))
+                return Json(new { status = "DELETE_OK" });
+            else
+                return Json(new { status = "DELETE_FALSE" });
+        }     
     }
 }
