@@ -376,8 +376,15 @@
                         html += '<td><p>' + item.email + '</p></td>';
                         html += '<td><p>' + item.fullName + '</p></td>';
                         html += '<td><p>' + item.gender + '</p></td>';
-                        html += '<td><p><img src="' + item.avatar + '" style="height: 75px; width: 75px; object-fit: cover;" /></p></td>';
-                        html += '<td><p>' + item.status + '</p></td>';
+                        html += '<td><p><img src="' + item.avatar + '" style="height: 75px; width: 75px; object-fit: cover;" /></p></td>';                       
+                        if (item.status == 'Admin')
+                            html += '<td class="text-center"><span class="badge bg-danger">Admin</span></td>';
+                        if (item.status == 'Thường')
+                            html += '<td class="text-center"><span class="badge bg-primary">Thường</span></td>';
+                        if (item.status == 'Vi phạm')
+                            html += '<td class="text-center"><span class="badge bg-warning">Vi phạm</span></td>';
+                        if (item.status == 'Khoá')
+                            html += '<td class="text-center"><span class="badge bg-light">Khoá</span></td>';
                         html += '<td class="link-action" style="min-width:135px; width: 135px;">';
                         html += '<a class="link-edit" data-id="' + item.id + '"><i class="fal fa-pencil-alt"></i> Sửa</a><br />';
                         html += '<a class="link-delete" data-id="' + item.id + '"><i class="far fa-trash-alt"></i> Xoá</a><br />';

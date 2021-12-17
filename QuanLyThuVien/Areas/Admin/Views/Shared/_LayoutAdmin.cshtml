@@ -42,7 +42,12 @@
                         </li>
                         <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_TheLoai" ? "active" : "")">
                             <a href="@Url.Action("ListCategories","ql_TheLoai")" class='sidebar-link'>
-                                <i class="fal fa-book-spells" style="margin-right: 20px"></i> Quản lý thể loại
+                                <i class="far fa-book-spells" style="margin-right: 20px"></i> Quản lý thể loại
+                            </a>
+                        </li>
+                        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_NguoiDung" ? "active" : "")">
+                            <a href="@Url.Action("ListUser","ql_NguoiDung")" class='sidebar-link'>
+                                <i class="far fa-users" style="margin-right: 20px"></i> Quản lý người dùng
                             </a>
                         </li>
                         <!---->
