@@ -29,7 +29,7 @@
                 <div class="sidebar-menu">
                     <ul class="menu">
                         <!---->
-                        <li class='sidebar-title'>Quản lý</li>
+                        <li class='sidebar-title'>&Pr; Quản lý &Sc;</li>
                         <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_Sach" ? "active" : "")">
                             <a href="@Url.Action("ListBooks","ql_Sach")" class='sidebar-link'>
                                 <i class="far fa-book" style="margin-right: 20px"></i> Quản lý sách
@@ -48,6 +48,11 @@
                         <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_NguoiDung" ? "active" : "")">
                             <a href="@Url.Action("ListUser","ql_NguoiDung")" class='sidebar-link'>
                                 <i class="far fa-users" style="margin-right: 20px"></i> Quản lý người dùng
+                            </a>
+                        </li>
+                        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ql_PhieuMuon" ? "active" : "")">
+                            <a href="@Url.Action("ListUser","ql_NguoiDung")" class='sidebar-link'>
+                                <i class="far fa-users" style="margin-right: 20px"></i> Quản lý phiếu mượn
                             </a>
                         </li>
                         <!---->
@@ -235,6 +240,7 @@
                                             <span class="avatar-content"><i data-feather="shopping-cart"></i></span>
                                         </div>
                                         <div>
+               
                                             <h6 class='text-bold'>New Order</h6>
                                             <p class='text-xs'>
                                                 An order made by Ahmad Saugi for product Samsung Galaxy S69
@@ -278,7 +284,6 @@
                     </ul>
                 </div>
             </nav>
-
             <div class="main-content container-fluid" id="body_build">
                 @RenderBody()
             </div>           

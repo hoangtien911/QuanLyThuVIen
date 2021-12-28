@@ -23,12 +23,13 @@ namespace QuanLyThuVien.Areas.Admin.Data
          */
 
         //1. Cấu hình
-        private static IFirebaseClient client;
+
         private static IFirebaseConfig config = new FirebaseConfig
         {
             BasePath = "https://libmanagerdatabase-default-rtdb.asia-southeast1.firebasedatabase.app/",
             AuthSecret = "Sxg7VD8YEx8nLTf7SJSSFK8c4ZWfKzvBokW1uw25"
         };
+        private static IFirebaseClient client = new FireSharp.FirebaseClient(config);
         //2. Biến dữ liệu
         public static bool UpdateCount = false;
         public static List<CallCard> CallcardList = new List<CallCard>();
@@ -39,6 +40,7 @@ namespace QuanLyThuVien.Areas.Admin.Data
             FirebaseResponse response = client.Get("CallCard");
             Dictionary<string, CallCard> data = JsonConvert.DeserializeObject<Dictionary<string, CallCard>>(response.Body.ToString());
 
+            //for ()
             foreach (var item in data)
             {
                 CallCard callCard = new CallCard();
