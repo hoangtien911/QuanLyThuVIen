@@ -42,11 +42,11 @@
                                 </div>
                                 <div style="margin: 10px 0;" id="info_user">
                                     <p style="margin: 10px 0;">Họ tên: @(Model.fullName != null ? Model.fullName : "Không có thông tin")</p>
-                                    <p style="margin: 10px 0;">Năm sinh: @(Model.dateOfBirth != null ? Model.dateOfBirth.ToString("dd-MM-yyyy") : "Không có thông tin")</p>
+                                    <p style="margin: 10px 0;">Năm sinh: @Model.dateOfBirth</p>
                                     <p style="margin: 10px 0;">Giới tính: @(Model.gender != null ? Model.gender : "Không có thông tin")</p>
                                     <p style="margin: 10px 0;">Số điện thoại: @(Model.phone != null ? Model.phone : "Không có thông tin")</p>
                                     <p style="margin: 10px 0;">Email: @(Model.email != null ? Model.email : "Không có thông tin")</p>
-                                    <p style="margin: 10px 0;">Ngày đăng ký: @(Model.dateOfRegist != null ? Model.dateOfRegist.ToString("dd-MM-yyyy") : "Không có thông tin")</p>
+                                    <p style="margin: 10px 0;">Ngày đăng ký: @Model.dateOfRegist</p>
                                     <p style="margin: 10px 0;">Địa chỉ: @(Model.adress != null ? Model.adress : "Không có thông tin")</p>
 
                                 </div>
@@ -82,7 +82,7 @@
                                              new
                                                   {
                                                       @class = "form-control",
-                                                      @Value = @Model.dateOfBirth.ToString("yyyy-MM-dd")
+                                                      @Value = @Model.dateOfBirth
                                                  ,
                                                       @id = "dob"
                                                   }

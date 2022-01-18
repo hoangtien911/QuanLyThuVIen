@@ -1,189 +1,523 @@
-﻿@model IEnumerable<QuanLyThuVien.Models.CallCard>
+﻿@model QuanLyThuVien.Models.CallCard
 
 @{
     ViewBag.Title = "Danh sách phiếu mượn";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
-<div class="container-fluid">
-
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <div class="row">
-                <h6 class="col-md-9 font-weight-bold text-primary font-Title">Quản lý phiếu mượn</h6>
-                <div class="col-md-3">
-                    <a href="@Url.Action("Create", "ql_PhieuMuon")" class="btn btn-success btn-user btn-block" style="font-weight:bold">
-                        <i class="fa fa-fw fa-plus-square"></i> Thêm mới phiếu mượn
-                    </a>
-                </div>
+<!-- PAGE BODY-->
+<div class="page-title">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-last">
+            <nav aria-label="breadcrumb" class='breadcrumb-header'>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Quản lý phiếu mượn</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách phiếu mượn</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Datatable-->
+<section class="section">
+    <div class="card">
+        <div class="card-header row" style="margin-bottom: 10px;">
+            <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #fff;">@ViewBag.Title</h3>
+            <div class="col-6 d-flex justify-content-end">
+                <a class="btn icon icon-left btn-primary" id="link-add" style="font-weight: bold; width: 200px; background-color:#0097ff; border-color: #fff">
+                    <i class="fal fa-plus-square"></i> Thêm mới
+                </a>
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr class="text-center">
-                            <th style="width: 250px;">
-                                @Html.DisplayNameFor(model => model.id)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.user_id)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.books_id)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.date_issued)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.date_return)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.date_returned)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.status)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td class="text-center">
-                                    @Html.DisplayFor(modelItem => item.id)
-                                </td>
-                                <td>
-                                    @{ //Hiển thị tên người dùng từ id
-                                        if (item.user_id != null)
-                                        {
-                                            foreach (var user in ViewBag.listUser)
-                                            {
-                                                if(item.user_id.Equals(user.id))
-                                                {
-                                                    <p>
-                                                        @user.username
-                                                    </p>
-                                                    break;
-                                                }
-                                            }
-                                        }
+            <table class='table table-hover' id="table1">
+                <thead>
+                    <tr style="text-align: center">
+                        <th>Người mượn</th>
+                        <th>Các sách mượn</th>
+                        <th>Ngày mượn</th>
+                        <th>Hạn trả</th>
+                        <th>Ngày trả</th>
+                        <th>Trạng thái</th>
+                        <th style="text-align: start">Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody id="_TBODY">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<div class="table_bar">
+    <a href="#" class="btn icon btn-success"></a>&emsp;Đang mượn&emsp;&emsp;
+    <a href="#" class="btn icon btn-primary"></a>&emsp;Đã trả&emsp;&emsp;
+    <a href="#" class="btn icon btn-danger"></a>&emsp;Quá hạn&emsp;&emsp;
+    <a href="#" class="btn icon btn-warning"></a>&emsp;Lỗi thông tin&emsp;&emsp;
+    <a href="#" class="btn icon btn-info"></a>&emsp;Chưa được duyệt&emsp;&emsp;
+    <a href="#" class="btn icon btn-secondary"></a>&emsp;Chưa cập nhật&emsp;&emsp;
+</div>
+<!-- CREATE-EDIT MODAL -->
+<div class="modal fade text-left w-100" id="AE_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="AE_Title">Thêm mới phiếu mượn</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="FormAddBook">
+                    <!--Row 1-->
+                    <div class="row">
+                        <div class="col-sm-6 mb-1" style="padding-right: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">ID</span>
+                                <input type="text" class="form-control" disabled="disabled" id="_id" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-1" style="padding-left: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">Trạng thái</span>
+                                <select class="form-control" id="_status">
+                                    <option>Đang mượn</option>
+                                    <option>Đã trả</option>
+                                    <option>Quá hạn</option>
+                                    <option>Lỗi thông tin</option>
+                                    <option>Chưa được duyệt</option>
+                                    <option>Chưa cập nhật</option>
+                                </select>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 2-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Người mượn *</span>
+                                <select class="form-control" id="_userID">
+                                    @foreach (var user in ViewBag.ListUser)
+                                    {
+                                        <option value="@user.id">@user.username</option>
                                     }
-                                </td>
-                                <td>
-                                    @{ //Hiển thị tên sách từ chuỗi id
-                                        if (item.books_id != null)
-                                        {
-                                            int i = 0;
-                                            string[] booksList = item.books_id.Split(',');
-                                            foreach (var book in booksList)
-                                            {
-                                                foreach (var bookName in ViewBag.listBooks)
-                                                {
-                                                    if (book.Equals(bookName._id))
-                                                    {
-                                                        if (i == 2)
-                                                        {
-                                                            <p>
-                                                                @bookName.title ...
-                                                            </p>
-                                                            break;
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>
-                                                                @bookName.title
-                                                            </p>
-                                                        }
-                                                    }
-                                                }
-                                                i++;
-                                                if (i == 3)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                        }
+                                </select>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 3 -->
+                    <div class="row mutil-choice">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Sách *</span>
+                                <select class="form-control" id="_books" name="_books" multiple="multiple">
+                                    @foreach (var book in ViewBag.ListBook)
+                                    {
+                                        <option value="@book._id">@book.title</option>
                                     }
-                                </td>
-                                <td class="text-center">
-                                    @{
-                                        DateTime date_temp = new DateTime(0001,01,01);
-                                        if (DateTime.Compare(item.date_issued, date_temp) == 0 )
-                                        {
-                                            <p>
-                                                Chưa có thông tin
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(modelItem => item.date_issued)
-                                        }
-                                    }
-                                </td>
-                                <td class="text-center">
-                                    @{                                       
-                                        if (DateTime.Compare(item.date_return, date_temp) == 0)
-                                        {
-                                            <p>
-                                                Chưa có thông tin
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(modelItem => item.date_return)
-                                        }
-                                    }
-                                </td>
-                                <td class="text-center">
-                                    @{                                       
-                                        if (DateTime.Compare(item.date_returned, date_temp) == 0)
-                                        {
-                                            <p>
-                                                Chưa có thông tin
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(modelItem => item.date_returned)
-                                        }
-                                    }
-                                </td>
-                                <td class="text-center">                                 
-                                    @Html.DisplayFor(modelItem => item.status)                                   
-                                </td>                                
-                                <td class="link-action">
-                                    <a class="link-edit" href="@Url.Action("Edit", "ql_PhieuMuon" , new { id = item.id})" 
-                                       onclick="return confirm('Bạn có muốn sửa phiếu mượn @Html.DisplayFor(modelItem => item.id)?')">
-                                        <i class="fas fa-fw fa-edit"></i>Sửa
-                                    </a><br />
-                                    <a class="link-delete" href="@Url.Action("Delete", "ql_PhieuMuon" , new { id = item.id})" 
-                                       onclick="return confirm('Bạn có muốn xoá phiếu mượn @Html.DisplayFor(modelItem => item.id)?')">
-                                        <i class="fas fa-fw fa-trash"></i>Xoá
-                                    </a><br />
-                                    <a class="link-detail" href="@Url.Action("Detail", "ql_PhieuMuon" , new { id = item.id})">
-                                        <i class="fas fa-fw fa-info"></i>Chi tiết
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                </select>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 4 -->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Ngày mượn</span>
+                                <input type="text" class="form-control" name="datepicker" id="_issued" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 5 -->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Ngày hẹn trả</span>
+                                <input type="text" class="form-control" name="datepicker" id="_return" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 6 -->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Ngày trả</span>
+                                <input type="text" class="form-control" name="datepicker" id="_returned" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!---->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="fa fa-times"></i> Huỷ
+                </button>
+                <button name="SaveBook" type="button" class="btn btn-primary ml-1" onclick="SaveData()">
+                    <i class="fal fa-save"></i> Lưu
+                </button>
             </div>
         </div>
     </div>
 </div>
-@{
-    if (ViewBag.MsEdit != null)
-    {
-        Response.Write("<script>alert('" + ViewBag.MsEdit + "')</script>");
-        ViewBag.MsEdit = null;
-    }
-    if (ViewBag.MsDelete != null)
-    {
-        Response.Write("<script>alert('Đã xoá phiếu mượn " + ViewBag.MsDelete + "')</script>");
-        ViewBag.MsDelete = null;
-    }
+<!-- DELETE MODAL-->
+<div class="modal fade text-left" id="Delete_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title white" id="Delete_title">Bạn có muốn xoá phiếu mượn này?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="Delete_modal_body">
+                <p id="D_id" class="hide"></p>
+                <div class="row">
+                    <div class="col-12">
+                        <ul>
+                            <li id="D_username"></li>
+                            <li id="D_books"></li>
+                            <li id="D_issued"></li>
+                            <li id="D_return"></li>
+                            <li id="D_returned"></li>
+                            <li id="D_status"></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="fa fa-times"></i> Huỷ
+                </button>
+                <button type="button" class="btn btn-danger ml-1" data-bs-dismiss="modal" onclick="DeleteData()">
+                    <i class="fa fa-trash"></i> Xoá
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DETAIL MODAL -->
+<div class="modal fade text-left w-100" id="Detail_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin phiếu mượn</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="row detail_old">
+                        <div class="col-3">
+                            <h4><b>Người mượn</b></h4>
+                        </div>
+                        <div class="col-9">
+                            <h4 id="Dl_username"></h4>
+                        </div>
+                    </div>
+                    <div class="row detail_even">
+                        <div class="col-3">
+                            <h4><b>Sách mượn</b></h4>
+                        </div>
+                        <div class="col-9">
+                            <ul id="Dl_books" style="padding-left: 15px">                                
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row detail_old">
+                        <div class="col-3">
+                            <h4><b>Ngày mượn</b></h4>
+                        </div>
+                        <div class="col-9">
+                            <h4 id="Dl_issued">Ngày mượn</h4>
+                        </div>
+                    </div>
+                    <div class="row detail_even">
+                        <div class="col-3">
+                            <h4><b>Ngày hẹn trả</b></h4>
+                        </div>
+                        <div class="col-9">
+                            <h4 id="Dl_return">Ngày hẹn trả</h4>
+                        </div>
+                    </div>
+                    <div class="row detail_old">
+                        <div class="col-3">
+                            <h4><b>Ngày trả</b></h4>
+                        </div>
+                        <div class="col-9">
+                            <h4 id="Dl_returned">Ngày trả</h4>
+                        </div>
+                    </div>
+                    <div class="row detail_even">
+                        <div class="col-3">
+                            <h4><b>Trạng thái</b></h4>
+                        </div>
+                        <div class="col-9">
+                            <h4 id="Dl_status">Trạng thái</h4>
+                        </div>
+                    </div>                                     
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="fa fa-chevron-left"></i> Trở lại
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        //ready function
+        $(document).ready(function () {
+            GetListData();
+
+            //setup chosen
+            $("#_status").chosen({
+                disable_search: true
+            });
+            $("#_userID").chosen();
+            $("#_books").chosen({
+                no_results_text: "Không tìm thấy sách",
+                max_selected_options: 5
+            });
+            $("#_books").bind("chosen:maxselected", function () { alert("Chỉ được chọn nhiều nhất 5 sách."); });
+            //setup datetime picker
+            var today = new Date();
+            var date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+            $('#_issued').datepicker({
+                autoclose: true,
+                format: "dd-mm-yyyy",
+            });
+            $('#_issued').datepicker('update', date);
+            //
+            $('#_return').datepicker({
+                autoclose: true,
+                format: "dd-mm-yyyy",
+            });
+            $('#_return').datepicker('update', date);
+            //
+            $('#_returned').datepicker({
+                autoclose: true,
+                format: "dd-mm-yyyy",
+            });
+            //
+        });
+        //Start datatable
+        var myTable = document.querySelector('#table1');
+        var dataTable = new simpleDatatables.DataTable(myTable);
+        function GetListData() {
+            $('#_TBODY').html("");
+            dataTable.destroy();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_PhieuMuon/GetListCallCard",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var html = '';
+                    $.each(res, function (key, item) {
+                        //lấy tên sách
+                        var i = 0;
+                        var BookName = '';
+                        $.each(item.books_id_temp, function (keyA, itemA) {
+                            if (i == 2) {
+                                BookName += '<p>' + itemA + ' ...</p>';
+                                return false;
+                            }
+                            else
+                                BookName += '<p>' + itemA + '</p>';
+                            i += 1;
+                        });
+                        //
+                        html += '<tr style="text-algin: center;">';
+                        html += '<td><p>' + item.username + '</p></td>';
+                        html += '<td style="max-width: 500px"><p>' + BookName + '</p></td>';
+                        html += '<td><p>' + item.date_issued + '</p></td>';
+                        html += '<td><p>' + item.date_return + '</p></td>';
+                        html += '<td><p>' + item.date_returned + '</p></td>';                        
+                        if (item.status == 'Đang mượn')
+                            html += '<td class="text-center"><span class="badge bg-success">' + item.status + '</span></td>';
+                        if (item.status == 'Quá hạn')
+                            html += '<td class="text-center"><span class="badge bg-danger">' + item.status + '</span></td>';
+                        if (item.status == 'Đã trả')
+                            html += '<td class="text-center"><span class="badge bg-primary">' + item.status + '</span></td>';
+                        if (item.status == 'Chưa cập nhật')
+                            html += '<td class="text-center"><span class="badge bg-secondary">' + item.status + '</span></td>';
+                        if (item.status == 'Chưa được duyệt')
+                            html += '<td class="text-center"><span class="badge bg-info">' + item.status + '</span></td>';
+                        if (item.status == 'Lỗi thông tin')
+                            html += '<td class="text-center"><span class="badge bg-warning">' + item.status + '</span></td>';
+                        html += '<td class="link-action" style="min-width:135px; width: 135px;">';
+                        html += '<a class="link-edit" data-id="' + item.id + '"><i class="fal fa-pencil-alt"></i> Sửa</a><br />';
+                        html += '<a class="link-delete" data-id="' + item.id + '"><i class="far fa-trash-alt"></i> Xoá</a><br />';
+                        html += '<a class="link-detail" data-id="' + item.id + '"><i class="fal fa-info-circle"></i> Chi tiết</a>';
+                        html += '</td >';
+                        html += '</tr>';
+                    });
+                    $('#_TBODY').html(html);
+                    dataTable = new simpleDatatables.DataTable(myTable);
+                }
+            });
+        }
+        //setup create modal
+        $(document).on("click", "#link-add", function (e) {
+            e.preventDefault();
+            $('#_id').val("");
+            $('#_status').val("Đang mượn").trigger('chosen:updated');
+            $('#_userID').val("").trigger('chosen:updated');
+            $('#_books').val("").trigger('chosen:updated');
+            var today = new Date();
+            var date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+            $('#_issued').datepicker('update', date);
+            $('#_return').datepicker('update', date);
+            $('#_returned').val('');
+            $('#AE_Modal').modal('show');
+        });
+        //Setup edit modal
+        $(document).on("click", ".link-edit", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            document.getElementById('AE_Title').innerHTML = "Sửa thông tin phiếu mượn";
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_PhieuMuon/GetCallCard/" + id,
+                dataType: "json",
+                success: function (res) {
+                    //
+                    $('#_id').val(res.id);
+                    $('#_status').val(res.status).trigger('chosen:updated');
+                    $('#_userID').val(res.user_id).trigger('chosen:updated');
+                    $('#_books').val(res.books_id_temp).trigger('chosen:updated');
+                    $('#_issued').val(res.date_issued);
+                    $('#_return').val(res.date_return);
+                    $('#_returned').val(res.date_returned);
+                    //
+                    $('#AE_Modal').modal('show');
+                }
+            })
+        });
+        //Setup delete modal
+        $(document).on("click", ".link-delete", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_PhieuMuon/GetCallCard_D/" + id,
+                dataType: "json",
+                success: function (res) {
+                    document.getElementById("D_id").innerHTML = res.id;
+                    document.getElementById("D_username").innerHTML = "<b>Người mượn:</b> " + res.username;
+                    var booksname = res.books_id_temp.join(', ');
+                    document.getElementById("D_books").innerHTML = "<b>Sách mượn:</b> " + booksname;
+                    document.getElementById("D_issued").innerHTML = "<b>Ngày mượn:</b> " + res.date_issued;
+                    document.getElementById("D_return").innerHTML = "<b>Ngày hẹn trả:</b> " + res.date_return;
+                    document.getElementById("D_returned").innerHTML = "<b>Ngày trả:</b> " + res.date_returned;
+                    document.getElementById("D_status").innerHTML = "<b>Trạng thái:</b> " + res.status;
+                    $('#Delete_Modal').modal('show');
+                }
+            })
+        });
+        //Setup detail modal
+        $(document).on("click", ".link-detail", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_PhieuMuon/GetCallCard_D/" + id,
+                dataType: "json",
+                success: function (res) {
+                    if (res != null) {
+                        $('#Dl_username').text(res.username);
+                        var newul = document.getElementById('Dl_books');
+                        newul.innerHTML = "";
+                        $.each(res.books_id_temp, function (key, item) {
+                            var newli = document.createElement("li");
+                            newli.innerHTML = '<h4>' + item + '</h4>';
+                            newul.appendChild(newli);
+                        });                                               
+                        $('#Dl_issued').text(res.date_issued);
+                        $('#Dl_return').text(res.date_return);
+                        $('#Dl_returned').text(res.date_returned);
+                        $('#Dl_status').text(res.status);                        
+                    }
+                    $('#Detail_Modal').modal('show');
+                }
+            })
+        })
+        //Add - Edit
+        function SaveData() {
+            var Data = {
+                id: $('#_id').val(),
+                status: $('#_status').val(),
+                user_id: $('#_userID').val(),
+                books_id_temp: $('#_books').val(),
+                date_issued: $('#_issued').val(),
+                date_return: $('#_return').val(),
+                date_returned: $('#_returned').val(),             
+            }
+            $.ajax({
+                url: "/Admin/ql_PhieuMuon/Create_Edit",
+                data: JSON.stringify(Data),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    if (res.status != null) {
+                        {
+                            if (res.status == "ADD_OK") {
+                                $('#ModalCancel').click();
+                                toastr["success"]("Thêm mới phiếu mượn thành công!", "Thêm mới thành công");
+                                GetListData();
+                            }
+                            if (res.status == "EDIT_OK") {
+                                $('#ModalCancel').click();
+                                toastr["success"]("Sửa thông tin phiếu mượn thành công!", "Sửa thông tin thành công");
+                                GetListData();
+                            }
+                            if (res.status == "ADD_FALSE") {
+                                toastr["warning"]("Thêm mới phiếu mượn không thành công!", "Thêm mới thất bại");
+                            }
+                            if (res.status == "EDIT_FALSE") {
+                                toastr["warning"]("Sửa thông tin phiếu mượn không thành công!", "Sửa thông tin thất bại");
+                            }
+                            if (res.status == "NO_INPUT_DATA") {
+                                toastr["error"](res.propery + " chưa được nhập!", "Lưu thất bại");
+                            }
+                        }
+                    }
+                },
+                error: function () {
+                    toastr["error"]("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Lỗi");
+                }
+            });
+        };
+        //Delete
+        function DeleteData() {
+            var id = document.getElementById("D_id").innerHTML;
+            $.ajax({
+                type: "POST",
+                url: "/Admin/ql_PhieuMuon/Delete/" + id,
+                dataType: "json",
+                success: function (res) {
+                    if (res.status == "DELETE_OK") {
+                        toastr["success"]("Phiếu mượn đã được xoá!", "Xoá thành công");
+                        GetListData();
+                    }
+                    if (res.status == "DELETE_FALSE") {
+                        toastr["error"]("Xoá thất bại. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Xoá thất bại");
+                    }
+
+                }
+            });
+        };
+    </script>
 }

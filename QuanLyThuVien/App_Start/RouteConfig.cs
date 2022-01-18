@@ -18,11 +18,6 @@ namespace QuanLyThuVien
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "TrangChu", action = "HomePage", id = UrlParameter.Optional }
             );
-            routes.MapRoute(
-                name: "Areas",
-                url: "{area}/{controller}/{action}/{id}",
-                defaults: new { area = "Admin", controller = "TrangChu", action = "HomePage", id = UrlParameter.Optional }
-            );
         }
     }
 }

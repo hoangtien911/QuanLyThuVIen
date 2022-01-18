@@ -73,7 +73,6 @@ namespace QuanLyThuVien.Areas.Admin.Data
             Books data = new Books();
             if (!UpdateCount)
             {
-                client = new FireSharp.FirebaseClient(config);
                 FirebaseResponse response = client.Get("Books/" + id);
                 data = JsonConvert.DeserializeObject<Books>(response.Body);
                 

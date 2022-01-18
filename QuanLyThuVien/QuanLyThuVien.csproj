@@ -5754,6 +5754,13 @@
     <Content Include="Areas\Admin\StyleSheet\fontawesome-free-5.15.4-web\webfonts\fa-light-300.svg" />
     <Content Include="Areas\Admin\StyleSheet\fontawesome-free-5.15.4-web\webfonts\fa-regular-400.svg" />
     <Content Include="Areas\Admin\StyleSheet\fontawesome-free-5.15.4-web\webfonts\fa-solid-900.svg" />
+    <Content Include="Areas\Admin\StyleSheet\vendors\chartjs\Chart.bundle.js" />
+    <Content Include="Areas\Admin\StyleSheet\vendors\chartjs\Chart.bundle.min.js" />
+    <Content Include="Areas\Admin\StyleSheet\vendors\chartjs\Chart.css" />
+    <Content Include="Areas\Admin\StyleSheet\vendors\chartjs\Chart.js" />
+    <Content Include="Areas\Admin\StyleSheet\vendors\chartjs\Chart.min.css" />
+    <Content Include="Areas\Admin\StyleSheet\vendors\chartjs\Chart.min.js" />
+    <Content Include="Areas\Admin\StyleSheet\vendors\dashboard.js" />
     <Content Include="Areas\Admin\StyleSheet\vendors\perfect-scrollbar\perfect-scrollbar.css" />
     <Content Include="Areas\Admin\JavaScript\perfect-scrollbar\perfect-scrollbar.min.js" />
     <Content Include="Areas\Admin\JavaScript\simple-datatables\simple-datatables.js" />
@@ -6026,10 +6033,7 @@
     <Content Include="Areas\Admin\Views\ql_NguoiDung\ListUser.cshtml" />
     <Content Include="Areas\Admin\Views\ql_TacGia\ListAuthor.cshtml" />
     <Content Include="Areas\Admin\Views\ql_TheLoai\ListCategories.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_PhieuMuon\Create.cshtml" />
     <Content Include="Areas\Admin\Views\ql_PhieuMuon\ListCallCard.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_PhieuMuon\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\ql_PhieuMuon\Detail.cshtml" />
     <Content Include="fonts\LibraryFonts\fonts\bicon.eot" />
     <Content Include="fonts\LibraryFonts\fonts\bicon.ttf" />
     <Content Include="fonts\LibraryFonts\fonts\bicon.woff" />

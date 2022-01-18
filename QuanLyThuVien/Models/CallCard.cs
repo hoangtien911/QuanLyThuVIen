@@ -17,20 +17,14 @@ namespace QuanLyThuVien.Models
         [Required(ErrorMessage = "Vui lòng nhập sách mượn")]
         public string books_id { get; set; }
         [Display(Name = "Ngày mượn")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime date_issued { get; set; }
+        public string date_issued { get; set; }
         [Display(Name = "Ngày hẹn trả")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime date_return { get; set; }
-        [Display(Name = "Ngày trả")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime date_returned { get; set; }
+        public string date_return { get; set; }
+        [Display(Name = "Ngày trả")]        
+        public string date_returned { get; set; }
         [Display(Name = "Trạng thái")]
         public string status { get; set; }
-
         public string [] books_id_temp { get; set; }
+        public string username { get; set; }
     }
 }

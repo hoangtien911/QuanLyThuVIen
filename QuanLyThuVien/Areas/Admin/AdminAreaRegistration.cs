@@ -15,9 +15,9 @@ namespace QuanLyThuVien.Areas.Admin
         public override void RegisterArea(AreaRegistrationContext context) 
         {
             context.MapRoute(
-                "Admin_",
+                "Admin",
                 "Admin/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { controller = "ThongKe", action = "ThongKe", id = UrlParameter.Optional }
             );
         }
     }

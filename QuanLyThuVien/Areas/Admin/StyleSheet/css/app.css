@@ -1131,7 +1131,7 @@ footer {
         }
 
 .navbar {
-    height: 70px;
+    height: 60px;
     padding: 1.5rem;
     box-shadow: 0 0 15px 0;
 }
@@ -1597,11 +1597,6 @@ footer {
 .text-info {
     color: #41b1f9
 }
-
-.bg-info {
-    background-color: #41b1f9 !important
-}
-
 .text-blue {
     color: #3245d1
 }
@@ -1786,4 +1781,25 @@ footer {
     margin-right: auto;
     border: 1rem solid #cbcbcb;
     border-radius: 30px;
+}
+.detail_old {
+    padding: 10px 50px 1px 50px;
+    background: #dbdbdb;
+}
+.detail_even {
+    padding: 10px 50px 1px 50px;
+    background: #fff;
+}
+.table_bar {
+    height: 40px;
+    width: auto;
+    padding: 0 1.7rem;
+    margin: 20px;
+    text-align: end;
+}
+.table_bar a{
+    margin-top:-4px;
+}
+#TableLine tbody tr{
+    height: 50px;
 }

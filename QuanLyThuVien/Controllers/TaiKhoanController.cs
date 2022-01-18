@@ -7,6 +7,7 @@ using FireSharp.Interfaces;
 using FireSharp.Config;
 using FireSharp.Response;
 using QuanLyThuVien.Models;
+using QuanLyThuVien.Areas.Admin.Data;
 
 namespace QuanLyThuVien.Controllers
 {
@@ -28,27 +29,17 @@ namespace QuanLyThuVien.Controllers
         [HttpPost]
         public ActionResult DangNhap(User user)
         {
-            client = new FireSharp.FirebaseClient(config);
-            FirebaseResponse response = client.Get("User");
-            Dictionary<string, User> data = JsonConvert.DeserializeObject<Dictionary<string, User>>(response.Body.ToString());
+            //check data
+            if (!Data_Users.UpdateCount)
+                Data_Users.GetAllData();
+            //logic
             User loginUser = new User();
             bool check = false;
-            foreach (var item in data)
+            foreach (var item in Data_Users.UserList)
             {
-                if (item.Value.username.Equals(user.username))
+                if (item.username.Equals(user.username))
                 {
-                    loginUser.id = item.Value.id;
-                    loginUser.username = item.Value.username;
-                    loginUser.email = item.Value.email;
-                    loginUser.password = item.Value.password;
-                    loginUser.fullName = item.Value.fullName;
-                    loginUser.dateOfBirth = item.Value.dateOfBirth;
-                    loginUser.gender = item.Value.gender;
-                    loginUser.adress = item.Value.adress;
-                    loginUser.phone = item.Value.phone;
-                    loginUser.dateOfRegist = item.Value.dateOfRegist;
-                    loginUser.avatar = item.Value.avatar;
-                    loginUser.status = item.Value.status;
+                    loginUser = item;
                     check = true;
                     break;
                 }
@@ -73,7 +64,7 @@ namespace QuanLyThuVien.Controllers
                     Response.Cookies["AdminCookies"]["avatar"] = loginUser.avatar;
                     return RedirectToAction("ThongKe", "ThongKe", new { area = "Admin" });
                 }
-                if (loginUser.status.Equals("User"))
+                if (loginUser.status.Equals("Thường"))
                 {
                     Session["UserSession"] = loginUser.id;
                     Response.Cookies["UserCookies"]["username"] = loginUser.username;

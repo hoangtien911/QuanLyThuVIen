@@ -10,6 +10,7 @@ using FireSharp.Response;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Areas.Admin.Data;
 using System.Threading;
+using System.Globalization;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
@@ -17,84 +18,175 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
     {     
         public ActionResult ThongKe()
         {
-            //setup
-            Data_Users.GetAllData();
-            Data_Books.GetAllData();
-            Data_CallCard.GetAllData();
-            //Lấy số lượng người dùng
+            //Check data
+            if (!Data_Books.UpdateCount)
+                Data_Books.GetAllData();
+            if (!Data_Users.UpdateCount)
+                Data_Users.GetAllData();
+            //Logic
             Thread t1 = new Thread(() =>
             {
-                ViewBag.UserCount = Data_Users.UserList.Count;
+                int BookCount = Data_Books.BooksList.Count;
+                int Account = Data_Users.UserList.Count;
+                ViewBag.Account = Account;
+                ViewBag.BookCount = BookCount;
             });
-            //Lấy số lượng sách
             Thread t2 = new Thread(() =>
-            {              
-                float TongSach = 0;
-                float SachCon = 0;
-                float tiLe = 0;
+            {
+                int TotalBook = 0;
+                int nBook = 0;
                 foreach (var book in Data_Books.BooksList)
                 {
-                    TongSach += book.count;
-                    SachCon += book.count_in;
-
+                    TotalBook += book.count;
+                    nBook += book.count_in;
                 }
-                tiLe = (SachCon / TongSach) * 100;
-                ViewBag.TiLeSach = tiLe;
-                ViewBag.BookCount = Data_Books.BooksList.Count;
+                ViewBag.TotalBook = TotalBook;
+                ViewBag.nBook = nBook;
             });
-            //Lấy số lượng phiếu mượn và tên người mượn
-            Thread t3 = new Thread(() =>
-            {
-                List<CallCard> callCards = Data_CallCard.CallcardList;
-                foreach(var card in callCards)
-                {
-                    User user = Data_Users.GetSingleData(card.user_id);
-                    card.user_id = user.username;
-                }
-                ViewBag.CallCardCount = Data_CallCard.CallcardList.Count;
-                ViewBag.listCallCard = callCards;
-            });
-            //lấy sách theo id trong phiếu mượn     
-            Thread t4 = new Thread(() =>
-            {
-                ViewBag.listBooksCallCard = new List<Books>();
-                foreach (var callCard in Data_CallCard.CallcardList)
-                {
-                    callCard.books_id_temp = callCard.books_id.Split(',');
-                    foreach (var booksID in callCard.books_id_temp)
-                    {
-                        ViewBag.listBooksCallCard.Add(Data_Books.GetSingleData(booksID));
-                    }
-                }
-            });         
             t1.Start();
-            t2.Start();
-            t3.Start();
-            t4.Start();
+            t2.Start();                                          
             return View();
         }
-        public JsonResult DataThongKe(string status)
-        {          
-            int DangMuons = 0;
-            int DaTras = 0;
-            int QuaHans = 0;
-            foreach(var item in Data_CallCard.CallcardList)
+        public JsonResult DataBarChart()
+        {
+            int Month = DateTime.Now.Month;
+            //Check data
+            if (!Data_CallCard.UpdateCount)
+                Data_CallCard.GetAllData();
+            //Logic
+
+            ///Tìm số phiếu mượn theo từng tháng để hiển thị lên biểu đồ
+            int[] CountCallCard = new int[12];
+            Thread t1 = new Thread(() =>
             {
-                if (item.status == "Đang mượn")
-                    DangMuons++;
-                if (item.status == "Đã trả")
-                    DaTras++;
-                if (item.status == "Quá hạn")
-                    QuaHans++;
-            }
-            return Json(new
+                int y = DateTime.Now.Year;
+                foreach (var card in Data_CallCard.CallcardList)
+                {
+                    if (card.status == "Đã trả" || card.status == "Đang mượn")
+                    {
+                        DateTime timeTemp = DateTime.ParseExact(card.date_issued, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                        if(timeTemp.Year == y)
+                        {
+                            int m = timeTemp.Month - 1;
+                            CountCallCard[m] += 1;
+                        }                 
+                    }
+                }
+            });        
+            ///Tổng phiếu mượn
+            int AllCallCard = Data_CallCard.CallcardList.Count;
+            ///Tính tỉ lệ phiếu mượn tháng này so với tháng trước
+            float rate = 0;
+            Thread t2 = new Thread(() =>
             {
-                Tong = Data_CallCard.CallcardList.Count,
-                DangMuon = DangMuons,
-                DaTra = DaTras,
-                QuaHan = QuaHans,
-                Status = status,
+                float CallCardLate = 0;
+                float CallCardNow = 0;        
+                ////Tháng 1 năm này và tháng 12 năm trước
+                if (Month == 1)
+                {
+                    int y = DateTime.Now.Year - 1;
+                    foreach (var card in Data_CallCard.CallcardList)
+                    {
+                        if (card.status == "Đã trả" || card.status == "Đang mượn")
+                        {
+                            DateTime timeTemp = DateTime.ParseExact(card.date_issued, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                            if (timeTemp.Year == y && (timeTemp.Month) == 12)
+                            {
+                                CallCardLate += 1;
+                            }
+                            if (timeTemp.Year == (y + 1) && (timeTemp.Month) == 1)
+                            {
+                                CallCardNow += 1;
+                            }
+                        }
+                    }
+                }
+                ////Tháng này và tháng trước
+                if (Month > 1)
+                {
+                    foreach (var card in Data_CallCard.CallcardList)
+                    {
+                        if (card.status == "Đã trả" || card.status == "Đang mượn")
+                        {
+                            DateTime timeTemp = DateTime.ParseExact(card.date_issued, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                            if ((timeTemp.Month) == Month -1)
+                            {
+                                CallCardLate += 1;
+                            }
+                            if ((timeTemp.Month) == Month)
+                            {
+                                CallCardNow += 1;
+                            }
+                        }
+                    }
+                }
+                ////Tính tỷ lệ
+                if (CallCardLate == 0 && CallCardNow == 0)
+                    rate = 0;
+                else if (CallCardLate == 0 && CallCardNow > 0)
+                    rate = 100;
+                else if (CallCardNow > 0 && CallCardNow == 0)
+                    rate = -100;
+                else
+                {
+                    rate = (CallCardNow / CallCardLate) * 100 -100;
+                }
             });
+            t1.Start();
+            t2.Start();
+            return Json(new { Month = Month, CountCallCard = CountCallCard, AllCallCard = AllCallCard, Rate = rate }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DataBarLine()
+        {
+            //checkData
+            if (!Data_CallCard.UpdateCount)
+                Data_CallCard.GetAllData();
+            //logic
+            float Count = Data_CallCard.CallcardList.Count;
+            float[] CountCard = new float[6];
+            foreach(var card in Data_CallCard.CallcardList)
+            {
+                if (card.status == "Đã trả")
+                    CountCard[0]++;
+                else if (card.status == "Đang mượn")
+                    CountCard[1]++;
+                else if (card.status == "Quá hạn")
+                    CountCard[2]++;
+                else if (card.status == "Chưa được duyệt")
+                    CountCard[3]++;
+                else if (card.status == "Lỗi thông tin")
+                    CountCard[4]++;
+                else if (card.status == "Chưa cập nhật")
+                    CountCard[5]++;
+            }
+            double[] RateCard = new double[6];
+            for(int i = 0; i < 6; i++)
+            {
+                RateCard[i] = CountCard[i] / Count * 100;
+                RateCard[i] = Math.Round(RateCard[i]);
+            }
+            return Json(new { RateCard = RateCard }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DataPieChart()
+        {
+            //check data
+            if (!Data_Users.UpdateCount)
+                Data_Users.GetAllData();
+            //logic
+            int[] UserData = new int[3];
+            int Count = 0;
+            foreach(var user in Data_Users.UserList)
+            {
+                if (user.status == "Thường")
+                    UserData[0]++;
+                else if (user.status == "Vi phạm")
+                    UserData[1]++;
+                else if (user.status == "Khoá")
+                    UserData[2]++;
+                if (user.status != "Admin")
+                    Count++;
+            }
+            return Json(new { UserData = UserData, Count = Count }, JsonRequestBehavior.AllowGet);
         }
     }
 }

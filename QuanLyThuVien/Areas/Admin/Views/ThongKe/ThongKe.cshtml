@@ -3,236 +3,325 @@
     ViewBag.Title = "ThongKe";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
-<!-- Begin Page Content -->
-<div class="container-fluid">
-
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Thống kê</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-            <i class="fas fa-download fa-sm text-white-50"></i> In báo cáo
-        </a>
+<div class="page-title">
+    <h3>Thống kê</h3>
+</div>
+<section class="section">
+    <div class="row mb-2">
+        <!---->
+        <div class="col-12 col-md-3">
+            <div class="card card-statistic">
+                <div class="card-body p-0">
+                    <div class="d-flex flex-column">
+                        <div class='px-3 py-3 d-flex justify-content-between'>
+                            <h3 class='card-title'>Đầu sách</h3>
+                            <div class="card-right d-flex align-items-center">
+                                <p>@ViewBag.BookCount </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---->
+        <div class="col-12 col-md-3">
+            <div class="card card-statistic">
+                <div class="card-body p-0">
+                    <div class="d-flex flex-column">
+                        <div class='px-3 py-3 d-flex justify-content-between'>
+                            <h3 class='card-title'>Tổng sách</h3>
+                            <div class="card-right d-flex align-items-center">
+                                <p>@ViewBag.TotalBook </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---->
+        <div class="col-12 col-md-3">
+            <div class="card card-statistic">
+                <div class="card-body p-0">
+                    <div class="d-flex flex-column">
+                        <div class='px-3 py-3 d-flex justify-content-between'>
+                            <h3 class='card-title'>Sách còn</h3>
+                            <div class="card-right d-flex align-items-center">
+                                <p>@ViewBag.nBook </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---->
+        <div class="col-12 col-md-3">
+            <div class="card card-statistic">
+                <div class="card-body p-0">
+                    <div class="d-flex flex-column">
+                        <div class='px-3 py-3 d-flex justify-content-between'>
+                            <h3 class='card-title'>Tài khoản</h3>
+                            <div class="card-right d-flex align-items-center">
+                                <p>@ViewBag.Account </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Content Row -->
-    <div class="row">
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Tổng số người dùng
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.UserCount Tài khoản</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-user fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header" style="background-color: #fff">
+                    <h3 class='card-heading p-1 pl-3 text-center'>BIỂU ĐỒ PHIẾU MƯỢN</h3>
                 </div>
-            </div>
-        </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Tổng số đầu sách
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.BookCount Sách</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-book-open fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Requests Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Tổng số phiếu mượn
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CallCardCount Phiếu mượn</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-id-card fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Sách còn trong kho
-                            </div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@ViewBag.TiLeSach%</div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar"
-                                             style="width: @ViewBag.TiLeSach%" aria-valuenow="@ViewBag.TiLeSach" aria-valuemin="0"
-                                             aria-valuemax="100"></div>
+                    <div class="row">
+                        <div class="col-md-4 col-12">
+                            <div class="pl-3">
+                                <h3 class='mt-5' id="AllCallCard">Tổng phiếu mượn: </h3>
+                                <p class='text-xs'>
+                                    <span class="text-green" id="RateCallCard">
+                                        <i data-feather="bar-chart"
+                                           width="15"></i> +x%
+                                    </span> so với tháng trước
+                                </p>
+                                <div class="legends">
+                                    <div class="legend d-flex flex-row align-items-center">
+                                        <div class='w-3 h-3 rounded-full bg-primary me-2' style="background-color: #41B1F9 !important"></div><span class='text-xs'>Tháng trước</span>
+                                    </div>
+                                    <div class="legend d-flex flex-row align-items-center">
+                                        <div class='w-3 h-3 rounded-full bg-blue me-2'></div><span class='text-xs'>Tháng này</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        <div class="col-md-8 col-12">
+                            <canvas id="bar"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-    </div>
-
-    <!-- Content Row -->
-
-    <div class="row">
-        <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
-            @{
-                if (ViewBag.listCallCard != null)
-                {
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Phiếu mượn quá hạn</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive" style="height:320px;">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr class="title-top">
-                                            <th>Tên tài khoản</th>
-                                            <th>Tên sách</th>
-                                            <th>Ngày mượn</th>
-                                            <th>Ngày hẹn trả</th>
-                                            <th>Ngày trả</th>
-                                            <th>Trạng thái</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in ViewBag.listCallCard)
-                                        {
-                                            <tr>
-                                                <td class="text-center">@item.user_id</td>
-                                                <td>
-                                                    @{ //Hiển thị tên sách từ chuỗi id
-                                                        if (item.books_id != null)
-                                                        {
-                                                            string[] booksList = item.books_id.Split(',');
-                                                            foreach (var book in booksList)
-                                                            {
-                                                                foreach (var bookName in ViewBag.listBooksCallCard)
-                                                                {
-                                                                    if (book.Equals(bookName._id))
-                                                                    {
-                                                                        <p>- @bookName.title</p>
-                                                                        break;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                </td>
-                                                <td class="text-center">
-                                                    @{
-                                                        DateTime date_temp = new DateTime(0001, 01, 01);
-                                                        if (DateTime.Compare(item.date_issued, date_temp) == 0)
-                                                        {
-                                                            <p>Chưa có thông tin</p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>@item.date_issued.ToString("dd-MM-yyyy")</p> }
-                                                    }
-                                                </td>
-                                                <td class="text-center">
-                                                    @{
-                                                        if (DateTime.Compare(item.date_return, date_temp) == 0)
-                                                        {
-                                                            <p>Chưa có thông tin</p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>@item.date_return.ToString("dd-MM-yyyy")</p>
-                                                        }
-                                                    }
-                                                </td>
-                                                <td class="text-center">
-                                                    @{
-                                                        if (DateTime.Compare(item.date_returned, date_temp) == 0)
-                                                        {
-                                                            <p>Chưa có thông tin</p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>@item.date_returned.ToString("dd-MM-yyyy")</p>
-                                                        }
-                                                    }
-                                                </td>
-                                                <td class="text-center">
-                                                    <p id="statusQuaHan">@item.status</p>
-                                                </td>
-                                            </tr>
-
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                }
-            }
-        </div>
-        <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Phiếu mượn</h6>
+            <div class="card">
+                <div class="card-header text-center" style="background-color: #fff">
+                    <h3 class="card-title" style="font-size: 1.5rem">PHIẾU MƯỢN GẦN ĐÂY</h3>                   
                 </div>
-                <!-- Card Body -->
+                <div class="card-body px-0 pb-0">
+                    <div class="table-responsive">
+                        <table class='table mb-0' id="table1">
+                            <thead>
+                                <tr>
+                                    <th>Người mượn</th>
+                                    <th>Sách mượn</th>
+                                    <th>Ngày mượn</th>
+                                    <th>Hạn trả</th>
+                                    <th>Ngày trả</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="_TBODY">
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card ">
+                <div class="card-header" style="background-color: #fff">
+                    <h3 class="text-center"></h3>
+                </div>
                 <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
+                    <div class="chart-pie" style="height: 307px">
                         <canvas id="myPieChart"></canvas>
                     </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Đang mượn
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Đã trả
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-danger"></i> Quá hạn
-                        </span>
+                    <hr style="margin-bottom: 5px;">
+                    <div class="table_bar" style="margin: 0; padding: 0; height: 31px;">
+                        <a href="#" class="btn icon btn-primary"></a>&emsp;Đang hoạt động&emsp;&emsp;
+                        <a href="#" class="btn icon btn-warning"></a>&emsp;Vi phạm&emsp;&emsp;
+                        <a href="#" class="btn icon btn-light"></a>&emsp;Khoá&emsp;&emsp;
                     </div>
+                </div>
+            </div>
+            <div class="card widget-todo">
+                <div class="card-header" style="background-color: #fff; padding-bottom: 7px;">
+                    <h3 class="card-title text-center" style="font-size: 1.5rem">TRẠNG THÁI PHIẾU MƯỢN</h3>
+                </div>
+                <div class="card-body px-0 py-1">
+                    <table class='table table-borderless' id="TableLine">
+                        <tr>
+                            <td class='col-4'>Đã trả</td>
+                            <td class='col-6'>
+                                <div class="progress progress-primary">
+                                    <div class="progress-bar" role="progressbar" style="width: 60%"
+                                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="_DaTra"></div>
+                                </div>
+                            </td>
+                            <td class='col-2 text-center' id="_DaTra_Text">60%</td>
+                        </tr>
+                        <tr>
+                            <td class='col-4'>Đang mượn</td>
+                            <td class='col-6'>
+                                <div class="progress progress-success">
+                                    <div class="progress-bar" role="progressbar" style="width: 35%"
+                                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="_DangMuon"></div>
+                                </div>
+                            </td>
+                            <td class='col-2 text-center' id="_DangMuon_Text">30%</td>
+                        </tr>
+                        <tr>
+                            <td class='col-4'>Quá hạn</td>
+                            <td class='col-6'>
+                                <div class="progress progress-danger">
+                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="_QuaHan"></div>
+                                </div>
+                            </td>
+                            <td class='col-2 text-center' id="_QuaHan_Text">50%</td>
+                        </tr>
+                        <tr>
+                            <td class='col-4'>Chưa được duyệt</td>
+                            <td class='col-6'>
+                                <div class="progress progress-info">
+                                    <div class="progress-bar" role="progressbar" style="width: 80%"
+                                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="_ChuaDuyet"></div>
+                                </div>
+                            </td>
+                            <td class='col-2 text-center' id="_ChuaDuyet_Text">80%</td>
+                        </tr>
+                        <tr>
+                            <td class='col-4'>Lỗi thông tin</td>
+                            <td class='col-6'>
+                                <div class="progress progress-warning">
+                                    <div class="progress-bar" role="progressbar" style="width: 65%"
+                                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="_Loi"></div>
+                                </div>
+                            </td>
+                            <td class='col-2 text-center' id="_Loi_Text">65%</td>
+                        </tr>
+                        <tr>
+                            <td class='col-4'>Chưa cập nhật</td>
+                            <td class='col-6'>
+                                <div class="progress progress-secondary">
+                                    <div class="progress-bar" role="progressbar" style="width: 65%"
+                                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="_CapNhat"></div>
+                                </div>
+                            </td>
+                            <td class='col-2 text-center' id="_CapNhat_Text">65%</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- /.container-fluid -->
+</section>
+@section scripts{
+    <script src="~/Areas/Admin/StyleSheet/vendors/dashboard.js"></script>
+    <script type="text/javascript">
+        //Start datatable
+        $(document).ready(function () {
+            GetListData();
+
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ThongKe/DataBarLine",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    //1
+                    var DaTra = document.getElementById("_DaTra");
+                    DaTra.style.removeProperty("width");
+                    DaTra.style.width = res.RateCard[0] + "%";
+                    document.getElementById("_DaTra_Text").innerHTML = res.RateCard[0] + "%";
+                    //2
+                    var DaTra = document.getElementById("_DangMuon");
+                    DaTra.style.removeProperty("width");
+                    DaTra.style.width = res.RateCard[1] + "%";
+                    document.getElementById("_DangMuon_Text").innerHTML = res.RateCard[1] + "%";
+                    //3
+                    var DaTra = document.getElementById("_QuaHan");
+                    DaTra.style.removeProperty("width");
+                    DaTra.style.width = res.RateCard[2] + "%";
+                    document.getElementById("_QuaHan_Text").innerHTML = res.RateCard[2] + "%";
+                    //4
+                    var DaTra = document.getElementById("_ChuaDuyet");
+                    DaTra.style.removeProperty("width");
+                    DaTra.style.width = res.RateCard[3] + "%";
+                    document.getElementById("_ChuaDuyet_Text").innerHTML = res.RateCard[3] + "%";
+                    //5
+                    var DaTra = document.getElementById("_Loi");
+                    DaTra.style.removeProperty("width");
+                    DaTra.style.width = res.RateCard[4] + "%";
+                    document.getElementById("_Loi_Text").innerHTML = res.RateCard[4] + "%";
+                    //6
+                    var DaTra = document.getElementById("_CapNhat");
+                    DaTra.style.removeProperty("width");
+                    DaTra.style.width = res.RateCard[5] + "%";
+                    document.getElementById("_CapNhat_Text").innerHTML = res.RateCard[5] + "%";
+                }
+            });
+                       
+        })
+        var myTable = document.querySelector('#table1');
+        var dataTable = new simpleDatatables.DataTable(myTable);
+        function GetListData() {
+            $('#_TBODY').html("");
+            dataTable.destroy();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_PhieuMuon/GetListCallCard",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var html = '';
+                    var checkOut = 0;
+                    $.each(res, function (key, item) {
+                        //lấy tên sách
+                        var i = 0;
+                        var BookName = '';
+                        $.each(item.books_id_temp, function (keyA, itemA) {
+                            if (i == 2) {
+                                BookName += '<p>' + itemA + ' ...</p>';
+                                return false;
+                            }
+                            else
+                                BookName += '<p>' + itemA + '</p>';
+                            i += 1;
+                        });
+                        //
+                        html += '<tr style="text-algin: center;">';
+                        html += '<td><p>' + item.username + '</p></td>';
+                        html += '<td style="max-width: 500px"><p>' + BookName + '</p></td>';
+                        html += '<td><p>' + item.date_issued + '</p></td>';
+                        html += '<td><p>' + item.date_return + '</p></td>';
+                        html += '<td><p>' + item.date_returned + '</p></td>';
+                        if (item.status == 'Đang mượn')
+                            html += '<td class="text-center"><span class="badge bg-success">' + item.status + '</span></td>';
+                        if (item.status == 'Quá hạn')
+                            html += '<td class="text-center"><span class="badge bg-danger">' + item.status + '</span></td>';
+                        if (item.status == 'Đã trả')
+                            html += '<td class="text-center"><span class="badge bg-primary">' + item.status + '</span></td>';
+                        if (item.status == 'Chưa cập nhật')
+                            html += '<td class="text-center"><span class="badge bg-secondary">' + item.status + '</span></td>';
+                        if (item.status == 'Chưa được duyệt')
+                            html += '<td class="text-center"><span class="badge bg-info">' + item.status + '</span></td>';
+                        if (item.status == 'Lỗi thông tin')
+                            html += '<td class="text-center"><span class="badge bg-warning">' + item.status + '</span></td>';                       
+                        html += '</tr>';
+                        if (checkOut == 4)
+                            return false;
+                        checkOut++;
+                    });
+                    $('#_TBODY').html(html);
+                    dataTable = new simpleDatatables.DataTable(myTable, {
+                        perPageSelect: false,
+                        searchable: false,
+                        footer: false,
+                        paging: false,
+                    });
+                }
+            });
+        }
+    </script>
+}

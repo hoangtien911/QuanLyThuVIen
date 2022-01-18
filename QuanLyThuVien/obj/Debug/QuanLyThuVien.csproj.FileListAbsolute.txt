@@ -190,4 +190,3 @@ E:\Tài liệu\DO_AN\QuanLyThuVIen\QuanLyThuVien\obj\Debug\QuanLyThuVien.csproj.
 E:\Tài liệu\DO_AN\QuanLyThuVIen\QuanLyThuVien\obj\Debug\QuanLyThuVien.csproj.CopyComplete
 E:\Tài liệu\DO_AN\QuanLyThuVIen\QuanLyThuVien\obj\Debug\QuanLyThuVien.dll
 E:\Tài liệu\DO_AN\QuanLyThuVIen\QuanLyThuVien\obj\Debug\QuanLyThuVien.pdb
-E:\Tài liệu\DO_AN\QuanLyThuVien\QuanLyThuVien\obj\Debug\QuanLyThuVien.csprojAssemblyReference.cache

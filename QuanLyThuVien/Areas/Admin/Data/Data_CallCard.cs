@@ -6,6 +6,8 @@ using FireSharp.Response;
 using QuanLyThuVien.Models;
 using Newtonsoft.Json;
 using System.Threading;
+using System;
+using System.Globalization;
 
 namespace QuanLyThuVien.Areas.Admin.Data
 {
@@ -36,13 +38,13 @@ namespace QuanLyThuVien.Areas.Admin.Data
         //3, Lấy tất cả dữ liệu phiếu mượn
         public static List<CallCard> GetAllData()
         {
-            client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = client.Get("CallCard");
             Dictionary<string, CallCard> data = JsonConvert.DeserializeObject<Dictionary<string, CallCard>>(response.Body.ToString());
+            CallcardList.Clear();
 
-            //for ()
-            foreach (var item in data)
+            for (int i = data.Count - 1; i >= 0; i--)
             {
+                var item = data.ElementAt(i);
                 CallCard callCard = new CallCard();
                 callCard.id = item.Value.id;
                 callCard.books_id = item.Value.books_id;
@@ -51,8 +53,9 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 callCard.date_return = item.Value.date_return;
                 callCard.date_returned = item.Value.date_returned;
                 callCard.status = item.Value.status;
+                checkStatus(callCard);
                 CallcardList.Add(callCard);
-            }
+            }           
             UpdateCount = true;
             return CallcardList;
         }
@@ -62,7 +65,6 @@ namespace QuanLyThuVien.Areas.Admin.Data
             CallCard data = null;
             if (!UpdateCount)
             {
-                client = new FireSharp.FirebaseClient(config);
                 FirebaseResponse response = client.Get("CallCard/" + id);
                 data = JsonConvert.DeserializeObject<CallCard>(response.Body);
             }
@@ -74,25 +76,27 @@ namespace QuanLyThuVien.Areas.Admin.Data
             return data;
         }
         //5. Thêm mới 1 phiếu mượn
-        public static void CreateData(CallCard card)
+        public static bool CreateData(CallCard card)
         {
             if (!UpdateCount)
             {
                 GetAllData();
-            }          
+            }
+            checkStatus(card);
+            PushResponse response = client.Push("CallCard/", card);
+            card.id = response.Result.name;
             Thread t1 = new Thread(() =>
             {
-                CallcardList.Add(card);
+                CallcardList.Insert(0, card);
             });
             Thread t2 = new Thread(() =>
             {
-                client = new FireSharp.FirebaseClient(config);
-                PushResponse response = client.Push("CallCard/", card);
-                card.id = response.Result.name;
+                
                 client.Set("CallCard/" + card.id, card);
             });
             t1.Start();
-            t2.Start();        
+            t2.Start();
+            return true;
         }
         //6. Sửa thông tin 1 phiếu mượn
         public static bool EditData(CallCard callCard)
@@ -106,6 +110,7 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 if (callCard.id.Equals(item.id))
                 {
+                    checkStatus(callCard);
                     Thread t1 = new Thread(() =>
                     {
                         client = new FireSharp.FirebaseClient(config);
@@ -131,7 +136,6 @@ namespace QuanLyThuVien.Areas.Admin.Data
             {
                 GetAllData();
             }
-
             foreach (var item in CallcardList)
             {
                 if (id.Equals(item.id))
@@ -152,6 +156,65 @@ namespace QuanLyThuVien.Areas.Admin.Data
                 }
             }
             return false;
+        }     
+        //8. Kiểm tra trạng thái
+        private static void checkStatus(CallCard card)
+        {
+            DateTime d_isussed;
+            DateTime d_return;
+            DateTime d_returned;
+            DateTime toDay = DateTime.Now;
+
+            //kiểm tra ngày mượn
+            if (card.date_issued != null)
+                d_isussed = DateTime.ParseExact(card.date_issued, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            else
+            {
+                card.status = "Chưa cập nhật";
+                return;
+            }           
+            //kiểm tra ngày hẹn trả
+            if (card.date_return != null)
+                d_return = DateTime.ParseExact(card.date_return, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            else
+            {
+                card.status = "Chưa được duyệt";
+                return;
+            }
+            //kiểm tra ngày trả
+            if(card.date_returned != null)
+            {
+                d_returned = DateTime.ParseExact(card.date_returned, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                //ngày mượn > ngày trả => lỗi thông tin
+                if (DateTime.Compare(d_isussed, d_returned) > 0)
+                {
+                    card.status = "Lỗi thông tin";
+                    return;
+                }
+                else
+                {
+                    card.status = "Đã trả";
+                    return;
+                }    
+            }
+            else
+            {
+                if(DateTime.Compare(d_isussed, d_return) > 0)
+                {
+                    card.status = "Lỗi thông tin";
+                    return;
+                }
+                if(DateTime.Compare(d_isussed, d_return) <= 0)
+                {
+                    if (DateTime.Compare(toDay, d_return) > 0)
+                    {
+                        card.status = "Quá hạn";
+                        return;
+                    }
+                    card.status = "Đang mượn";
+                    return;
+                }              
+            }                   
         }
     }
 }

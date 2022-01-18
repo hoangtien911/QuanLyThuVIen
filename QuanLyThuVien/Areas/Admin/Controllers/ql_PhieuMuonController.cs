@@ -12,202 +12,132 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         /* Controller Quản lý phiếu mượn
          * 
          * 1. Danh sách phiếu mượn
-         * 2. Thêm mới phiếu mượn
-         * 3. Sửa thông tin phiếu mượn
-         * 4. Xoá phiếu mượn
-         * 5. Chi tiết phiếu mượn
-         * 6. Lấy danh sách người dùng
-         * 7. Lấy danh sách sách
-         * 8. Hàm kiểm tra trạng thái sách theo ngày mượn - trả - hẹn trả
+         * 2. Thêm mới và sửa phiếu mượn
+         * 3. Lấy thông tin 1 phiếu mượn
+         * 4. Lấy thông tin 1 phiếu mượn Xoá
+         * 5. Xoá phiếu mượn      
          */
 
         //1. Danh sách phiếu mượn
-        public ActionResult ListCallCard(string message)
-        {
-           
-            ViewBag.listUser = getUser();
-            ViewBag.listBooks = getBooks();
-            if (!Data_CallCard.UpdateCount)
-            {
-                return View(Data_CallCard.GetAllData());
-            }
-            else
-            {
-                return View(Data_CallCard.CallcardList);
-            }
-        }
-       
-        //2. Thêm mới phiếu mượn
-        [HttpGet]
-        public ActionResult Create()
-        {
-            ViewBag.listUser = getUser();
-            ViewBag.listBooks = getBooks();
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Create(CallCard callCard)
-        {
-            ViewBag.listUser = getUser();
-            ViewBag.listBooks = getBooks();
-            string message = "";
-            if (callCard.user_id != null && callCard.books_id_temp != null)
-            {             
-                //Trừ sách trong kho
-                foreach(var item in callCard.books_id_temp)
-                {
-                    Books books_temp = Data_Books.GetSingleData(item);
-                    books_temp.count_in--;
-                    if (books_temp.count_in < 0)
-                    {
-                        message += books_temp.title + ", ";
-                    }
-                    else
-                    {
-                        Data_Books.EditData(books_temp);
-                    }
-                }
-                //nếu message rỗng (số lượng sách không âm)
-                if (message.Equals(""))
-                {
-                    //Gộp mảng id sách sang chuỗi
-                    callCard.books_id = string.Join(",", callCard.books_id_temp);
-                    callCard.books_id_temp = null;
-                    //Kiểm tra trạng thái
-                    callCard.status = checkStatus(callCard);
-                    //Thêm mới
-                    Data_CallCard.CreateData(callCard);
-                }
-            }
-            return View();
-        }
-
-        //3. Sửa thông tin phiếu mượn
-        [HttpGet]
-        public ActionResult Edit(string id)
-        {
-            ViewBag.listUser = getUser();
-            ViewBag.listBooks = getBooks();
-            CallCard data = Data_CallCard.GetSingleData(id);
-            //Tách chuỗi id sách sang mảng
-            if (data.books_id != null)
-                data.books_id_temp = data.books_id.Split(',');
-            //Cộng sách chuẩn bị sửa
-            foreach (var item in data.books_id_temp)
-            {
-                Books books_temp = Data_Books.GetSingleData(item);
-                books_temp.count_in++;
-                Data_Books.EditData(books_temp);
-            }
-            return View(data);
-        }
-        [HttpPost]
-        public ActionResult Edit(CallCard callCard)
-        {
-            ViewBag.listUser = getUser();
-            ViewBag.listBooks = getBooks();
-            string message = "";
-            if (callCard.user_id != null && callCard.books_id_temp != null)
-            {
-                //Trừ sách trong kho
-                foreach (var item in callCard.books_id_temp)
-                {
-                    Books books_temp = Data_Books.GetSingleData(item);
-                    books_temp.count_in--;
-                    if (books_temp.count_in < 0)
-                    {
-                        message += books_temp.title + ", ";
-                    }
-                    else
-                    {
-                        Data_Books.EditData(books_temp);
-                    }
-                }
-                //nếu message rỗng (số lượng sách không âm)
-                if (message.Equals(""))
-                {
-                    //Gộp mảng id sách sang chuỗi
-                    callCard.books_id = string.Join(",", callCard.books_id_temp);
-                    callCard.books_id_temp = null;
-                    //Kiểm tra trạng thái
-                    callCard.status = checkStatus(callCard);
-                    //Sửa sách
-                    Data_CallCard.EditData(callCard);
-                }
-            }
-            return RedirectToAction("ListCallCard");
-        }
-        //4. Xoá phiếu mượn
-        public ActionResult Delete(string id)
-        {
-            Data_CallCard.DeleteData(id);
-                return RedirectToAction("ListCallCard");
-           
-        }
-        //5. Chi tiết phiếu mượn
-        [HttpGet]
-        public ActionResult Detail(string id)
-        {
-            CallCard data = Data_CallCard.GetSingleData(id);
-            ViewBag.UserDetail = Data_Users.GetSingleData(data.user_id);
-            //Tách chuỗi sách sang mảng
-            if (data.books_id != null)
-                data.books_id_temp = data.books_id.Split(',');
-            //
-            int i = 0;
-            int length_listBooks = data.books_id_temp.Length - 1;
-            string namebooks = "";
-            foreach (var bookid in data.books_id_temp)
-            {
-                Books books_temp = Data_Books.GetSingleData(bookid);
-                if (i < length_listBooks)
-                    namebooks += books_temp.title + ", ";
-                else
-                    namebooks += books_temp.title + ".";
-                i++;
-            }
-            ViewBag.nameBooks = namebooks;
-            return View(data);
-        }
-        //6. Lấy danh sách người dùng
-        public List<User> getUser()
+        public ActionResult ListCallCard()
         {
             if (!Data_Users.UpdateCount)
-            {
-                return (Data_Users.GetAllData());
-            }
+                ViewBag.ListUser = Data_Users.GetAllData();
             else
-            {
-                return (Data_Users.UserList);
-            }
-        }
-        //7. Lấy danh sách sách
-        public List<Books> getBooks()
-        {
+                ViewBag.ListUser = Data_Users.UserList;
             if (!Data_Books.UpdateCount)
+                ViewBag.ListBook = Data_Books.GetAllData();
+            else
+                ViewBag.ListBook = Data_Books.BooksList;
+            return View();
+        }
+        public JsonResult GetListCallCard()
+        {
+            if (!Data_CallCard.UpdateCount)
+                Data_CallCard.GetAllData();
+            //lấy tên người dùng và tên sách theo id
+            foreach (var callcard in Data_CallCard.CallcardList)
             {
-                return (Data_Books.GetAllData());
+                if (callcard.user_id != null)
+                {
+                    callcard.username = Data_Users.GetSingleData(callcard.user_id).username;
+                }
+                if (callcard.books_id != null)
+                {
+                    callcard.books_id_temp = callcard.books_id.Split(',');                   
+                    for (int i = 0; i < callcard.books_id_temp.Length; i++)
+                    {
+                        string idBook = callcard.books_id_temp[i];
+                        string nameBook = Data_Books.GetSingleData(idBook).title;
+                        callcard.books_id_temp[i] = nameBook;
+                    }                  
+                }
+            }
+            return Json(Data_CallCard.CallcardList, JsonRequestBehavior.AllowGet);
+        }
+        //2. Thêm mới và sửa phiếu mượn      
+        public JsonResult Create_Edit(CallCard callCard)
+        {
+            if (callCard.user_id != null && callCard.books_id_temp != null)
+            {
+                // gộp mảng sách sang chuỗi
+                callCard.books_id = string.Join(",", callCard.books_id_temp);               
+                callCard.books_id_temp = null;
+                callCard.username = null;
+                //Create
+                if (callCard.id == null)
+                {
+                    if (Data_CallCard.CreateData(callCard))
+                    {
+                        return Json(new { status = "ADD_OK" });
+                    }                   
+                    return Json(new { status = "ADD_FALSE" });
+                }
+                //Edit
+                else
+                {
+                    if (Data_CallCard.EditData(callCard))
+                    {
+                        return Json(new { status = "EDIT_OK" });
+                    }
+                    else
+                    {
+                        return Json(new { status = "EDIT_FALSE" });
+                    }
+                }
+
             }
             else
             {
-                return (Data_Books.BooksList);
+                string propetyName = "";
+                if (callCard.user_id == null)
+                    propetyName += "Người mượn, ";
+                if (callCard.books_id_temp == null)
+                    propetyName += "Sách mượn, ";               
+                return Json(new { status = "NO_INPUT_DATA", propery = propetyName });
             }
+
+
         }
-        //8. Hàm kiểm tra trạng thái sách theo ngày mượn - trả - hẹn trả
-        public string checkStatus (CallCard callCard)
+        //3. Lấy thông tin 1 phiếu mượn
+        public JsonResult GetCallCard(string id)
         {
-            if (callCard.date_return != null)
+            CallCard callCard = Data_CallCard.GetSingleData(id);
+            if (callCard != null)
             {
-                if (DateTime.Compare(callCard.date_return, DateTime.Now) < 0)
-                    callCard.status = "Quá hạn";
-                if (DateTime.Compare(callCard.date_return, DateTime.Now) > 0)
-                    callCard.status = "Đang mượn";
-                if (DateTime.Compare(callCard.date_return, new DateTime(0001, 01, 01)) == 0)
-                    callCard.status = "Chưa cập nhật";
+
+                callCard.books_id_temp = callCard.books_id.Split(',');               
+                return Json(callCard, JsonRequestBehavior.AllowGet);
             }
-            if (DateTime.Compare(callCard.date_returned, new DateTime(0001, 01, 01)) != 0)
-                callCard.status = "Đã trả";
-            return callCard.status;
+            return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+
+        }
+        //4. Lấy thông tin 1 phiếu mượn Xoá
+        public JsonResult GetCallCard_D(string id)
+        {
+            CallCard callCard = Data_CallCard.GetSingleData(id);
+            if (callCard != null)
+            {
+                callCard.username = Data_Users.GetSingleData(callCard.user_id).username;
+                callCard.books_id_temp = callCard.books_id.Split(',');
+                for (int i = 0; i < callCard.books_id_temp.Length; i++)
+                {
+                    string idBook = callCard.books_id_temp[i];
+                    string nameBook = Data_Books.GetSingleData(idBook).title;
+                    callCard.books_id_temp[i] = nameBook;
+                }
+                return Json(callCard, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+
+        }
+        //5. Xoá phiếu mượn
+        public ActionResult Delete(string id)
+        {
+            if (Data_CallCard.DeleteData(id))
+                return Json(new { status = "DELETE_OK" });
+            else
+                return Json(new { status = "DELETE_FALSE" });
         }
     }
 }
