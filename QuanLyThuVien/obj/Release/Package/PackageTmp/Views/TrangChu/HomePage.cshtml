@@ -1,0 +1,266 @@
+﻿
+@{
+    ViewBag.Title = "HomePage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Start Slider area -->
+<div class="slider-area brown__nav slider--15 slide__activation slide__arrow01 owl-carousel owl-theme">
+    <!-- Start Single Slide -->
+    <div class="slide animation__style10 bg-image--8 fullscreen align__center--left" style="height: 937px !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="slider__content">
+                        <div class="contentbox text-white-h2 description-white">
+                            <h2>5 Centimet</h2>
+                            <h2>&emsp;trên</h2>
+                            <h2>&emsp;&emsp;giây</h2>
+                            <p>
+                                &emsp;&emsp;Năm centimet trên giây mang đến những khắc họa mới về tâm hồn và khả năng tồn tại của cảm xúc, bắt đầu từ tình yêu trong sáng, ngọt ngào của một cô bé và cậu bé.
+                                <br />
+                                &emsp;&emsp;Ba giai đoạn, ba mảnh ghép, ba ngôi kể chuyện khác nhau nhưng đều xoay quanh nhân vật nam chính, người luôn bị ám ảnh bởi kí ức và những điều đã qua…
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Single Slide -->
+    <!-- Start Single Slide -->
+    <div class="slide animation__style10 bg-image--9 fullscreen align__center--left" style="height: 937px !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="slider__content">
+                        <div class="contentbox text-white-h2 description-white">
+                            <h2>Your name</h2>
+                            <p>
+                                &emsp;&emsp;Your Name là câu chuyện tình cảm kéo dài từ thời thiếu niên của những người trẻ tuổi. Cô bé Mitsuha sinh ra và lớn lên tại một vùng quê hẻo lánh, cảm thấy không bằng lòng với cuộc sống nơi thôn quê buồn chán. Còn Taki là cậu học sinh bình thường ở Tokyo, cuộc sống đều đều trôi qua với bè bạn và việc đi học.
+                                <br />
+                                &emsp;&emsp;Một ngày kia, hai người họ thức dậy trong thân xác của người còn lại. Rất nhiều những chi tiết kỳ ảo và lãng mạn được đưa ra nhằm giải thích cho sự kiện phi lý này. Phần còn lại của bộ phim kể về quá trình họ tìm ra nhau, dù cả hai chưa từng gặp mặt.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Single Slide -->
+</div>
+<!-- End Slider area -->
+<!-- Start top books Area -->
+<section class="wn__product__area brown--color pt--80  pb--30">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section__title text-center">
+                    <h2 class="title__be--2">Sách <span class="color--theme">mượn nhiều</span> trong tháng</h2>
+                    <p>Cảm ơn các bạn đọc đã ủng hộ thư viện. Dưới đây là các sách được mượn nhiều trong tháng.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Start Single Tab Content -->
+        <div class="furniture--4 border--round arrows_style owl-carousel owl-theme row mt--50">
+            @{
+                int j = 0;
+                foreach (var item in ViewBag.listbooks)
+                {
+                    <!-- Start Single Product -->
+                    <div class="product product__style--3">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="product__thumb">
+                                <a class="first__img" href="@Url.Action("ChiTietSach","Sach", new { id = item._id })"><img src="@item.thumbnailUrl"></a>
+                            </div>
+                            <div class="product__content content--center">
+                                <h4><a href="@Url.Action("ChiTietSach","Sach", new { id = item._id })">@item.title</a></h4>
+                                @{ //Hiển thị tên tác giả từ chuỗi id
+                                    string authorName = "";
+                                    if (item.authors != null)
+                                    {
+                                        int i = 0;
+                                        string[] authorList = item.authors.Split(',');
+                                        foreach (var ath in authorList)
+                                        {
+                                            foreach (var athName in ViewBag.listauthor)
+                                            {
+                                                if (ath.Equals(athName.id))
+                                                {
+                                                    if (i == authorList.Length - 1)
+                                                    {
+                                                        authorName += athName.name;
+                                                        break;
+                                                    }
+                                                    else
+                                                    {
+                                                        authorName += athName.name + ", ";
+                                                    }
+                                                }
+                                            }
+                                            i++;
+                                        }
+                                    }
+                                    <h4 class="book_author"><a href="@Url.Action("ChiTietTacGia","Sach", new { id = item.authors })"> - @authorName - </a></h4>
+                                    <ul class="rating d-flex">
+                                        <li class="on"><i class="fa fa-star-o"></i></li>
+                                        <li class="on"><i class="fa fa-star-o"></i></li>
+                                        <li class="on"><i class="fa fa-star-o"></i></li>
+                                        <li><i class="fa fa-star-o"></i></li>
+                                        <li><i class="fa fa-star-o"></i></li>
+                                        <li>(1)</li>
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Single Product -->
+                    j++;
+                    if (j == 6)
+                    {
+                        break;
+                    }
+                }
+            }
+        </div>
+        <!-- End Single Tab Content -->
+    </div>
+</section>
+<!-- End top books Area -->
+<!-- Start top author Area -->
+<section class="wn__testimonial__area bg--gray ptb--80">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section__title text-center">
+                    <h2 class="title__be--2"><span class="color--theme">Tác giả</span> tiêu biểu</h2>
+                    <p style="margin-bottom: 20px;">Tác giả là người "ban sự sống" cho các tác phẩm. Dưới đây là các tác giả nổi tiếng trên thế giới.</p>
+                </div>
+            </div>
+            <div class="col-lg-12 col-12">
+                <div class="testimonial__container text-center">
+                    <div class="tes__img__slide thumb_active">
+                        @{
+                            int l = 0;
+                            foreach (var author in ViewBag.listauthor)
+                            {
+                                <div class="testimonial__img">
+                                    <span><img src="@author.avatar" alt="testimonial image" class="rounded-circle" style="height:150px; width:150px;"></span>
+                                </div>
+                                l++;
+                                if (l == 6)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="testimonial__text__slide testext_active">
+                        @{
+                            int k = 0;
+                            foreach (var author in ViewBag.listauthor)
+                            {
+                                <div class="clint__info">
+                                    <p>@author.note</p>
+                                    <div class="name__post">
+                                        <span>@author.name</span>
+                                        <h6>@author.website</h6>
+                                    </div>
+                                </div>
+                                k++;
+                                if (k == 6)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End top author Area -->
+<!-- Start All books Area -->
+<section class="wn__bestseller__area bg--white pt--80  pb--30">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section__title text-center">
+                    <h2 class="title__be--2"><span class="color--theme">Sách</span> mới</h2>
+                    <p style="margin-bottom: 20px;">Dưới đây là những sách mới được cập nhật. Chúc bạn đọc có những phút giây thư giãn và bổ ích.</p>
+                </div>
+            </div>
+        </div>        
+        <div class="tab__container">
+            <div class="shop-grid tab-pane fade show active" id="nav-grid" role="tabpanel">
+                <div class="row" id="product-Item">
+                    @{
+                        foreach (var item in ViewBag.listbooks)
+                        {
+                            <!-- Start Single Product -->
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                                <div class="product product__style--3">
+                                    <div class="product__thumb">
+                                        <a class="first__img" href="@Url.Action("ChiTietSach","Sach", new { id = item._id })"><img src="@item.thumbnailUrl"></a>
+                                    </div>
+                                    <div class="product__content content--center">
+                                        <h4><a href="@Url.Action("ChiTietSach","Sach", new { id = item._id })">@item.title</a></h4>
+                                        @{ //Hiển thị tên tác giả từ chuỗi id
+                                            string authorName = "";
+                                            if (item.authors != null)
+                                            {
+                                                int i = 0;
+                                                string[] authorList = item.authors.Split(',');
+                                                foreach (var ath in authorList)
+                                                {
+                                                    foreach (var athName in ViewBag.listauthor)
+                                                    {
+                                                        if (ath.Equals(athName.id))
+                                                        {
+                                                            if (i == authorList.Length - 1)
+                                                            {
+                                                                authorName += athName.name;
+                                                                break;
+                                                            }
+                                                            else
+                                                            {
+                                                                authorName += athName.name + ", ";
+                                                            }
+                                                        }
+                                                    }
+                                                    i++;
+                                                }
+                                            }
+                                            <h4 class="book_author"><a href="@Url.Action("ChiTietTacGia","Sach",new { id = item.authors })"> - @authorName - </a></h4>
+                                            <ul class="rating d-flex">
+                                                <li class="on"><i class="fa fa-star-o"></i></li>
+                                                <li class="on"><i class="fa fa-star-o"></i></li>
+                                                <li class="on"><i class="fa fa-star-o"></i></li>
+                                                <li><i class="fa fa-star-o"></i></li>
+                                                <li><i class="fa fa-star-o"></i></li>
+                                                <li>(1)</li>
+                                            </ul>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Single Product -->                           
+                        }
+                    }                   
+                </div>
+                <ul class="wn__pagination" id="page-num">
+                    <li style="width: 24px;" id="prev-button"><i class="zmdi zmdi-chevron-left hidden"></i></li>                    
+                    <li class="active"><a>1</a></li>
+                    @for (int i = 1; i < ViewBag.lenghtBooks; i++)
+                    {
+                        <li><a>@(i+1)</a></li>                       
+                    }
+                    <li style="width:24px;" id="next-button"><i class="zmdi zmdi-chevron-right"></i></li>
+                </ul>
+            </div>           
+        </div>
+    </div>
+</section>
+<a class="hidden" id="checkShow">HomePage</a>
+<!-- Start All books Area -->

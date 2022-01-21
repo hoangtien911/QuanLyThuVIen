@@ -1,0 +1,163 @@
+﻿<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Thư viện thị trấn Văn Quan</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="~/Content/LibraryImage/favicon.ico">
+    <link rel="apple-touch-icon" href="~/Content/LibraryImage/icon.png">
+
+    <!-- Google font (font-family: 'Roboto', sans-serif; Poppins ; Satisfy) -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,600,600i,700,700i,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/StyleSheet/LibraryCss/bootstrap.min.css">
+    <link rel="stylesheet" href="~/StyleSheet/LibraryCss/plugins.css">
+    <link rel="stylesheet" href="~/StyleSheet/LibraryCss/style.css">
+    <!-- Cusom css -->
+    <link rel="stylesheet" href="~/StyleSheet/LibraryCss/custom.css">
+</head>
+<body>
+
+    <!-- Main wrapper -->
+    <div class="wrapper" id="wrapper">
+        <!-- Header -->
+        <header id="wn__header" class="header__area header__absolute sticky__header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-6 col-lg-3">
+                        <div class="logo">
+                            <a href="#">
+                                <span>Thư viện</span><span style="color: #e59285;"> Văn Quan</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <nav class="mainmenu__nav justify-content-center">
+                            <ul class="meninmenu d-flex justify-content-start">
+                                <li>
+                                    <a href="@Url.Action("HomePage", "TrangChu")"
+                                       class="@(ViewContext.RouteData.Values["Controller"].ToString() == "TrangChu" ? "LinkActive" : "")">Trang chủ</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("KhoSach", "Sach")"
+                                       class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Sach" ? "LinkActive" : "")">Sách</a>
+                                </li>
+                                <li>
+                                <a href="@Url.Action("LienHe", "LienHe")"
+                                   class="@(ViewContext.RouteData.Values["Controller"].ToString() == "LienHe" ? "LinkActive" : "")">Liên hệ</a></li>
+                                                 
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-6 col-lg-3">
+                        <ul class="header__sidebar__right d-flex justify-content-end align-items-center">
+                            @{
+                                if (Request.Cookies["UserCookies"] != null)
+                                {
+                                    <li>
+                                        <span style="text-transform: none; margin-right: 10px; color: #fff;">Xin chào: @Request.Cookies["UserCookies"]["username"]</span>
+                                    </li>
+                                }
+                            }
+
+                            <li class="setting__bar__icon">
+                                <a class="setting__active" href="#"></a>
+                                <div class="searchbar__content setting__block">
+                                    <div class="content-inner">
+                                        <div class="switcher-currency">
+                                            @{
+                                                if (Session["UserSession"] != null)
+                                                {
+                                                    <strong class="label switcher-label">
+                                                        <a href="@Url.Action("ChiTietUser", "TaiKhoan", new { id = Request.Cookies["UserCookies"]["userid"] })">
+                                                            <span style="text-transform: none;">Thông tin cá nhân</span>
+                                                        </a>
+                                                    </strong>
+                                                    <strong class="label switcher-label">
+                                                        <a href="@Url.Action("DangXuat", "TaiKhoan")"><span style="text-transform: none;">Đăng xuất</span></a>
+                                                    </strong>
+                                                }
+                                                else
+                                                {
+                                                    <strong class="label switcher-label">
+                                                        <a href="@Url.Action("DangNhap", "TaiKhoan")"><span style="text-transform: none;">Đăng nhập</span></a>
+                                                    </strong>
+                                                }
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>              
+            </div>
+        </header>
+        <!-- //Header -->
+        <!--Conten body-->
+        @RenderBody()
+        <!--End conten body-->
+        <!-- Footer Area -->
+        <footer id="wn__footer" class="footer__area bg__cat--8 brown--color">
+            <div class="footer-static-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="footer__widget footer__menu">
+                                <div class="ft__logo">
+                                    <a href="@Url.Action("HomePage", "TrangChu")">
+                                        <h2 style="font-weight: 800;"><span>Thư viện</span><span style="color: #e59285;"> Văn Quan</span></h2>
+                                    </a>
+                                    <p>Theo dõi chúng tôi để có những thông tin mới và chính xác nhất.</p>
+                                </div>
+                                <div class="footer__content">
+                                    <ul class="social__net social__net--2 d-flex justify-content-center">
+                                        <li><a><i class="bi bi-facebook"></i></a></li>
+                                        <li><a><i class="bi bi-linkedin"></i></a></li>
+                                        <li><a><i class="bi bi-youtube"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="copyright__wrapper">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="copyright">
+                                <div class="copy__right__inner text-center">
+                                    <p>Copyright <i class="fa fa-copyright"></i> <a href="@Url.Action("HomePage", "TrangChu")">Thư viện Văn Quan.</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- //Footer Area -->
+
+    </div>
+    <!-- //Main wrapper -->
+    <!-- JS Files -->
+    <script src="~/Scripts/LibraryJs/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/LibraryJs/popper.min.js"></script>
+    <script src="~/Scripts/LibraryJs/bootstrap.min.js"></script>
+    <script src="~/Scripts/LibraryJs/plugins.js"></script>
+    <script src="~/Scripts/LibraryJs/active.js"></script>
+    <!-- Modernizer js -->
+    <script src="~/Scripts/LibraryJs/modernizr-3.5.0.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

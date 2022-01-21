@@ -1,0 +1,313 @@
+﻿@model QuanLyThuVien.Models.User
+
+@{
+    ViewBag.Title = "ChiTietUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Start link area -->
+<div class="ht__bradcaump__area bg-image--6">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="bradcaump__inner text-center">
+                    <h2 class="bradcaump-title">Tài khoản</h2>
+                    <nav class="bradcaump-content">
+                        <a class="breadcrumb_item" href="@Url.Action("HomePage", "TrangChu")">Trang chủ</a>
+                        <span class="brd-separetor">/</span>
+                        <span class="breadcrumb_item active">Thông tin người dùng: @Model.username</span>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End link area -->
+<!-- Start main Content -->
+<div class="maincontent bg--white pt--80 pb--55">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="wn__single__product">
+                    <div class="row">
+                        <div class="col-lg-6 col-12" style="border-right: 1px solid;">
+                            <div class="wn__fotorama__wrapper" id="avatar_user">
+                                <a><img src="@Model.avatar" class="img_author" style="left: 60% !important "></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="product__info__main">
+                                <div class="price-box">
+                                    <span>@Model.username</span>
+                                    <p class="hidden" id="user_id">@(Model.id != null ? Model.id : "")</p>
+                                </div>
+                                <div style="margin: 10px 0;" id="info_user">
+                                    <p style="margin: 10px 0;">Họ tên: @(Model.fullName != null ? Model.fullName : "Không có thông tin")</p>
+                                    <p style="margin: 10px 0;">Năm sinh: @Model.dateOfBirth</p>
+                                    <p style="margin: 10px 0;">Giới tính: @(Model.gender != null ? Model.gender : "Không có thông tin")</p>
+                                    <p style="margin: 10px 0;">Số điện thoại: @(Model.phone != null ? Model.phone : "Không có thông tin")</p>
+                                    <p style="margin: 10px 0;">Email: @(Model.email != null ? Model.email : "Không có thông tin")</p>
+                                    <p style="margin: 10px 0;">Ngày đăng ký: @Model.dateOfRegist</p>
+                                    <p style="margin: 10px 0;">Địa chỉ: @(Model.adress != null ? Model.adress : "Không có thông tin")</p>
+
+                                </div>
+                                <div class="row" id="button_even">
+                                    <div class="product__overview d-flex justify-content-center col-6">
+                                        <a class="btn btn-primary" style="color: aliceblue;" id="edit_user_btn"
+                                           onclick="return confirm('Bạn có muốn chỉnh sửa thông tin cá nhân?')">
+                                            <i class="fa fa-pencil" style="margin-right: 5px;"></i>Chỉnh sửa thông tin cá nhân
+                                        </a>
+                                    </div>
+                                    <div class="product__overview d-flex justify-content-center col-6">
+                                        <a class="btn btn-secondary" style="color: aliceblue;" id="change_password_btn"
+                                           onclick="return confirm('Bạn có muốn đổi mật khẩu?')">
+                                            <i class="fa fa-key" style="margin-right: 5px;"></i>Đổi mật khẩu
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div style="margin: 10px 0;" id="edit_user" class="hidden">
+                                    <div class="row text-sm-left">
+                                        <p class="col-3">Họ tên: </p>
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.fullName, new { htmlAttributes = new { @class = "form-control", @id = "fullname" } })
+                                        </div>
+                                    </div>
+                                    <div class="row text-sm-left">
+                                        <p class="col-3">Năm sinh: </p>
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.dateOfBirth, new
+                                            {
+                                                htmlAttributes =
+                                             new
+                                                  {
+                                                      @class = "form-control",
+                                                      @Value = @Model.dateOfBirth
+                                                 ,
+                                                      @id = "dob"
+                                                  }
+                                            })
+                                        </div>
+                                    </div>
+
+                                    <div class="row text-sm-left">
+                                        <p class="col-3">Giới tính: </p>
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(model => model.gender, new SelectList(new[] { "Nam", "Nữ", "Giới tính khác" }),
+                                           new { @class = "form-control", @id = "gender" })
+                                        </div>
+                                    </div>
+                                    <div class="row text-sm-left">
+                                        <p class="col-3">Số điện thoại: </p>
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control", @id = "phone" } })
+                                        </div>
+                                    </div>
+                                    <div class="row text-sm-left">
+                                        <p class="col-3">Email: </p>
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", @id = "email" } })
+                                        </div>
+                                    </div>
+                                    <div class="row text-sm-left">
+                                        <p class="col-3">Địa chỉ: </p>
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.adress, new { htmlAttributes = new { @class = "form-control", @id = "adress" } })
+                                        </div>
+                                    </div>
+                                    <div class="row text-sm-left">
+                                        <p class="col-3">Ảnh đại diện: </p>
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.avatar, new { htmlAttributes = new { @class = "form-control", @id = "avatar" } })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row hidden" id="button_edit">
+                                    <div class="product__overview d-flex justify-content-center col-6">
+                                        <a class="btn btn-primary" style="color: aliceblue;" id="save_edit_user">
+                                            <i class="fa fa-save" style="margin-right: 5px;"></i>Lưu thông tin
+                                        </a>
+                                    </div>
+                                    <div class="product__overview d-flex justify-content-center col-6">
+                                        <a class="btn btn-danger" style="color: aliceblue;" id="exit_edit_user">
+                                            <i class="fa fa-times" style="margin-right: 5px;"></i>Huỷ thay đổi
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div style="margin: 10px 0;" id="change_password" class="hidden">
+                                    <div class="row text-sm-left">
+                                        <p class="col-4">Mật khẩu cũ: </p>
+                                        <div class="col-md-8">
+                                            <input type="password" class="form-control" id="password" />
+                                        </div>
+                                    </div>
+                                    <div class="row text-sm-left">
+                                        <p class="col-4">Mật khẩu mới: </p>
+                                        <div class="col-md-8">
+                                            <input type="password" class="form-control" id="newpassword" />
+                                        </div>
+                                    </div>
+                                    <div class="row text-sm-left">
+                                        <p class="col-4">Nhập lại mật khẩu: </p>
+                                        <div class="col-md-8">
+                                            <input type="password" class="form-control" id="checknewpass" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row hidden" id="button_change_pass">
+                                    <div class="product__overview d-flex justify-content-center col-6">
+                                        <a class="btn btn-primary" style="color: aliceblue;" id="save_change_pass">
+                                            <i class="fa fa-save" style="margin-right: 5px;"></i>Thay đổi mật khẩu
+                                        </a>
+                                    </div>
+                                    <div class="product__overview d-flex justify-content-center col-6">
+                                        <a class="btn btn-danger" style="color: aliceblue;" id="exit_change_pass">
+                                            <i class="fa fa-times" style="margin-right: 5px;"></i>Huỷ thay đổi
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @{
+                    if (ViewBag.listBooksFavorite != null)
+                    {
+                        <div class="wn__related__product pt--80 pb--50">
+                            <div class="section__title text-center">
+                                <h2 class="title__be--2">Sách yêu thích</h2>
+                            </div>
+                            <div class="row mt--60">
+                                <div class="productcategory__slide--2 arrows_style owl-carousel owl-theme">
+                                    @{
+                                        foreach (var book in ViewBag.listBooksFavorite)
+                                        {
+                                            <!-- Start Single Product -->
+                                            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                                                <div class="product">
+                                                    <div class="product__thumb">
+                                                        <a class="first__img" href="@Url.Action("ChiTietSach","Sach", new { id = book._id })"><img src="@book.thumbnailUrl" alt="product image"></a>
+                                                        <ul class="prize position__right__bottom d-flex">
+                                                            <li>@ViewBag.authors</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="product__content text-center">
+                                                        <h4><a href="@Url.Action("ChiTietSach","Sach", new { id = book._id })">@book.title</a></h4>
+                                                        <ul class="rating d-flex justify-content-center">
+                                                            <li class="on"><i class="fa fa-star-o"></i></li>
+                                                            <li class="on"><i class="fa fa-star-o"></i></li>
+                                                            <li class="on"><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Start Single Product -->
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+                @{
+                    if (ViewBag.listCallCard != null)
+                    {
+                        <div class="wn__related__product pt--80 pb--50" style="padding-top: 20px;">
+                            <div class="section__title text-center">
+                                <h2 class="title__be--2">Phiếu mượn</h2>
+                            </div>
+                            <div class="table-content wnro__table table-responsive" style="height:500px;">
+                                <table>
+                                    <thead>
+                                        <tr class="title-top">
+                                            <th>Tên sách</th>
+                                            <th>Ngày mượn</th>
+                                            <th>Ngày hẹn trả</th>
+                                            <th>Ngày trả</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in ViewBag.listCallCard)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @{ //Hiển thị tên sách từ chuỗi id
+                                                        if (item.books_id != null)
+                                                        {
+                                                            string[] booksList = item.books_id.Split(',');
+                                                            foreach (var book in booksList)
+                                                            {
+                                                                foreach (var bookName in ViewBag.listBooksCallCard)
+                                                                {
+                                                                    if (book.Equals(bookName._id))
+                                                                    {
+                                                                        <p>- @bookName.title</p>
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                </td>
+                                                <td class="text-center">
+                                                    @{
+                                                        DateTime date_temp = new DateTime(0001, 01, 01);
+                                                        if (DateTime.Compare(item.date_issued, date_temp) == 0)
+                                                        {
+                                                            <p>Chưa có thông tin</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>@item.date_issued.ToString("dd-MM-yyyy")</p> }
+                                                    }
+                                                </td>
+                                                <td class="text-center">
+                                                    @{
+                                                        if (DateTime.Compare(item.date_return, date_temp) == 0)
+                                                        {
+                                                            <p>Chưa có thông tin</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>@item.date_return.ToString("dd-MM-yyyy")</p>
+                                                        }
+                                                    }
+                                                </td>
+                                                <td class="text-center">
+                                                    @{
+                                                        if (DateTime.Compare(item.date_returned, date_temp) == 0)
+                                                        {
+                                                            <p>Chưa có thông tin</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>@item.date_returned.ToString("dd-MM-yyyy")</p>
+                                                        }
+                                                    }
+                                                </td>
+                                                <td class="text-center">
+                                                    <p id="statusCallCard">@item.status</p>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End main Content -->

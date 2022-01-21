@@ -1,0 +1,429 @@
+﻿@model IEnumerable<QuanLyThuVien.Models.Categories>
+
+@{
+    ViewBag.Title = "Danh sách thể loại";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<!-- PAGE BODY-->
+<div class="page-title">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-last">
+            <nav aria-label="breadcrumb" class='breadcrumb-header'>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Quản lý thể loại</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách thể loại</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Datatable-->
+<section class="section">
+    <div class="card">
+        <div class="card-header row" style="margin-bottom: 10px;">
+            <h3 class="col-6" style="margin-bottom: 0; margin-top: 4px; color: #fff;">@ViewBag.Title</h3>
+            <div class="col-6 d-flex justify-content-end">
+                <a class="btn icon icon-left btn-primary" id="link-add" style="font-weight: bold; width: 200px; background-color:#0097ff; border-color: #fff">
+                    <i class="fal fa-plus-square"></i> Thêm mới
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class='table table-hover' id="table1">
+                <thead>
+                    <tr>
+                        <th>Tên thể loại</th>
+                        <th>Giới thiệu</th>
+                        <th>Hình ảnh</th>
+                        <th style="text-align: start">Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody id="_TBODY">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<!-- CREATE-EDIT MODAL -->
+<div class="modal fade text-left w-100" id="AddEdit_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="AddEdit_Title">Thêm mới thể loại</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="FormAddBook">
+                    <!--Row 1-->
+                    <div class="row">
+                        <div class="col-sm-6 mb-1" style="padding-right: 10px;">
+                            <div class="input-group">
+                                <span class="input-group-text">ID</span>
+                                <input type="text" class="form-control" disabled="disabled" id="Add_id" />
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 2-->
+                    <div class="row">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Tên thể loại *</span>
+                                <input type="text" class="form-control" id="Add_name" />
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!-- Row 3-->
+                    <div class="row mutil-choice">
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Giới thiệu chung</span>
+                                <textarea class="form-control" rows="3" style="resize: none;" id="Add_short"></textarea>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 4-->
+                    <div class="row">
+                        <div class="input-group" style="height: 400px">
+                            <span class="input-group-text">Giới thiệu chi tiết</span>
+                            <div style="flex: 1 1 auto; width: min-content">
+                                <div id="full_editor" style="height: 358px">
+                                </div>
+                                <textarea class="hide" id="Add_long"></textarea>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <!-- Row 5-->
+                    <div class="row">
+                        <input type="file" class="hide" accept="image/*" id="Add_image_hide" />
+                        <div class="col mb-1">
+                            <div class="input-group">
+                                <span class="input-group-text">Hình ảnh</span>
+                                <label class="form-control" style="background-color: white; overflow: hidden; text-overflow: ellipsis; " id="Add_image"></label>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <!---->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="fa fa-times"></i> Huỷ
+                </button>
+                <button name="SaveBook" type="button" class="btn btn-primary ml-1" onclick="SaveData()">
+                    <i class="fal fa-save"></i></i> Lưu
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DELETE MODAL-->
+<div class="modal fade text-left" id="Delete_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title white" id="Delete_title">Bạn có muốn xoá thể loại này?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="Delete_modal_body">
+                <p id="D_ID" class="hide"></p>
+                <ul>
+                    <li id="D_name"></li>
+                    <li id="D_short"></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="fa fa-times"></i> Huỷ
+                </button>
+                <button type="button" class="btn btn-danger ml-1" data-bs-dismiss="modal" onclick="DeleteData()">
+                    <i class="fa fa-trash"></i> Xoá
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DETAIL MODAL -->
+<div class="modal fade text-left w-100" id="Detail_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin thể loại</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-5">
+                        <img id="Data-image" class="img_cate" />
+                    </div>
+                    <div class="col-7" style="display: table;">
+                        <div style="display: table-cell; vertical-align: middle">
+                            <h2 id="Data-name" style="font-size: 2.8rem; margin: 10px 0 30px 0">Tên thể loại</h2>
+                            <p id="Data-short" style="font-size: 1rem">Giới thiệu chung: </p>                           
+                        </div>
+                    </div>
+                </div>
+                <div style="border: 1px solid; margin: 30px 0 10px 0">
+                    <p class="border_Text_cate">CHI TIẾT VỀ THỂ LOẠI</p>
+                </div>
+                <div id="Data-long" class="ql-editor row" style="font-size: 1rem">                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="ModalCancel">
+                    <i class="fa fa-chevron-left"></i> Trở lại
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        //Setup page
+        var thumbSrc = "";
+        $(document).ready(function () {
+            GetAllData();
+            //Cấu hình toasts
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            //Chọn file ảnh
+            $('#Add_image').on('click', function () {
+                $('#Add_image_hide').click();
+            });
+            $('#Add_image_hide').on('change', function (e) {
+                //lấy file
+                var fff = e.target.files;
+                var no_files = 0;
+                if (fff !== undefined)
+                    no_files = fff.length;
+
+                $('#Add_image').empty();
+                $('#Add_image').text(fff[no_files - 1].name);
+
+                // Resize ảnh
+                const resize_width = 600;
+                const item = fff[no_files - 1];
+                const reader = new FileReader();
+                reader.readAsDataURL(item);
+                reader.name = item.name;
+                reader.size = item.size;
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.name = event.target.name;
+                    img.size = event.target.size;
+                    img.onload = function (el) {
+                        const elem = document.createElement('canvas');
+                        const scaleResize = resize_width / el.target.width;
+                        elem.width = resize_width;
+                        elem.height = el.target.height * scaleResize;
+                        const ctx = elem.getContext('2d');
+                        ctx.drawImage(el.target, 0, 0, elem.width, elem.height);
+                        const srcEncoded = ctx.canvas.toDataURL('image/jpeg', 1);
+
+                        thumbSrc = srcEncoded;
+                    }
+                }
+                ///
+            });
+        });
+        //Start datatable
+        var myTable = document.querySelector('#table1');
+        var dataTable = new simpleDatatables.DataTable(myTable);
+        function GetAllData() {
+            dataTable.destroy();
+            $('#_TBODY').empty();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_TheLoai/GetListCate",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var html = '';
+                    $.each(res, function (key, item) {
+                        html += '<tr>';
+                        html += '<td><p>' + item.name + '</p></td>';
+                        html += '<td style="max-width: 300px"><p>' + item.shortDescription + '</p></td>';
+                        html += '<td><p><img src="' + item.image + '" style="height: 75px; width: 75px; object-fit: cover;" /></p></td>';
+                        html += '<td class="link-action" style="min-width:135px; width: 135px;">';
+                        html += '<a class="link-edit" data-id="' + item.id + '"><i class="fal fa-pencil-alt"></i> Sửa</a><br />';
+                        html += '<a class="link-delete" data-id="' + item.id + '"><i class="far fa-trash-alt"></i> Xoá</a><br />';
+                        html += '<a class="link-detail" data-id="' + item.id + '"><i class="fal fa-info-circle"></i> Chi tiết</a>';
+                        html += '</td >';
+                        html += '</tr>';
+                    });
+                    $('#_TBODY').html(html);
+                    dataTable = new simpleDatatables.DataTable(myTable);
+                }
+            });
+        };
+        //setup create modal
+        $(document).on("click", "#link-add", function (e) {
+            e.preventDefault();
+            document.getElementById('AddEdit_Title').innerHTML = "Thêm mới thể loại";
+            $('#Add_id').val("");
+            //
+            $('#Add_name').val("");
+            //
+            $('#Add_short').val("");
+            //
+            $('#Add_long').val("");
+            quillEditor.root.innerHTML = "";
+            //
+            $('#Add_image').empty;
+            $('#Add_image').text("");
+            $('#Add_image_hide').val("");
+            thumbSrc = "";
+            //
+            $('#AddEdit_Modal').modal('show');
+        });
+        //Setup edit modal
+        $(document).on("click", ".link-edit", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            document.getElementById('AddEdit_Title').innerHTML = "Sửa thông tin thể loại";
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_TheLoai/GetCategories/" + id,
+                dataType: "json",
+                success: function (res) {
+                    $('#Add_id').val(res.id);
+                    $('#Add_name').val(res.name);
+                    $('#Add_short').val(res.shortDescription);
+                    $('#Add_long').val("");
+                    quillEditor.root.innerHTML = res.longDescription;
+                    $('#Add_image').empty();
+                    $('#Add_image').text(res.image);
+                    thumbSrc = res.image;
+                    $('#AddEdit_Modal').modal('show');
+                }
+            })
+        });
+        //Setup delete modal
+        $(document).on("click", ".link-delete", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_TheLoai/GetCategories/" + id,
+                dataType: "json",
+                success: function (res) {
+                    document.getElementById("D_ID").innerHTML = res.id;
+                    document.getElementById("D_name").innerHTML = "Thể loại: " + res.name;
+                    document.getElementById("D_short").innerHTML = "Giới thiệu: " + res.shortDescription;
+                    $('#Delete_Modal').modal('show');
+                }
+            })
+        });
+        //Setup detail modal
+        $(document).on("click", ".link-detail", function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ql_TheLoai/GetCategories/" + id,
+                dataType: "json",
+                success: function (res) {
+                    if (res != null) {
+                        document.getElementById('Data-image').src = res.image;
+                        $('#Data-name').text(res.name);
+                        $('#Data-short').html("<strong>Giới thiệu chung: </strong>" + res.shortDescription);
+                        document.getElementById('Data-long').innerHTML = res.longDescription;
+                    }
+                    $('#Detail_Modal').modal('show');
+                }
+            })
+        })
+        //Add - Edit
+        function SaveData() {
+            document.getElementById("Add_long").value = quillEditor.root.innerHTML;
+            var Data = {
+                id: $('#Add_id').val(),
+                name: $('#Add_name').val(),
+                shortDescription: $('#Add_short').val(),              
+                longDescription: $('#Add_long').val(),
+                image: thumbSrc
+            }
+            $.ajax({
+                url: "/Admin/ql_TheLoai/Create_Edit",
+                data: JSON.stringify(Data),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    if (res.status != null) {
+                        {
+                            if (res.status == "ADD_OK") {
+                                $('#ModalCancel').click();
+                                toastr["success"]("Thêm mới thể loại: " + Data.name + " thành công!", "Thêm mới thành công");
+                                GetAllData();
+                            }
+                            if (res.status == "EDIT_OK") {
+                                $('#ModalCancel').click();
+                                toastr["success"]("Sửa thông tin thể loại: " + Data.name + " thành công!", "Sửa thông tin thành công");
+                                GetAllData();
+                            }
+                            if (res.status == "ADD_FALSE") {
+                                toastr["warning"]("Thể loại: " + Data.name + " đã có trong hệ thống!", "Thêm mới thất bại");
+                            }
+                            if (res.status == "EDIT_FALSE") {
+                                toastr["warning"]("Thể loại: " + Data.name + " đã có trong hệ thống!", "Sửa thông tin thất bại");
+                            }
+                            if (res.status == "NO_INPUT_DATA") {
+                                toastr["error"]("Tên thể loại chưa được nhập!", "Lưu thất bại");
+                            }
+                        }
+                    }
+                },
+                error: function () {
+                    toastr["error"]("Đã có lỗi xảy ra. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Lỗi");
+                }
+            });
+        };
+        //Delete
+        function DeleteData() {
+            var id = document.getElementById("D_ID").innerHTML;
+            $.ajax({
+                type: "POST",
+                url: "/Admin/ql_TheLoai/Delete/" + id,
+                dataType: "json",
+                success: function (res) {
+                    if (res.status == "DELETE_OK") {
+                        toastr["success"]("Thể loại đã được xoá!", "Xoá thành công");
+                        GetAllData();
+                    }
+                    if (res.status == "DELETE_FALSE") {
+                        toastr["error"]("Xoá thất bại. Kiểm tra lại kết nối mạng hoặc tải lại trang!", "Xoá thất bại");
+                    }
+
+                }
+            });
+        };
+    </script>
+}
