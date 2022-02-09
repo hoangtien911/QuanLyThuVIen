@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using FireSharp.Interfaces;
@@ -33,50 +32,58 @@ namespace QuanLyThuVien.Controllers
             if (!Data_Users.UpdateCount)
                 Data_Users.GetAllData();
             //logic
-            User loginUser = new User();
+            UserLogin userLogin = new UserLogin();
             bool check = false;
-            foreach (var item in Data_Users.UserList)
+            foreach (var useritem in Data_Users.UserList)
             {
-                if (item.username.Equals(user.username))
+                if (user.username == useritem.username)
                 {
-                    loginUser = item;
-                    check = true;
-                    break;
+                    if(user.password != useritem.password)
+                    {
+                        ViewBag.thongbao = "Mật khẩu không đúng";
+                        return View();
+                    }
+                    else
+                    {
+                        userLogin.userid = useritem.id;
+                        userLogin.username = useritem.username;
+                        userLogin.avatar = useritem.avatar;
+                        check = true;
+                        break;
+                    }
                 }
             }
             if (!check)
             {
                 ViewBag.thongbao = "Tên tài khoản không tồn tại.";
                 return View();
-            }
-            if (!loginUser.password.Equals(user.password))
+            }         
+            else
             {
-                ViewBag.thongbao = "Mật khẩu không đúng";
-                return View();
-            }
-            else if (loginUser.password.Equals(user.password))
-            {
-                if (loginUser.status.Equals("Admin"))
+                switch (Data_Users.GetSingleData(userLogin.userid).status)
                 {
-                    Session["AdminSession"] = loginUser.id;                     
-                    Response.Cookies["AdminCookies"]["id"] = loginUser.id;
-                    Response.Cookies["AdminCookies"]["name"] = loginUser.fullName;
-                    Response.Cookies["AdminCookies"]["avatar"] = loginUser.avatar;
-                    return RedirectToAction("ThongKe", "ThongKe", new { area = "Admin" });
-                }
-                if (loginUser.status.Equals("Thường"))
-                {
-                    Session["UserSession"] = loginUser.id;
-                    Response.Cookies["UserCookies"]["username"] = loginUser.username;
-                    Response.Cookies["UserCookies"]["userid"] = loginUser.id;
-                    if (user.remember)
-                    {                      
-                        Response.Cookies["UserCookies"]["password"] = loginUser.password;
-                        Response.Cookies["UserCookies"].Expires = DateTime.Now.AddDays(15);
-                    }
-                    return RedirectToAction("HomePage", "TrangChu");
-                }
-
+                    case "Admin":
+                        {
+                            Session["UserSession"] = userLogin.userid;
+                            return RedirectToAction("ThongKe", "ThongKe", new { area = "Admin" });
+                        }
+                    case "Thường":
+                        {
+                            Session["UserSession"] = userLogin.userid;
+                            Response.Cookies["UserCookies"]["username"] = userLogin.username;
+                            Response.Cookies["UserCookies"]["userid"] = userLogin.userid;
+                            if (user.remember)
+                            {
+                                Response.Cookies["UserCookies"].Expires = DateTime.Now.AddDays(15);
+                            }
+                            return RedirectToAction("HomePage", "TrangChu");
+                        }
+                    case "Khoá":
+                        {
+                            ViewBag.thongbao = "Tài khoản của bạn đã bị khoá. Xin vui lòng liên hệ trực tiếp với quản trị viên.";
+                            return View();
+                        }
+                }             
             }
             return View();
         }
@@ -86,7 +93,6 @@ namespace QuanLyThuVien.Controllers
         public ActionResult DangXuat()
         {
             Session["UserSession"] = null;
-            Session["AdminSession"] = null;
             Response.Cookies["UserCookies"].Expires = DateTime.Now.AddDays(-1);
             Response.Cookies["AdminCookies"].Expires = DateTime.Now.AddDays(-1);
             return RedirectToAction("HomePage", "TrangChu");
@@ -94,74 +100,61 @@ namespace QuanLyThuVien.Controllers
         /// <summary> Chi tiết thông tin cá nhân </summary>   
         public ActionResult ChiTietUser(string id)
         {
-            //check session user
-            if (Session["UserSession"] == null)
-                return RedirectToAction("DangNhap", "TaiKhoan");
-            //Config and call response
-            client = new FireSharp.FirebaseClient(config);
-
-            // get user with user id
-            FirebaseResponse getUserResponse = client.Get("User/" + id);
-            User getUser = JsonConvert.DeserializeObject<User>(getUserResponse.Body.ToString());
-
-            FirebaseResponse getCallCardResponse = client.Get("CallCard/");
-            FirebaseResponse getFavoriteResponse = client.Get("Favorite/" + getUser.id);
-
-            //get favorite with user id
-            Favorite getFavorite = JsonConvert.DeserializeObject<Favorite>(getFavoriteResponse.Body.ToString());
-            if (getFavorite != null && getFavorite.booksID != null)
+            if(Session["UserSession"] != null && Session["UserSession"].ToString() == id)
             {
-                getFavorite.booksID_temp = getFavorite.booksID.Split(',');
-                //get books with favorite id
-                ViewBag.listBooksFavorite = new List<Books>();
-                foreach (var booksID in getFavorite.booksID_temp)
+                //lấy các dữ liệu user từ userid trong session 
+                User getUser = Data_Users.GetSingleData(id);
+
+                //Lấy dữ liệu sách yêu thích
+                client = new FireSharp.FirebaseClient(config);
+                FirebaseResponse getFavoriteResponse = client.Get("Favorite/" + getUser.id);
+                Favorite getFavorite = JsonConvert.DeserializeObject<Favorite>(getFavoriteResponse.Body.ToString());
+                if (getFavorite != null && getFavorite.booksID != null)
                 {
-                    FirebaseResponse getBook = client.Get("Books/" + booksID);
-                    ViewBag.listBooksFavorite.Add(JsonConvert.DeserializeObject<Books>(getBook.Body.ToString()));
-                }
-            }
-            // get callcard == user.id
-            Dictionary<string, CallCard> data = JsonConvert.DeserializeObject<Dictionary<string, CallCard>>(getCallCardResponse.Body.ToString());
-            if (data != null)
-            {
-                List<CallCard> listCallCard = new List<CallCard>();
-                foreach (var item in data)
-                {
-                    if (item.Value.user_id.Equals(getUser.id))
+                    getFavorite.booksID_temp = getFavorite.booksID.Split(',');
+                    //Lấy danh sách sách từ danh sách id sách yêu thích                  
+                    ViewBag.listBooksFavorite = new List<Books>();
+                    foreach (var booksID in getFavorite.booksID_temp)
                     {
-                        CallCard callCard = new CallCard();
-                        callCard.id = item.Value.id;
-                        callCard.books_id = item.Value.books_id;
-                        callCard.user_id = item.Value.user_id;
-                        callCard.date_issued = item.Value.date_issued;
-                        callCard.date_return = item.Value.date_return;
-                        callCard.date_returned = item.Value.date_returned;
-                        callCard.status = item.Value.status;
-                        listCallCard.Add(callCard);
+                        ViewBag.listBooksFavorite.Add(Data_Books.GetSingleData(booksID));
                     }
                 }
-                if(listCallCard.Count == 0)
+                //Lấy dữ liệu phiếu mượn
+                if (Data_CallCard.UpdateCount == false)
+                    Data_CallCard.GetAllData();
+                //Tìm kiếm các phiếu mượn có id trùng với session id
+                List<CallCard> listUserCallCard = new List<CallCard>();
+                foreach (var callcard in Data_CallCard.CallcardList)
+                {
+                    if (callcard.user_id == getUser.id)
+                        listUserCallCard.Add(callcard);
+                }
+                //kiểm tra dữ liệu
+                if (listUserCallCard.Count == 0)
                 {
                     ViewBag.listCallCard = null;
                 }
                 else
                 {
-                    ViewBag.listCallCard = listCallCard;
-                    //get books with callcard books_id                    
+                    ViewBag.listCallCard = listUserCallCard;
+                    //lấy danh sách sách dựa trên id sách trong phiếu mượn                
                     ViewBag.listBooksCallCard = new List<Books>();
-                    foreach (var item in listCallCard)
+                    foreach (var item in listUserCallCard)
                     {
                         item.books_id_temp = item.books_id.Split(',');
                         foreach (var booksID in item.books_id_temp)
                         {
-                            FirebaseResponse getBook = client.Get("Books/" + booksID);
-                            ViewBag.listBooksCallCard.Add(JsonConvert.DeserializeObject<Books>(getBook.Body.ToString()));
+                            ViewBag.listBooksCallCard.Add(Data_Books.GetSingleData(booksID));
                         }
                     }
                 }
-                
+                return View(getUser);
             }
-            return View(getUser);
+            else
+            {
+                return RedirectToAction("DangNhap", "TaiKhoan");
+            }
+            
         }
 
         public JsonResult SuaThongTin(string id, string fullName, string dateOfBirth, string phone, string email, string gender, string adress, string avatar)

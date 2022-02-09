@@ -7,7 +7,7 @@ using QuanLyThuVien.Areas.Admin.Data;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
-    public class ql_PhieuMuonController : Controller
+    public class ql_PhieuMuonController : BaseController
     {
         /* Controller Quản lý phiếu mượn
          * 

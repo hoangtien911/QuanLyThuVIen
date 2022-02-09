@@ -7984,6 +7984,7 @@ a.checkout__title {
         line-height: 45px;
         text-align: left;
         text-transform: capitalize;
+        cursor: pointer;
     }
 
         .wedget__categories.poroduct--cat ul li a {

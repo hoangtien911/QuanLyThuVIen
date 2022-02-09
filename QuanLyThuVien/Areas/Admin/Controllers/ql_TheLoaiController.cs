@@ -4,7 +4,7 @@ using QuanLyThuVien.Areas.Admin.Data;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
-    public class ql_TheLoaiController : Controller
+    public class ql_TheLoaiController : BaseController
     {       
         /* Controller Quản thể loại
         * 

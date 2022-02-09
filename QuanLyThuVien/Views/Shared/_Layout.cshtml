@@ -61,19 +61,19 @@
                             @{
                                 if (Request.Cookies["UserCookies"] != null)
                                 {
+                                    
                                     <li>
                                         <span style="text-transform: none; margin-right: 10px; color: #fff;">Xin chào: @Request.Cookies["UserCookies"]["username"]</span>
                                     </li>
                                 }
                             }
-
                             <li class="setting__bar__icon">
                                 <a class="setting__active" href="#"></a>
                                 <div class="searchbar__content setting__block">
                                     <div class="content-inner">
                                         <div class="switcher-currency">
-                                            @{
-                                                if (Session["UserSession"] != null)
+                                            @{                                               
+                                                if (Request.Cookies["UserCookies"] != null)
                                                 {
                                                     <strong class="label switcher-label">
                                                         <a href="@Url.Action("ChiTietUser", "TaiKhoan", new { id = Request.Cookies["UserCookies"]["userid"] })">

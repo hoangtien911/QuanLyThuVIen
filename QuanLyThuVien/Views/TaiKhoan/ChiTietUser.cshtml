@@ -259,40 +259,13 @@
                                                     }
                                                 </td>
                                                 <td class="text-center">
-                                                    @{
-                                                        DateTime date_temp = new DateTime(0001, 01, 01);
-                                                        if (DateTime.Compare(item.date_issued, date_temp) == 0)
-                                                        {
-                                                            <p>Chưa có thông tin</p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>@item.date_issued.ToString("dd-MM-yyyy")</p> }
-                                                    }
+                                                    <p>@item.date_issued</p>
                                                 </td>
                                                 <td class="text-center">
-                                                    @{
-                                                        if (DateTime.Compare(item.date_return, date_temp) == 0)
-                                                        {
-                                                            <p>Chưa có thông tin</p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>@item.date_return.ToString("dd-MM-yyyy")</p>
-                                                        }
-                                                    }
+                                                    <p>@item.date_return</p>
                                                 </td>
                                                 <td class="text-center">
-                                                    @{
-                                                        if (DateTime.Compare(item.date_returned, date_temp) == 0)
-                                                        {
-                                                            <p>Chưa có thông tin</p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>@item.date_returned.ToString("dd-MM-yyyy")</p>
-                                                        }
-                                                    }
+                                                    <p>@item.date_returned</p>
                                                 </td>
                                                 <td class="text-center">
                                                     <p id="statusCallCard">@item.status</p>

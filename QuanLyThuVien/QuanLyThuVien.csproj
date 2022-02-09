@@ -283,6 +283,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\BaseController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_PhieuMuonController.cs" />
     <Compile Include="Areas\Admin\Controllers\ql_SachController.cs" />
@@ -308,6 +309,7 @@
     <Compile Include="Models\Categories.cs" />
     <Compile Include="Models\Favorite.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -6023,6 +6025,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

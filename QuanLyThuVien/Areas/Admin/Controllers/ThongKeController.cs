@@ -14,7 +14,7 @@ using System.Globalization;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
-    public class ThongKeController : Controller
+    public class ThongKeController : BaseController
     {     
         public ActionResult ThongKe()
         {
@@ -27,7 +27,12 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             Thread t1 = new Thread(() =>
             {
                 int BookCount = Data_Books.BooksList.Count;
-                int Account = Data_Users.UserList.Count;
+                int Account = 0;
+                foreach(var usertemp in Data_Users.UserList)
+                {
+                    if (usertemp.status != "Admin")
+                        Account++;
+                }
                 ViewBag.Account = Account;
                 ViewBag.BookCount = BookCount;
             });

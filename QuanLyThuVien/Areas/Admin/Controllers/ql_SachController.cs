@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
-    public class ql_SachController : Controller
+    public class ql_SachController : BaseController
     {
         /* Controller Quản lý sách
          * 
